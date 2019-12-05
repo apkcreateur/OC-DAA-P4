@@ -9,7 +9,7 @@ nos services sont :
   - ce problème risque d'être récurrent dans le temps pour le maintien 
   à jour de l'application qui ne devrait pas être fait par une seule 
   personne. Je m'explique avec un exemple : si nous n'avons qu'un seul 
-  développeur qui connais le Kotlin, mais que celui-ci vennait a être 
+  développeur qui connait le Kotlin, mais que celui-ci venait a être 
   indisponible (travail sur un autre projet, en congé, départ 
   d'entreprise ...) alors il faudrait qu'un autre développeur se forme 
   en urgenge
@@ -20,13 +20,19 @@ nos services sont :
   jours pourraient engendrer des problèmes d'incompatibilitées de 
   versions (fonctions renommées, dépréciées, supprimées, ajoutées ...)
 
-Alors qu'en Java :
+Alors qu'avec Java :  
 
   - nous n'aurons plus de problème de compétences en interne car plus 
   de la moitié de nos développeurs maîtrise Java. De plus si nous 
-  avions un départ, il plus facile de trouver un remplaçant Dev Java 
-  qu'un Dev Kotlin sur le marché du travail
+  avions un départ, il est plus facile de trouver un remplaçant Dev 
+  Java qu'un Dev Kotlin sur le marché du travail
   - la communauté Java est grande et expérimentée. Nous n'aurons aucun 
   mal a trouver de l'aide si nécessaire
   - la fiabilité et le contenu des libs Java n'est plus a démontrer, 
   elles ont été éprouvées et étoffées au fil des années
+
+Je préconise donc l'utilisation de Java pour commencer. Plus tard rien 
+ne nous empêchera de migrer sous Kotlin lorsque nous aurons les 
+compétences en interne. Cela pourra se faire petit a petit étant donné 
+que Java et Kotlin peuvent cohabiter au sein d'un même projet (Kotlin 
+est basé sur la JVM).  
