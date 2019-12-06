@@ -1,5 +1,7 @@
 # Pourquoi utiliser Java plutôt que Kotlin ?
 
+## Contre Kotlin
+
 Les principaux freins a l'utilisation de Kotlin par rapport a Java dans 
 nos services sont :  
 
@@ -15,10 +17,9 @@ nos services sont :
   en urgenge
   - Kotlin est un langage encore jeune ce qui signifie que sa 
   communauté est "petite" et n'est "pas encore assez expérimentée". Il 
-  est possible que des libs spécifiques ne soient pas encore présentes. 
-  Aussi il ne faut pas négliger le fait que de potentielles mises à 
-  jours pourraient engendrer des problèmes d'incompatibilitées de 
-  versions (fonctions renommées, dépréciées, supprimées, ajoutées ...)
+  est possible que des libs spécifiques ne soient pas encore présentes
+
+## Pour Java
 
 Alors qu'avec Java :  
 
@@ -31,8 +32,10 @@ Alors qu'avec Java :
   - la fiabilité et le contenu des libs Java n'est plus a démontrer, 
   elles ont été éprouvées et étoffées au fil des années
 
+## Conclusion
+
 Je préconise donc l'utilisation de Java pour commencer. Plus tard rien 
 ne nous empêchera de migrer sous Kotlin lorsque nous aurons les 
 compétences en interne. Cela pourra se faire petit a petit étant donné 
 que Java et Kotlin peuvent cohabiter au sein d'un même projet (Kotlin 
-est basé sur la JVM).  
+se basant aussi sur la JVM).  

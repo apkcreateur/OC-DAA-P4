@@ -49,7 +49,7 @@ Le développement de l'application :
 
   - **v0.1 :** liste des réunions
   - **v0.2 :** ajout ou suppression d'une réunion
-  - **v0.4 :** filtre des réunion (date ou lieu)
+  - **v0.3 :** filtre des réunions (date ou lieu)
 
 ### Mon organisation
 
