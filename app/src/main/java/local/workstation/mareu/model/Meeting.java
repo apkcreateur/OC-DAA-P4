@@ -7,7 +7,7 @@ import java.util.List;
 public class Meeting {
     private static Integer sLastId = 0;
 
-    private static Integer mId;
+    private Integer mId;
     private String mRoomName;
     private Date mDatetime;
     private String mTopic;
@@ -38,5 +38,9 @@ public class Meeting {
         mDatetime = datetime;
         mTopic = topic;
         mParticipants = participants;
+    }
+
+    public Integer getId() {
+        return mId;
     }
 }
