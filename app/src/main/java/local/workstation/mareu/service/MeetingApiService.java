@@ -4,6 +4,9 @@ import java.util.List;
 
 import local.workstation.mareu.model.Meeting;
 
+/**
+ * Meeting API client
+ */
 public interface MeetingApiService {
     /**
      * Get all meetings
@@ -19,7 +22,7 @@ public interface MeetingApiService {
 
     /**
      * Remove a meeting
-     * @param meeting meeting to delete
+     * @param idMeeting meeting to delete using the unique identifier
      */
-    void delMeeting(Meeting meeting);
+    void delMeeting(Integer idMeeting);
 }
