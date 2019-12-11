@@ -69,3 +69,16 @@ Le développement de l'application :
   - un lien vers le dépôt GitHub contenant le code de votre application
   - un paragraphe justifiant le choix du langage Java par rapport a 
   Kotlin pour le développement de l’application
+
+## Réalisation
+
+### Version 0.1
+
+Afficher la liste des réunions. Voici le prototype :  
+
+![prototype de la fonctionnalité "afficher la liste des réunions"](MaReu_v0.1.png)  
+
+Une réunion est représentée par la classe `Meeting` (nous 
+n'affichons que les attributs) :  
+
+![diagramme de classe UML "Meeting"](model_class_diagram_v0.1.png)  
