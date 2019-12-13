@@ -4,6 +4,7 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import static local.workstation.mareu.service.DummyMeetingGenerator.fromTime;
@@ -26,11 +27,10 @@ public class MeetingTest {
 
     @Test
     public void givenInvalidEmailAddresses_whenInstatiateMeeting_thenGetValidParticipants() {
-        // Valid email addresses
-        List<String> participants  = Arrays.asList(
+        List<String> participants  = new LinkedList<>(Arrays.asList(
                 "p.roger@gmail.com",
                 "s.ramen@gmail.fr",
-                "tests");
+                "tests"));
 
         Meeting meeting = new Meeting("Salle 1",
                 fromTime("11:00"),
@@ -38,7 +38,7 @@ public class MeetingTest {
                 participants);
 
         // Remove invalid email address
-        participants.remove("test");
+        participants.remove("tests");
 
         // Compare
         assertThat(participants, CoreMatchers.is(meeting.getParticipants()));
