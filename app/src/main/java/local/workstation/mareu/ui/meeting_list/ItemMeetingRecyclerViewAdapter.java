@@ -1,5 +1,6 @@
 package local.workstation.mareu.ui.meeting_list;
 
+import android.graphics.drawable.GradientDrawable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +20,7 @@ import local.workstation.mareu.view.ItemMeeting;
 public class ItemMeetingRecyclerViewAdapter extends RecyclerView.Adapter<ItemMeeting> {
     private List<Meeting> mMeetings;
 
-    public ItemMeetingRecyclerViewAdapter(List<Meeting> meetings) {
+    ItemMeetingRecyclerViewAdapter(List<Meeting> meetings) {
         mMeetings = meetings;
     }
 
@@ -40,8 +41,10 @@ public class ItemMeetingRecyclerViewAdapter extends RecyclerView.Adapter<ItemMee
                 meeting.getTopic()));
 
         holder.mDescriptionTextView.setText(desc);
-        holder.mParticipantsTextView.setText(TextUtils.join(", ",
+        holder.mParticipantsTextView.setText(
+                TextUtils.join(", ",
                 meeting.getParticipants()));
+        ((GradientDrawable)holder.mImageView.getBackground()).setColor(meeting.getColor());
     }
 
     @Override
