@@ -1,5 +1,6 @@
 package local.workstation.mareu.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import local.workstation.mareu.model.Meeting;
@@ -8,7 +9,7 @@ import local.workstation.mareu.model.Meeting;
  * Dummy mock for the Meeting Api Service
  */
 public class FakeMeetingApiService implements MeetingApiService {
-    private List<Meeting> mMeetings = DummyMeetingGenerator.generateMeetings();
+    private List<Meeting> mMeetings = new ArrayList<>();
 
     /**
      * {@inheritDoc}

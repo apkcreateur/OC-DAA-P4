@@ -1,4 +1,4 @@
-package local.workstation.mareu.service;
+package local.workstation.mareu.utils;
 
 import java.sql.Time;
 import java.util.ArrayList;
@@ -100,3 +100,4 @@ public abstract class DummyMeetingGenerator {
         return new ArrayList<>(DUMMY_MEETINGS);
     }
 }
+
