@@ -1,14 +1,14 @@
 package local.workstation.mareu.model;
 
+import org.junit.jupiter.api.Test;
 import org.hamcrest.CoreMatchers;
-import org.junit.Test;
+
+import static local.workstation.mareu.utils.Util.fromTime;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-
-import static local.workstation.mareu.service.DummyMeetingGenerator.fromTime;
-import static org.junit.Assert.*;
 
 public class MeetingTest {
     private final String invalid_email = "test";
