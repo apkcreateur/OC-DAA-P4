@@ -11,6 +11,8 @@ import static local.workstation.mareu.service.DummyMeetingGenerator.fromTime;
 import static org.junit.Assert.*;
 
 public class MeetingTest {
+    private final String invalid_email = "test";
+
     @Test
     public void givenValidEmailAddresses_whenInstatiateMeeting_thenGetValidParticipants() {
         List<String> participants  = Arrays.asList(
@@ -30,7 +32,7 @@ public class MeetingTest {
         List<String> participants  = new LinkedList<>(Arrays.asList(
                 "p.roger@gmail.com",
                 "s.ramen@gmail.fr",
-                "tests"));
+                invalid_email));
 
         Meeting meeting = new Meeting("Salle 1",
                 fromTime("11:00"),
@@ -38,7 +40,7 @@ public class MeetingTest {
                 participants);
 
         // Remove invalid email address
-        participants.remove("tests");
+        participants.remove(invalid_email);
 
         // Compare
         assertThat(participants, CoreMatchers.is(meeting.getParticipants()));
