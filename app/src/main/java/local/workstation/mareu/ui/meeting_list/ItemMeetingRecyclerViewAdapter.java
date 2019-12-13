@@ -4,8 +4,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,8 +14,9 @@ import java.util.List;
 
 import local.workstation.mareu.R;
 import local.workstation.mareu.model.Meeting;
+import local.workstation.mareu.view.ItemMeeting;
 
-public class ItemMeetingRecyclerViewAdapter extends RecyclerView.Adapter<ItemMeetingRecyclerViewAdapter.ItemMeeting> {
+public class ItemMeetingRecyclerViewAdapter extends RecyclerView.Adapter<ItemMeeting> {
     private List<Meeting> mMeetings;
 
     public ItemMeetingRecyclerViewAdapter(List<Meeting> meetings) {
@@ -48,20 +47,5 @@ public class ItemMeetingRecyclerViewAdapter extends RecyclerView.Adapter<ItemMee
     @Override
     public int getItemCount() {
         return mMeetings.size();
-    }
-
-    public class ItemMeeting extends RecyclerView.ViewHolder {
-
-        final ImageView mImageView;
-        final TextView mDescriptionTextView;
-        final TextView mParticipantsTextView;
-
-        public ItemMeeting(@NonNull View itemView) {
-            super(itemView);
-
-            mImageView = itemView.findViewById(R.id.circle_item);
-            mDescriptionTextView = itemView.findViewById(R.id.description_item);
-            mParticipantsTextView = itemView.findViewById(R.id.participants_item);
-        }
     }
 }
