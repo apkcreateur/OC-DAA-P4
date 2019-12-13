@@ -3,6 +3,7 @@ package local.workstation.mareu.model;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Meeting {
@@ -37,7 +38,7 @@ public class Meeting {
         mDatetime = datetime;
         mTopic = topic;
         mParticipants = new ArrayList<>();
-        setParticipants(participants);
+        this.setParticipants(participants);
     }
 
     public Integer getId() {
@@ -61,12 +62,14 @@ public class Meeting {
     }
 
     public void setParticipants(List<String> participants) {
-        Pattern EMAIL_REGEX = Pattern.compile(
-                "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
-                Pattern.CASE_INSENSITIVE);
+        String email_pattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$";
+        Pattern pattern = Pattern.compile(email_pattern);
 
-        for (String participant : participants)
-            if (EMAIL_REGEX.matcher(participant).find())
+        for (String participant : participants) {
+            Matcher matcher = pattern.matcher(participant);
+            if (matcher.matches()) {
                 mParticipants.add(participant);
+            }
+        }
     }
 }
