@@ -31,9 +31,7 @@ public class Meeting {
      * @param participants list of email addresses of meeting participants
      */
     public Meeting(String roomName, Date datetime, String topic, List<String> participants) {
-        sLastId++;
-
-        mId = sLastId;
+        mId = ++sLastId;
         mRoomName = roomName;
         mDatetime = datetime;
         mTopic = topic;
@@ -42,5 +40,21 @@ public class Meeting {
 
     public Integer getId() {
         return mId;
+    }
+
+    public String getRoomName() {
+        return mRoomName;
+    }
+
+    public Date getDatetime() {
+        return mDatetime;
+    }
+
+    public String getTopic() {
+        return mTopic;
+    }
+
+    public List<String> getParticipants() {
+        return mParticipants;
     }
 }
