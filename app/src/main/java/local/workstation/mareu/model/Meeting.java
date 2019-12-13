@@ -24,16 +24,6 @@ public class Meeting {
      * @param topic topic of the meeting
      * @param roomName name of the meeting room
      * @param datetime meeting time
-     */
-    public Meeting(String roomName, Date datetime, String topic) {
-        this(roomName, datetime, topic, new ArrayList<String>());
-    }
-
-    /**
-     * Constructor
-     * @param topic topic of the meeting
-     * @param roomName name of the meeting room
-     * @param datetime meeting time
      * @param participants list of email addresses of meeting participants
      */
     public Meeting(String roomName, Date datetime, String topic, List<String> participants) {
