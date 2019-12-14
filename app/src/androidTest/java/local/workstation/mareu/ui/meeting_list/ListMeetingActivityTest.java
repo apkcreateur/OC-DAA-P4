@@ -27,18 +27,20 @@ import static org.hamcrest.core.IsNull.notNullValue;
 
 @RunWith(AndroidJUnit4.class)
 public class ListMeetingActivityTest {
-    private ListMeetingActivity mActivity;
 
     @Rule
     public ActivityTestRule<ListMeetingActivity> mActivityRule =
-            new ActivityTestRule(ListMeetingActivity.class);
+            new ActivityTestRule<ListMeetingActivity>(ListMeetingActivity.class) {
+                @Override
+                protected void beforeActivityLaunched() {
+                    DI.initializeMeetingApiService(generateMeetings());
+                }
+            };
 
     @Before
     public void setUp() {
-        DI.initializeMeetingApiService(generateMeetings());
-
-        mActivity = mActivityRule.getActivity();
-        assertThat(mActivity, notNullValue());
+        ListMeetingActivity activity = mActivityRule.getActivity();
+        assertThat(activity, notNullValue());
     }
 
     @Test
@@ -49,10 +51,10 @@ public class ListMeetingActivityTest {
 
     @Test
     public void meetingList_firstItem_shouldBeValidValue() {
+        // TODO
         onData(ViewMatchers.withId(R.id.list))
                 .atPosition(0)
                 .onChildView(withId(R.id.description_item))
                 .check(matches(withText(DESCRIPTION_EXPECTED)));
-
     }
 }
