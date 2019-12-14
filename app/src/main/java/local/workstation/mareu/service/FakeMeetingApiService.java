@@ -9,7 +9,7 @@ import local.workstation.mareu.model.Meeting;
  * Dummy mock for the Meeting Api Service
  */
 public class FakeMeetingApiService implements MeetingApiService {
-    private List<Meeting> mMeetings = new ArrayList<>();
+    public List<Meeting> mMeetings = new ArrayList<>();
 
     /**
      * {@inheritDoc}

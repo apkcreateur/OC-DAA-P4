@@ -9,6 +9,8 @@ import java.util.List;
 import local.workstation.mareu.model.Meeting;
 
 public abstract class DummyMeetingGenerator {
+    public static int ITEMS_COUNT = 12;
+    public static String DESCRIPTION_EXPECTED = "Room 1 - 14:00 - Java vs Kotlin";
 
     public static List<String> participants1 = Arrays.asList(
             "s.poli@yahoo.fr");
@@ -96,7 +98,7 @@ public abstract class DummyMeetingGenerator {
      * Generate list of meetings
      * @return list of mmeetings
      */
-    static List<Meeting> generateMeetings() {
+    public static List<Meeting> generateMeetings() {
         return new ArrayList<>(DUMMY_MEETINGS);
     }
 }

@@ -47,9 +47,9 @@ Avant de commencer a développer l'application en elle-même :
 
 Le développement de l'application :  
 
-  - **v0.1 :** liste des réunions
-  - **v0.2 :** ajout ou suppression d'une réunion
-  - **v0.3 :** filtre des réunions (date ou lieu)
+  - **v0.1 :** afficher la liste des réunions
+  - **v0.2 :** ajouter ou supprimer une réunion
+  - **v0.3 :** filtrer l'affichage des réunions (par date ou lieu)
 
 ### Mon organisation
 

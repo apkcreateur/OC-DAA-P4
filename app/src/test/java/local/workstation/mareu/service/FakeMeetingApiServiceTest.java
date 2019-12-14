@@ -1,15 +1,15 @@
 package local.workstation.mareu.service;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import local.workstation.mareu.model.Meeting;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 public class FakeMeetingApiServiceTest {
 
@@ -17,8 +17,8 @@ public class FakeMeetingApiServiceTest {
     private Integer mInitialCount;
     private Meeting mMeeting;
 
-    @BeforeEach
-    void setUp() {
+    @Before
+    public void setUp() {
         mApi = new FakeMeetingApiService();
 
         List<String> participants = Arrays.asList(
@@ -40,18 +40,18 @@ public class FakeMeetingApiServiceTest {
 
         mApi.addMeeting(meeting);
 
-        assertEquals(++mInitialCount, mApi.getMeetings().size());
+        assertEquals((int) ++mInitialCount, mApi.getMeetings().size());
     }
 
     @Test
     public void getMeetings() {
-        assertEquals(mInitialCount, mApi.getMeetings().size());
+        assertEquals((int) mInitialCount, mApi.getMeetings().size());
     }
 
     @Test
     public void delMeeting() {
         mApi.delMeeting(mMeeting.getId());
 
-        assertEquals(--mInitialCount, mApi.getMeetings().size());
+        assertEquals((int) --mInitialCount, mApi.getMeetings().size());
     }
 }

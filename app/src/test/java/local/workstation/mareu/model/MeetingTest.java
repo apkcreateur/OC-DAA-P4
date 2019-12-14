@@ -1,6 +1,6 @@
 package local.workstation.mareu.model;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.hamcrest.CoreMatchers;
 
 import static local.workstation.mareu.utils.Util.fromTime;

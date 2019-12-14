@@ -1,17 +1,21 @@
 package local.workstation.mareu.di;
 
+import java.util.List;
+
+import local.workstation.mareu.model.Meeting;
 import local.workstation.mareu.service.FakeMeetingApiService;
 import local.workstation.mareu.service.MeetingApiService;
 
 public class DI {
-    private static MeetingApiService mService = new FakeMeetingApiService();
+    private static MeetingApiService sService = new FakeMeetingApiService();
 
     /**
      * Get instance on @{link MeetingApiService}
+     *
      * @return FakeMeetingApiService();
      */
     public static MeetingApiService getApiService() {
-        return mService;
+        return sService;
     }
 
     /**
@@ -22,5 +26,18 @@ public class DI {
      */
     public static MeetingApiService getNewInstanceApiService() {
         return new FakeMeetingApiService();
+    }
+
+    /**
+     * Initialize FakeMeetingApiService for tests
+     *
+     * @param meetings list of meetings
+     */
+    public static void initializeMeetingApiService(List<Meeting> meetings) {
+        // Purge
+        sService = new FakeMeetingApiService();
+        // And initialize
+        for (Meeting meeting: meetings)
+            sService.addMeeting(meeting);
     }
 }
