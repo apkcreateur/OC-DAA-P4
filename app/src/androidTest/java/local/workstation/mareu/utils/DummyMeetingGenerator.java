@@ -3,6 +3,7 @@ package local.workstation.mareu.utils;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -10,27 +11,29 @@ import local.workstation.mareu.model.Meeting;
 
 public abstract class DummyMeetingGenerator {
     public static int ITEMS_COUNT = 12;
-    public static String DESCRIPTION_EXPECTED = "Room 1 - 14:00 - Java vs Kotlin";
+    public static final String EXPECTED_DESCRIPTION = "Room 1 - 14:00 - Java vs Kotlin";
+    public static final String EXPECTED_PARTICIPANTS =
+            "d.doret@gmail.com, m.justal@outlook.fr, f.tolken@gmail.fr, s.decourt@gmail.fr";
 
-    public static List<String> participants1 = Arrays.asList(
+    private static List<String> participants1 = Collections.singletonList(
             "s.poli@yahoo.fr");
 
-    public static List<String> participants2 = Arrays.asList(
+    private static List<String> participants2 = Arrays.asList(
             "p.roger@gmail.com",
             "s.ramen@gmail.fr");
 
-    public static List<String> participants3 = Arrays.asList(
+    private static List<String> participants3 = Arrays.asList(
             "d.dout@yahoo.fr",
             "p.roger@gmail.com",
             "s.diego@gmail.fr");
 
-    public static List<String> participants4 = Arrays.asList(
+    private static List<String> participants4 = Arrays.asList(
             "d.doret@gmail.com",
             "m.justal@outlook.fr",
             "f.tolken@gmail.fr",
             "s.decourt@gmail.fr");
 
-    public static Date fromTime(String time) {
+    private static Date fromTime(String time) {
         // convert string to time
         Time tmp = Time.valueOf(time + ":00");
         // get now
@@ -43,7 +46,7 @@ public abstract class DummyMeetingGenerator {
         return date;
     }
 
-    public static List<Meeting> DUMMY_MEETINGS = Arrays.asList(
+    private static List<Meeting> DUMMY_MEETINGS = Arrays.asList(
             new Meeting("Room 1",
                     fromTime("14:00"),
                     "Java vs Kotlin",
