@@ -56,11 +56,13 @@ Le développement de l'application :
   - analyse et conception global
   - pour chaque fonctionnalités (v0.1 a v0.3) :
     - analyse et conception
-    - implémentation des tests unitaires
     - implémentation de la fonctionnalité
-    - validation des tests (BugFix si nécessaire)
-    - rédaction de la JavaDoc
-  - test et validation global (tests instrumentalisés)
+    - implémentation des tests unitaires et/ou instrumentaux
+    - test (exécution des nouveaux tests)
+    - test de non régréssion (exécution des tests des précédantes 
+    fonctionnalités)
+    - validation (documenter et versionner la nouvelle fonctionnalité)
+  - test et validation global (unitaire, instrumentaux et utilisateur)
 
 ### Livrables
 
