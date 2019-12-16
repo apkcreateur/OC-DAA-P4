@@ -15,8 +15,8 @@ Voici les fonctionnalités de l'application qui devront être
 implémentées :  
 
   - liste des réunions comprenant :
-    - l’heure de la réunion
-    - le lieu de la réunion
+    - l’heure et la durée de la réunion
+    - le lieu de la réunion (nom de la salle)
     - le sujet de la réunion
     - la liste des participants (adresses mail)
   - ajout d’une réunion
@@ -50,25 +50,27 @@ Le développement de l'application :
   - **v0.1 :** afficher la liste des réunions
   - **v0.2 :** ajouter ou supprimer une réunion
   - **v0.3 :** filtrer l'affichage des réunions (par date ou lieu)
-  - **v0.4 :** améliorer l'ergonomie
+  - **v0.4 :** améliorer l'ergonomie (design, compatibilité matériel, 
+  ...)
 
 ### Mon organisation
 
   - analyse et conception global
-  - pour chaque fonctionnalités (v0.1 a v0.3) :
+  - pour chaque fonctionnalité (v0.1 a v0.3) :
     - analyse et conception
     - implémentation de la fonctionnalité
     - implémentation des tests unitaires et/ou instrumentaux
-    - test (exécution des nouveaux tests)
-    - test de non régréssion (exécution des tests des précédantes 
+    - tests (exécution des nouveaux tests)
+    - tests de non régréssion (exécution des tests des précédantes 
     fonctionnalités)
     - validation (documenter et versionner la nouvelle fonctionnalité)
-  - test et validation global (unitaire, instrumentaux et utilisateur)
+  - test et validation global (tests unitaires, instrumentaux et 
+  utilisateurs)
 
 ### Livrables
 
-  - les rapports d'exécution (unitaire et instrumentalisé) des tests 
-  finaux (qui doivent indiquer que les tests réussissent) au format HTML
+  - les rapports d'exécution des tests unitaires, instrumentaux et 
+  finaux réussis (format HTML)
   - un lien vers le dépôt GitHub contenant le code de votre application
   - un paragraphe justifiant le choix du langage Java par rapport a 
   Kotlin pour le développement de l’application
