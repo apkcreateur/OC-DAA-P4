@@ -50,6 +50,7 @@ Le développement de l'application :
   - **v0.1 :** afficher la liste des réunions
   - **v0.2 :** ajouter ou supprimer une réunion
   - **v0.3 :** filtrer l'affichage des réunions (par date ou lieu)
+  - **v0.4 :** améliorer l'ergonomie
 
 ### Mon organisation
 
