@@ -84,3 +84,16 @@ Une réunion est représentée par la classe `Meeting` (nous
 n'affichons que les attributs) :  
 
 ![diagramme de classe UML "Meeting"](model_class_diagram_v0.1.png)  
+
+### Version 0.2
+
+Ajouter ou supprimer une réunion. Voici le prototype :  
+
+![prototype de la fonctionnalité "ajouter ou supprimer une réunion"](MaReu_v0.2.png)  
+
+## Sources
+
+[**Date & Time** - YouTube "Coding In Flow"](https://www.youtube.com/watch?v=Le47R9H3qow&list=PLrnPJCHvNZuAWIa1JCho4PGgNTNK0dfJ_)  
+[**Validate Email & Password with Regular Expression** - YouTube "Coding In Flow"](https://www.youtube.com/watch?v=cnD_7qFeZcY&list=PLrnPJCHvNZuBJwo9Zt3AQwpRax4RtrReD&index=5)  
+[**Search Functionality for RecyclerView** - YouTube "Coding In Flow"](https://www.youtube.com/watch?v=OWwOSLfWboY&list=PLrnPJCHvNZuBJwo9Zt3AQwpRax4RtrReD&index=7)  
+[**How to Filter a RecyclerView with SearchView** - YouTube "Coding In Flow"](https://www.youtube.com/watch?v=sJ-Z9G0SDhc)  
