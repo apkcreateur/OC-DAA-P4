@@ -7,4 +7,5 @@
     <color name="colorTextDescription">#000000</color>
     <color name="colorTextParticipants">#000000</color>
     <color name="colorTextToast">#555555</color>
+    <color name="colorTextButton">#FFFFFF</color>
 </resources>
