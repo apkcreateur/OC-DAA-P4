@@ -6,15 +6,20 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import androidx.test.espresso.contrib.RecyclerViewActions;
+import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
 import local.workstation.mareu.R;
 import local.workstation.mareu.di.DI;
+import local.workstation.mareu.ui.AddMeetingActivity;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -90,7 +95,7 @@ public class ListMeetingActivityTest {
      * Check that the deletion of the third item is effective
      */
     @Test
-    public void givenMeetingList_whenDeleteAction_thenRemoveOneMeeting() {
+    public void givenMeetingList_whenPerformAClickOnItemDeleteImageButton_thenRemoveOneMeeting() {
         onView(ViewMatchers.withId(R.id.list))
                 .check(itemCountAssertion(ITEMS_COUNT));
         onView(ViewMatchers.withId(R.id.list))
@@ -100,5 +105,16 @@ public class ListMeetingActivityTest {
                 .check(matches(isDisplayed()));
         onView(ViewMatchers.withId(R.id.list))
                 .check(itemCountAssertion(ITEMS_COUNT - 1));
+    }
+
+    /**
+     * Check that the AddMeetingActivity is displayed when we click on the add meeting button
+     */
+    @Test
+    public void givenMeetingList_whenPerformAClickOnAddMeetingFloatingActionButton_thenStartAddMeetingActivity() {
+        Intents.init();
+        onView(ViewMatchers.withId(R.id.add))
+                .perform(click());
+        intended(hasComponent(AddMeetingActivity.class.getName()));
     }
 }
