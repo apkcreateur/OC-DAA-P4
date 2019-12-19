@@ -12,14 +12,13 @@
         android:id="@+id/room_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_input_layout_margin"
         app:errorEnabled="true">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:hint="@string/meeting_room_name"
-            tools:ignore="Autofill"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
             android:inputType="text" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -28,14 +27,13 @@
         android:id="@+id/topic"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_input_layout_margin"
         app:errorEnabled="true">
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
         android:hint="@string/meeting_topic"
-        tools:ignore="Autofill"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/edit_text_margin"
         android:inputType="text" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -45,14 +43,13 @@
         android:id="@+id/participants"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_input_layout_margin"
         app:errorEnabled="true">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:hint="@string/list_of_participants"
-            tools:ignore="Autofill"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/edit_text_margin"
             android:inputType="text" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -61,14 +58,13 @@
         android:id="@+id/date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_input_layout_margin"
         app:errorEnabled="true">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:hint="@string/date"
-            tools:ignore="Autofill"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/edit_text_margin"
             android:inputType="text" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -83,15 +79,14 @@
             android:id="@+id/from"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_input_layout_margin"
             android:layout_weight="1"
             app:errorEnabled="true">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:hint="@string/from"
-                tools:ignore="Autofill"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/edit_text_margin"
                 android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -100,15 +95,14 @@
             android:id="@+id/to"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_input_layout_margin"
             android:layout_weight="1"
             app:errorEnabled="true">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:hint="@string/to"
-                tools:ignore="Autofill"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/edit_text_margin"
                 android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -122,6 +116,7 @@
         android:orientation="horizontal">
 
     <Button
+        android:id="@+id/cancel_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -132,6 +127,7 @@
         android:text="@string/cancel"/>
 
     <Button
+        android:id="@+id/add_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -140,6 +136,7 @@
         android:textColor="@color/colorTextButton"
         android:layout_margin="@dimen/button_margin"
         android:text="@string/add"/>
+
     </LinearLayout>
 
 </LinearLayout>

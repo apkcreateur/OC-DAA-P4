@@ -13,4 +13,8 @@
     <string name="date">Date</string>
     <string name="from">De</string>
     <string name="to">à</string>
+    <string name="error_field_empty">Ce champ ne peut pas être vide</string>
+    <string name="add_new_meeting">La nouvelle réunion a été ajoutée</string>
+    <string name="error_add_new_meeting">Champ invalide ou champ manquant</string>
+    <string name="abort_add_meeting">L\'ajout d\'une réunion a été abandonnée</string>
 </resources>
