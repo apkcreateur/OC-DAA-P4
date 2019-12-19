@@ -2,5 +2,6 @@
     <string name="app_name">MaRéu</string>
     <string name="default_text">Default text</string>
     <string name="default_content_description">Default content description</string>
-    <string name="delete_meeting">Delete meeting</string>
+    <string name="content_description_delete_meeting">Delete meeting</string>
+    <string name="toast_text_delete_meeting">The meeting has been deleted!</string>
 </resources>

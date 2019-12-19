@@ -1,10 +1,12 @@
 package local.workstation.mareu.ui.meeting_list;
 
+import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,10 +21,12 @@ import local.workstation.mareu.service.MeetingApiService;
 import local.workstation.mareu.view.ItemMeeting;
 
 public class ItemMeetingRecyclerViewAdapter extends RecyclerView.Adapter<ItemMeeting> {
-    private List<Meeting> mMeetings;
+    private Context mContext;
     private MeetingApiService mApiService;
+    private List<Meeting> mMeetings;
 
-    ItemMeetingRecyclerViewAdapter(MeetingApiService apiService) {
+    ItemMeetingRecyclerViewAdapter(Context context , MeetingApiService apiService) {
+        mContext = context;
         mApiService = apiService;
         mMeetings = mApiService.getMeetings();
     }
@@ -49,11 +53,14 @@ public class ItemMeetingRecyclerViewAdapter extends RecyclerView.Adapter<ItemMee
                 meeting.getParticipants()));
         ((GradientDrawable)holder.mImageView.getBackground()).setColor(meeting.getColor());
 
+        // Delete meeting
         holder.mDeleteImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mApiService.delMeeting(meeting.getId());
                 mMeetings = mApiService.getMeetings();
+
+                Toast.makeText(mContext, R.string.toast_text_delete_meeting, Toast.LENGTH_SHORT).show();
             }
         });
     }

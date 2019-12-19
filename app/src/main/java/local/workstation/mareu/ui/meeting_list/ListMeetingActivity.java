@@ -25,7 +25,7 @@ public class ListMeetingActivity extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        mItemMeetingRecyclerViewAdapter = new ItemMeetingRecyclerViewAdapter(mApiService);
+        mItemMeetingRecyclerViewAdapter = new ItemMeetingRecyclerViewAdapter(this, mApiService);
 
         mRecyclerView.setAdapter(mItemMeetingRecyclerViewAdapter);
     }
