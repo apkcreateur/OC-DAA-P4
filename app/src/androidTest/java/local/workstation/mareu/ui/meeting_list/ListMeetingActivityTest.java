@@ -14,9 +14,15 @@ import local.workstation.mareu.R;
 import local.workstation.mareu.di.DI;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static local.workstation.mareu.utils.RecyclerViewItemCountAssertion.itemCountAssertion;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 
 import static local.workstation.mareu.utils.DummyMeetingGenerator.generateMeetings;
@@ -89,6 +95,9 @@ public class ListMeetingActivityTest {
                 .check(itemCountAssertion(ITEMS_COUNT));
         onView(ViewMatchers.withId(R.id.list))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(DELETE_ITEM_POSITION, clickToDeleteButton()));
+        onView(withText(R.string.toast_text_delete_meeting))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
         onView(ViewMatchers.withId(R.id.list))
                 .check(itemCountAssertion(ITEMS_COUNT - 1));
     }

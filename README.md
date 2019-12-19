@@ -100,3 +100,4 @@ Ajouter ou supprimer une réunion. Voici le prototype :
 [**Validate Email & Password with Regular Expression** - YouTube "Coding In Flow"](https://www.youtube.com/watch?v=cnD_7qFeZcY&list=PLrnPJCHvNZuBJwo9Zt3AQwpRax4RtrReD&index=5)  
 [**Search Functionality for RecyclerView** - YouTube "Coding In Flow"](https://www.youtube.com/watch?v=OWwOSLfWboY&list=PLrnPJCHvNZuBJwo9Zt3AQwpRax4RtrReD&index=7)  
 [**How to Filter a RecyclerView with SearchView** - YouTube "Coding In Flow"](https://www.youtube.com/watch?v=sJ-Z9G0SDhc)  
+[**Check if a Toast was displayed** - Gist brunodles](https://gist.github.com/brunodles/badaa6de2ad3a84138d517795f15efc7)  
