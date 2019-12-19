@@ -15,13 +15,16 @@ import java.util.List;
 
 import local.workstation.mareu.R;
 import local.workstation.mareu.model.Meeting;
+import local.workstation.mareu.service.MeetingApiService;
 import local.workstation.mareu.view.ItemMeeting;
 
 public class ItemMeetingRecyclerViewAdapter extends RecyclerView.Adapter<ItemMeeting> {
     private List<Meeting> mMeetings;
+    private MeetingApiService mApiService;
 
-    ItemMeetingRecyclerViewAdapter(List<Meeting> meetings) {
-        mMeetings = meetings;
+    ItemMeetingRecyclerViewAdapter(MeetingApiService apiService) {
+        mApiService = apiService;
+        mMeetings = mApiService.getMeetings();
     }
 
     @NonNull
@@ -33,8 +36,8 @@ public class ItemMeetingRecyclerViewAdapter extends RecyclerView.Adapter<ItemMee
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ItemMeeting holder, int position) {
-        Meeting meeting = mMeetings.get(position);
+    public void onBindViewHolder(@NonNull final ItemMeeting holder, int position) {
+        final Meeting meeting = mMeetings.get(position);
         String desc = TextUtils.join(" - ", Arrays.asList(
                 meeting.getRoomName(),
                 DateFormat.getTimeInstance(DateFormat.SHORT).format(meeting.getDatetime()),
@@ -45,6 +48,14 @@ public class ItemMeetingRecyclerViewAdapter extends RecyclerView.Adapter<ItemMee
                 TextUtils.join(", ",
                 meeting.getParticipants()));
         ((GradientDrawable)holder.mImageView.getBackground()).setColor(meeting.getColor());
+
+        holder.mDeleteImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mApiService.delMeeting(meeting.getId());
+                mMeetings = mApiService.getMeetings();
+            }
+        });
     }
 
     @Override
