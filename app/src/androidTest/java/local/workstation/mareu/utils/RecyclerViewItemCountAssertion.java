@@ -12,10 +12,10 @@ import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
 import static org.hamcrest.Matchers.is;
 
 public class RecyclerViewItemCountAssertion implements ViewAssertion {
-    private final int expectedCount;
+    private final int mExpectedCount;
 
-    public RecyclerViewItemCountAssertion(int expectedCount) {
-        this.expectedCount = expectedCount;
+    private RecyclerViewItemCountAssertion(int expectedCount) {
+        this.mExpectedCount = expectedCount;
     }
 
     @Override
@@ -26,6 +26,10 @@ public class RecyclerViewItemCountAssertion implements ViewAssertion {
 
         RecyclerView recyclerView = (RecyclerView) view;
         RecyclerView.Adapter adapter = recyclerView.getAdapter();
-        assertThat(Objects.requireNonNull(adapter).getItemCount(), is(expectedCount));
+        assertThat(Objects.requireNonNull(adapter).getItemCount(), is(mExpectedCount));
+    }
+
+    public static RecyclerViewItemCountAssertion itemCountAssertion(int expectedCount) {
+        return new RecyclerViewItemCountAssertion(expectedCount);
     }
 }

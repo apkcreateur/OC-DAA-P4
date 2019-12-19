@@ -11,6 +11,8 @@ import local.workstation.mareu.model.Meeting;
 
 public abstract class DummyMeetingGenerator {
     public static int ITEMS_COUNT = 12;
+    public static final int EXPECTED_ITEM_POSITION = 0;
+    public static final int DELETE_ITEM_POSITION = 3;
     public static final String EXPECTED_DESCRIPTION = "Room 1 - 14:00 - Java vs Kotlin";
     public static final String EXPECTED_PARTICIPANTS =
             "d.doret@gmail.com, m.justal@outlook.fr, f.tolken@gmail.fr, s.decourt@gmail.fr";

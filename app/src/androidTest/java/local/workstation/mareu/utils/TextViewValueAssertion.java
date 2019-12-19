@@ -12,20 +12,12 @@ import local.workstation.mareu.R;
 import static org.junit.Assert.assertEquals;
 
 public class TextViewValueAssertion implements ViewAssertion {
-    private final int mItemPostion;
+    private final int mItemPosition;
     private final int mExpectedId;
     private final String mExpectedText;
 
-    public static TextViewValueAssertion matchesDescriptionAtItemPosition(int itemPosition, String expectedText) {
-        return new TextViewValueAssertion(itemPosition, R.id.description_item, expectedText);
-    }
-
-    public static TextViewValueAssertion matchesParticipantsAtItemPosition(int itemPosition, String expectedText) {
-        return new TextViewValueAssertion(itemPosition, R.id.participants_item, expectedText);
-    }
-
     private TextViewValueAssertion(int itemPosition, int expectedId, String expectedText) {
-        mItemPostion = itemPosition;
+        mItemPosition = itemPosition;
         mExpectedId = expectedId;
         mExpectedText = expectedText;
     }
@@ -37,10 +29,18 @@ public class TextViewValueAssertion implements ViewAssertion {
         }
 
         RecyclerView recyclerView = (RecyclerView) view;
-        RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(mItemPostion);
+        RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(mItemPosition);
         assert viewHolder != null;
         TextView textView = viewHolder.itemView.findViewById(mExpectedId);
 
         assertEquals(textView.getText().toString(), mExpectedText);
+    }
+
+    public static TextViewValueAssertion matchesDescriptionAtItemPosition(int itemPosition, String expectedText) {
+        return new TextViewValueAssertion(itemPosition, R.id.description_item, expectedText);
+    }
+
+    public static TextViewValueAssertion matchesParticipantsAtItemPosition(int itemPosition, String expectedText) {
+        return new TextViewValueAssertion(itemPosition, R.id.participants_item, expectedText);
     }
 }
