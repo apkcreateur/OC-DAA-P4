@@ -20,6 +20,15 @@ import local.workstation.mareu.model.Meeting;
 import local.workstation.mareu.service.MeetingApiService;
 import local.workstation.mareu.view.ItemMeeting;
 
+/**
+ * Display list of meetings
+ *
+ * For each item:
+ *   - displays:
+ *     - description (room name - time - topic)
+ *     - participants (comma separated list of emails)
+ *   - offers a delete meeting button
+ */
 public class ItemMeetingRecyclerViewAdapter extends RecyclerView.Adapter<ItemMeeting> {
     private Context mContext;
     private MeetingApiService mApiService;

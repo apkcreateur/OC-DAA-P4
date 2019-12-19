@@ -10,6 +10,11 @@ import local.workstation.mareu.R;
 import local.workstation.mareu.di.DI;
 import local.workstation.mareu.service.MeetingApiService;
 
+/**
+ * Display list of meetings (main activity)
+ *
+ * Use an fake meeting API Service to manage meetings.
+ */
 public class ListMeetingActivity extends AppCompatActivity {
     private MeetingApiService mApiService;
     private RecyclerView mRecyclerView;
