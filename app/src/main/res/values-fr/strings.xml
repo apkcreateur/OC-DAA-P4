@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MaRéu</string>
+    <string name="default_text">Default text</string>
+    <string name="default_content_description">Default content description</string>
+    <string name="content_description_delete_meeting">Supprimer une réunion</string>
+    <string name="toast_text_delete_meeting">La réunion a bien été supprimée !</string>
+    <string name="meeting_room_name">Nom de la salle de réunion</string>
+    <string name="meeting_topic">Sujet de la réunion</string>
+    <string name="cancel">Annuler</string>
+    <string name="add">Ajouter</string>
+    <string name="list_of_participants">Liste des participants (mails)</string>
+    <string name="date">Date</string>
+    <string name="from">De</string>
+    <string name="to">à</string>
+</resources>
