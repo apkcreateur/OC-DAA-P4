@@ -3,8 +3,8 @@ package local.workstation.mareu.ui;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
@@ -19,8 +19,6 @@ public class AddMeetingActivity extends AppCompatActivity {
     private TextInputLayout mRoomNameTextInputLayout;
     private TextInputLayout mTopicTextInputLayout;
 
-    private Button mAddButton;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,21 +26,34 @@ public class AddMeetingActivity extends AppCompatActivity {
 
         mRoomNameTextInputLayout = findViewById(R.id.room_name);
         mTopicTextInputLayout = findViewById(R.id.topic);
+    }
 
-        mAddButton = findViewById(R.id.add_button);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_add_meeting, menu);
 
-        mAddButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!validateTextInputLayout(mRoomNameTextInputLayout) | !validateTextInputLayout(mTopicTextInputLayout)) {
-                    Toast.makeText(v.getContext(), R.string.error_add_new_meeting, Toast.LENGTH_LONG).show();
-                    return;
-                }
-                Toast.makeText(v.getContext(), R.string.add_new_meeting, Toast.LENGTH_LONG).show();
-                // TODO returns serialized data
-                finish();
-            }
-        });
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_add_meeting:
+                add_meeting();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void add_meeting() {
+        if (!validateTextInputLayout(mRoomNameTextInputLayout) | !validateTextInputLayout(mTopicTextInputLayout)) {
+            Toast.makeText(this.getApplicationContext(), R.string.error_add_new_meeting, Toast.LENGTH_LONG).show();
+            return;
+        }
+        Toast.makeText(this.getApplicationContext(), R.string.add_new_meeting, Toast.LENGTH_LONG).show();
+        // TODO serialize and return data OR upload to Fake Service API ?
+        finish();
     }
 
     private boolean validateTextInputLayout(TextInputLayout inputValue) {
