@@ -3,10 +3,16 @@ package local.workstation.mareu.ui;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.Spanned;
+import android.text.TextWatcher;
+import android.text.style.ImageSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.material.chip.ChipDrawable;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import local.workstation.mareu.R;
@@ -19,6 +25,8 @@ public class AddMeetingActivity extends AppCompatActivity {
     private TextInputLayout mRoomNameTextInputLayout;
     private TextInputLayout mTopicTextInputLayout;
 
+    private TextInputEditText mEmailsTextInputEditText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +34,43 @@ public class AddMeetingActivity extends AppCompatActivity {
 
         mRoomNameTextInputLayout = findViewById(R.id.room_name);
         mTopicTextInputLayout = findViewById(R.id.topic);
+
+        mEmailsTextInputEditText = findViewById(R.id.emails);
+
+        mEmailsTextInputEditText.addTextChangedListener(new TextWatcher() {
+            private int mPreviousPosition = 0;
+            private boolean mNewEmail = false;
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                mNewEmail = false;
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(count >=1) {
+                    if(s.charAt(start) == ' ' || s.charAt(start) == ',' || s.charAt(start) == ';') {
+                        mNewEmail = true;
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // TODO
+                if (mNewEmail) {
+                    ChipDrawable email = ChipDrawable.createFromResource(AddMeetingActivity.this, R.xml.chip);
+
+                    email.setText(s.subSequence(mPreviousPosition, s.length()).toString());
+                    email.setBounds(0, 0, email.getIntrinsicWidth(), email.getIntrinsicHeight());
+
+                    ImageSpan span = new ImageSpan(email);
+                    s.setSpan(span, mPreviousPosition, s.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                    mPreviousPosition = s.length();
+                }
+            }
+        });
     }
 
     @Override

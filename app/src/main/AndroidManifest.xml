@@ -9,10 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".ui.AddMeetingActivity"
-            android:parentActivityName=".ui.meeting_list.ListMeetingActivity">
-        </activity>
+            android:parentActivityName=".ui.meeting_list.ListMeetingActivity"
+            android:theme="@style/AppTheme.AddMeetingTheme"></activity>
         <activity android:name=".ui.meeting_list.ListMeetingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
