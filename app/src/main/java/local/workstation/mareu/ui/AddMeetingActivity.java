@@ -19,7 +19,6 @@ public class AddMeetingActivity extends AppCompatActivity {
     private TextInputLayout mRoomNameTextInputLayout;
     private TextInputLayout mTopicTextInputLayout;
 
-    private Button mCancelButton;
     private Button mAddButton;
 
     @Override
@@ -30,16 +29,7 @@ public class AddMeetingActivity extends AppCompatActivity {
         mRoomNameTextInputLayout = findViewById(R.id.room_name);
         mTopicTextInputLayout = findViewById(R.id.topic);
 
-        mCancelButton = findViewById(R.id.cancel_button);
         mAddButton = findViewById(R.id.add_button);
-
-        mCancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(v.getContext(), R.string.abort_add_meeting, Toast.LENGTH_LONG).show();
-                finish();
-            }
-        });
 
         mAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
