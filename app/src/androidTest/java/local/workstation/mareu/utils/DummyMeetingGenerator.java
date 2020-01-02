@@ -48,6 +48,10 @@ public abstract class DummyMeetingGenerator {
         return date;
     }
 
+    private static List<String> DUMMY_MEETING_ROOMS = Arrays.asList(
+            "Room 1", "Room 2", "Room 3", "Room 4", "Room 5",
+            "Room 6", "Room 7", "Room 8", "Room 9", "Room 10");
+
     private static List<Meeting> DUMMY_MEETINGS = Arrays.asList(
             new Meeting("Room 1",
                     fromTime("14:00"),
@@ -98,6 +102,14 @@ public abstract class DummyMeetingGenerator {
                     "Once upon a time",
                     participants4)
     );
+
+    /**
+     * Generate list of meeting rooms
+     * @return list of mmeeting rooms
+     */
+    public static List<String> generateRooms() {
+        return new ArrayList<>(DUMMY_MEETING_ROOMS);
+    }
 
     /**
      * Generate list of meetings

@@ -25,6 +25,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static local.workstation.mareu.utils.DummyMeetingGenerator.generateRooms;
 import static local.workstation.mareu.utils.RecyclerViewItemCountAssertion.itemCountAssertion;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
@@ -51,7 +52,7 @@ public class ListMeetingActivityTest {
             new ActivityTestRule<ListMeetingActivity>(ListMeetingActivity.class) {
                 @Override
                 protected void beforeActivityLaunched() {
-                    DI.initializeMeetingApiService(generateMeetings());
+                    DI.initializeMeetingApiService(generateRooms(), generateMeetings());
                 }
             };
 

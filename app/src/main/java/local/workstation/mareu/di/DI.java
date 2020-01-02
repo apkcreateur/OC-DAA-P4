@@ -33,10 +33,13 @@ public class DI {
      *
      * @param meetings list of meetings
      */
-    public static void initializeMeetingApiService(List<Meeting> meetings) {
+    public static void initializeMeetingApiService(List<String> rooms, List<Meeting> meetings) {
         // Purge
         sService = new FakeMeetingApiService();
         // And initialize
+        for (String room: rooms)
+            sService.addRoom(room);
+
         for (Meeting meeting: meetings)
             sService.addMeeting(meeting);
     }

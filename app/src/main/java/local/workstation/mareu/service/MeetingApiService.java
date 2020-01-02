@@ -9,6 +9,24 @@ import local.workstation.mareu.model.Meeting;
  */
 public interface MeetingApiService {
     /**
+     * Get all meeting rooms
+     * @return list of meeting rooms
+     */
+    List<String> getRooms();
+
+    /**
+     * Add a meeting room
+     * @param room meeting room to add
+     */
+    void addRoom(String room);
+
+    /**
+     * Remove a meeting room
+     * @param room meeting room to delete
+     */
+    void delRoom(String room);
+
+    /**
      * Get all meetings
      * @return list of meetings
      */
