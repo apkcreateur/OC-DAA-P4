@@ -5,4 +5,7 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_input_layout_margin">16dp</dimen>
     <dimen name="button_margin">16dp</dimen>
+    <dimen name="spinner_item_margin">8dp</dimen>
+    <dimen name="text_view_spinner_size">18sp</dimen>
+    <dimen name="text_view_spinner_item_size">16sp</dimen>
 </resources>

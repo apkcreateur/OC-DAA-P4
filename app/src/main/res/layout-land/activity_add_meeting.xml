@@ -20,15 +20,17 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_margin="@dimen/text_input_layout_margin"
-            app:errorEnabled="true"
-            style="@style/Widget.AppCompat.Spinner.DropDown" >
+            app:errorEnabled="true" >
 
             <AutoCompleteTextView
                 android:id="@+id/room_name"
                 android:hint="@string/meeting_room_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text" />
+                android:inputType="text"
+                android:cursorVisible="false"
+                android:textSize="@dimen/text_view_spinner_size"
+                style="@style/Widget.AppCompat.Spinner.Underlined" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

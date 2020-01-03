@@ -2,24 +2,25 @@ package local.workstation.mareu.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.style.ImageSpan;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
 import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.List;
+import java.util.Objects;
 
 import local.workstation.mareu.R;
 
@@ -33,45 +34,52 @@ public class AddMeetingActivity extends AppCompatActivity {
     private boolean mError;
 
     private List<String> mRooms;
-
     private TextInputLayout mRoomNameTextInputLayout;
     private AutoCompleteTextView mRoomNameAutoCompleteTextView;
+
     private TextInputLayout mTopicTextInputLayout;
 
     private ChipGroup mEmailsChipGroup;
     private TextInputEditText mEmailsTextInputEditText;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Global -->
         setContentView(R.layout.activity_add_meeting);
-
         mError = false;
+        // Global <--
+
+        // Meeting room -->
         mRooms = sApiService.getRooms();
         mRoomNameTextInputLayout = findViewById(R.id.room_name_layout);
-        mRoomNameTextInputLayout.setTag(false);
         mRoomNameAutoCompleteTextView = findViewById(R.id.room_name);
-
-        mTopicTextInputLayout = findViewById(R.id.topic);
-
-        mEmailsChipGroup = findViewById(R.id.emails_group);
-        mEmailsTextInputEditText = findViewById(R.id.emails);
 
         mRoomNameAutoCompleteTextView.setAdapter(new ArrayAdapter<>(
                 this,
                 R.layout.room_item,
                 mRooms));
 
-        mRoomNameTextInputLayout.setOnClickListener(new View.OnClickListener() {
+        mRoomNameAutoCompleteTextView.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                mRoomNameTextInputLayout.setTag(! (boolean) mRoomNameTextInputLayout.getTag());
-                if ((boolean) mRoomNameTextInputLayout.getTag())
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN) {
                     mRoomNameAutoCompleteTextView.showDropDown();
-                else
-                    mRoomNameAutoCompleteTextView.dismissDropDown();
+                    return true;
+                }
+                return (event.getAction() == MotionEvent.ACTION_UP);
             }
         });
+        // Meeting room <--
+
+        // Meeting topic -->
+        mTopicTextInputLayout = findViewById(R.id.topic);
+        // Meeting topic <--
+
+        // Meeting participants -->
+        mEmailsChipGroup = findViewById(R.id.emails_group);
+        mEmailsTextInputEditText = findViewById(R.id.emails);
 
         mEmailsTextInputEditText.addTextChangedListener(new TextWatcher() {
             private int mPreviousPosition = 0;
@@ -114,6 +122,7 @@ public class AddMeetingActivity extends AppCompatActivity {
 //                }
             }
         });
+        // Meeting participants <--
     }
 
     @Override
@@ -136,46 +145,40 @@ public class AddMeetingActivity extends AppCompatActivity {
 
     private void add_meeting() {
         validateTextInput(mTopicTextInputLayout);
-        validateRoomTextInput(mRoomNameTextInputLayout);
+        validateTextInput(mRoomNameTextInputLayout);
 
         if (mError) {
             Toast.makeText(this.getApplicationContext(), R.string.error_add_new_meeting, Toast.LENGTH_LONG).show();
             mError = false;
-            return;
         } else {
             Toast.makeText(this.getApplicationContext(), R.string.add_new_meeting, Toast.LENGTH_LONG).show();
             // TODO
-            // serialize and return data OR upload to Fake Service API ?
+            // Upload with Fake Service API
             finish();
         }
     }
 
-    private boolean validateTextInput(TextInputLayout inputValue) {
-        String tmpValue = inputValue.getEditText().getText().toString().trim();
+    private void validateTextInput(TextInputLayout inputValue) {
+        String tmpValue = Objects.requireNonNull(inputValue.getEditText()).getText().toString().trim();
 
         if (tmpValue.isEmpty()) {
             inputValue.setError(getText(R.string.error_empty_field));
             mError = true;
-            return false;
         } else {
             inputValue.setError(null);
-            return true;
         }
     }
 
-    private boolean validateRoomTextInput(TextInputLayout inputValue) {
-        String tmpValue = inputValue.getEditText().getText().toString().trim();
+    private void validateEmailInput(TextInputLayout inputValue) {
+        String tmpValue = Objects.requireNonNull(inputValue.getEditText()).getText().toString().trim();
         if (tmpValue.isEmpty()) {
             inputValue.setError(getText(R.string.error_empty_field));
             mError = true;
-            return false;
         } else if (!mRooms.contains(tmpValue)) {
             inputValue.setError(getText(R.string.error_invalid_field));
             mError = true;
-            return false;
         } else {
             inputValue.setError(null);
-            return true;
         }
     }
 }

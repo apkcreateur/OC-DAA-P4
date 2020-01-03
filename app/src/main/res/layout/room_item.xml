@@ -5,4 +5,6 @@
     android:layout_height="wrap_content"
     android:ellipsize="end"
     android:maxLines="1"
-    android:textAppearance="?attr/textAppearanceSubtitle1" />
+    android:textColor="@color/colorTextDescription"
+    android:textSize="@dimen/text_view_spinner_item_size"
+    android:padding="@dimen/spinner_item_margin"/>
