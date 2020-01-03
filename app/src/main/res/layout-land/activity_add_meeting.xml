@@ -14,38 +14,39 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/room_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_input_layout_margin"
-        android:layout_weight="1"
-        app:errorEnabled="true">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:hint="@string/meeting_room_name"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/room_name_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text" />
+            android:layout_weight="1"
+            android:layout_margin="@dimen/text_input_layout_margin"
+            app:errorEnabled="true"
+            style="@style/Widget.AppCompat.Spinner.DropDown" >
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <AutoCompleteTextView
+                android:id="@+id/room_name"
+                android:hint="@string/meeting_room_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/topic"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_input_layout_margin"
-        android:layout_weight="1"
-        app:errorEnabled="true" >
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:hint="@string/meeting_topic"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/topic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text" />
+            android:layout_margin="@dimen/text_input_layout_margin"
+            android:layout_weight="1"
+            app:errorEnabled="true" >
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:hint="@string/meeting_topic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
 
-    </com.google.android.material.textfield.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
 
@@ -61,7 +62,7 @@
             android:hint="@string/list_of_participants"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text" />
+            android:inputType="textEmailAddress" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

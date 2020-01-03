@@ -9,17 +9,20 @@
     android:orientation="vertical">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/room_name"
+        android:id="@+id/room_name_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_input_layout_margin"
-        app:errorEnabled="true">
+        app:errorEnabled="true"
+        style="@style/Widget.AppCompat.Spinner.DropDown" >
 
-        <com.google.android.material.textfield.TextInputEditText
+        <AutoCompleteTextView
+            android:id="@+id/room_name"
             android:hint="@string/meeting_room_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text" />
+            android:inputType="text"
+             />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -50,9 +53,15 @@
             android:hint="@string/list_of_participants"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text" />
+            android:inputType="textEmailAddress" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/emails_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_input_layout_margin" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/date"

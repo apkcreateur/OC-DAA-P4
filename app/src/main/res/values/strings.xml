@@ -13,9 +13,10 @@
     <string name="date">Date</string>
     <string name="from">From</string>
     <string name="to">To</string>
-    <string name="error_field_empty">Field can\'t be empty</string>
+    <string name="error_empty_field">Field can\'t be empty</string>
     <string name="add_new_meeting">The new meeting has been added</string>
     <string name="error_add_new_meeting">Invalid field or missing field</string>
     <string name="abort_add_meeting">Adding a meeting has been abort</string>
     <string name="action_add">Add</string>
+    <string name="error_invalid_field">Field it is not valid</string>
 </resources>
