@@ -1,6 +1,8 @@
 package local.workstation.mareu.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import local.workstation.mareu.model.Meeting;
@@ -9,8 +11,15 @@ import local.workstation.mareu.model.Meeting;
  * Dummy mock for the Meeting Api Service
  */
 public class FakeMeetingApiService implements MeetingApiService {
-    private List<Meeting> mMeetings = new ArrayList<>();
-    private List<String> mRooms = new ArrayList<>();
+    private List<Meeting> mMeetings;
+    private final List<String> mRooms;
+
+    public FakeMeetingApiService() {
+        mMeetings = new ArrayList<>();
+        mRooms = Collections.synchronizedList(new ArrayList<>(Arrays.asList(
+                "Room 1", "Room 2", "Room 3", "Room 4", "Room 5",
+                "Room 6", "Room 7", "Room 8", "Room 9", "Room 10")));
+    }
 
     /**
      * {@inheritDoc}
@@ -33,11 +42,16 @@ public class FakeMeetingApiService implements MeetingApiService {
      */
     @Override
     public void delRoom(String room) {
-        for (String r: mRooms) {
-            if (r.equals(room)) {
-                mRooms.remove(r);
-                break;
-            }
+        mRooms.remove(room);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void delAllRooms() {
+        synchronized(mRooms) {
+            mRooms.clear();
         }
     }
 

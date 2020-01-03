@@ -27,6 +27,13 @@ public interface MeetingApiService {
     void delRoom(String room);
 
     /**
+     * Remove all meeting rooms
+     *
+     * Secure path to delete all meeting rooms
+     */
+    void delAllRooms();
+
+    /**
      * Get all meetings
      * @return list of meetings
      */

@@ -22,7 +22,7 @@ import local.workstation.mareu.ui.AddMeetingActivity;
  */
 public class ListMeetingActivity extends AppCompatActivity {
     private static final int ADD_MEETING_ACTIVITY_REQUEST_CODE = 1;
-    private MeetingApiService mApiService;
+    public static MeetingApiService sApiService;
     private RecyclerView mRecyclerView;
     private ItemMeetingRecyclerViewAdapter mItemMeetingRecyclerViewAdapter;
     private FloatingActionButton mFloatingActionButton;
@@ -32,11 +32,11 @@ public class ListMeetingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_meeting);
 
-        mApiService = DI.getApiService();
+        sApiService = DI.getApiService();
 
         mRecyclerView = findViewById(R.id.list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mItemMeetingRecyclerViewAdapter = new ItemMeetingRecyclerViewAdapter(this, mApiService);
+        mItemMeetingRecyclerViewAdapter = new ItemMeetingRecyclerViewAdapter(this, sApiService);
         mRecyclerView.setAdapter(mItemMeetingRecyclerViewAdapter);
 
         mFloatingActionButton = findViewById(R.id.add);

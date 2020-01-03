@@ -19,16 +19,6 @@ public class DI {
     }
 
     /**
-     * Get always a new instance on {@link MeetingApiService}.
-     *
-     * Userful for tests, so we ensure the context is clean.
-     * @return FakeMeetingApiService();
-     */
-    public static MeetingApiService getNewInstanceApiService() {
-        return new FakeMeetingApiService();
-    }
-
-    /**
      * Initialize FakeMeetingApiService for tests
      *
      * @param meetings list of meetings
@@ -36,7 +26,9 @@ public class DI {
     public static void initializeMeetingApiService(List<String> rooms, List<Meeting> meetings) {
         // Purge
         sService = new FakeMeetingApiService();
-        // And initialize
+        sService.delAllRooms();
+
+        // Initialize
         for (String room: rooms)
             sService.addRoom(room);
 
