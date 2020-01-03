@@ -2,7 +2,6 @@ package local.workstation.mareu.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import local.workstation.mareu.model.Meeting;
@@ -16,9 +15,9 @@ public class FakeMeetingApiService implements MeetingApiService {
 
     public FakeMeetingApiService() {
         mMeetings = new ArrayList<>();
-        mRooms = Collections.synchronizedList(new ArrayList<>(Arrays.asList(
+        mRooms = new ArrayList<>(Arrays.asList(
                 "Room 1", "Room 2", "Room 3", "Room 4", "Room 5",
-                "Room 6", "Room 7", "Room 8", "Room 9", "Room 10")));
+                "Room 6", "Room 7", "Room 8", "Room 9", "Room 10"));
     }
 
     /**
@@ -50,9 +49,7 @@ public class FakeMeetingApiService implements MeetingApiService {
      */
     @Override
     public void delAllRooms() {
-        synchronized(mRooms) {
-            mRooms.clear();
-        }
+        mRooms.clear();
     }
 
     /**
