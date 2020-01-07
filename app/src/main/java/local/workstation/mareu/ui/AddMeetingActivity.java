@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -14,6 +16,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.material.chip.Chip;
@@ -48,6 +51,9 @@ public class AddMeetingActivity extends AppCompatActivity {
 
     private TextInputLayout mDateTextInputLayout;
     private TextInputEditText mDateTextInputEditText;
+
+    private TextInputLayout mStartTimeTextInputLayout, mEndTimeTextInputLayout;
+    private TextInputEditText mStartTimeTextInputEditText, mEndTimeTextInputEditText;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -141,7 +147,6 @@ public class AddMeetingActivity extends AppCompatActivity {
                 Calendar calendar = Calendar.getInstance();
                 DatePickerDialog mDatePickerDialog;
 
-
                 mDatePickerDialog = new DatePickerDialog(v.getContext(),
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
@@ -158,6 +163,73 @@ public class AddMeetingActivity extends AppCompatActivity {
             }
         });
         // Meeting date <--
+
+        // Meeting time -->
+        mStartTimeTextInputLayout = findViewById(R.id.from_layout);
+        mStartTimeTextInputEditText = findViewById(R.id.from);
+        mEndTimeTextInputLayout = findViewById(R.id.to_layout);
+        mEndTimeTextInputEditText = findViewById(R.id.to);
+
+        mStartTimeTextInputEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar time = Calendar.getInstance();
+
+                int unroundedMinutes = time.get(Calendar.MINUTE);
+                int mod = unroundedMinutes % 15;
+                time.add(Calendar.MINUTE, mod > 0 ? (15 - mod) : 0);
+                if (unroundedMinutes > 45)
+                    time.add(Calendar.HOUR_OF_DAY, 1);
+
+                TimePickerDialog mTimePickerDialog;
+
+                mTimePickerDialog = new TimePickerDialog(AddMeetingActivity.this,
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                                Calendar tim = Calendar.getInstance();
+                                tim.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                                tim.set(Calendar.MINUTE, minute);
+                                mStartTimeTextInputEditText.setText(android.text.format.DateFormat.getTimeFormat(getApplicationContext()).format(tim.getTime()));
+                            }
+                        },
+                        time.get(Calendar.HOUR_OF_DAY),
+                        time.get(Calendar.MINUTE),
+                        DateFormat.is24HourFormat(AddMeetingActivity.this));
+                mTimePickerDialog.show();
+            }
+        });
+
+        mEndTimeTextInputEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar time = Calendar.getInstance();
+
+                int unroundedMinutes = time.get(Calendar.MINUTE);
+                int mod = unroundedMinutes % 15;
+                time.add(Calendar.MINUTE, mod > 0 ? (15 - mod) : 0);
+                if (unroundedMinutes > 45)
+                    time.add(Calendar.HOUR_OF_DAY, 1);
+
+                TimePickerDialog mTimePickerDialog;
+
+                mTimePickerDialog = new TimePickerDialog(AddMeetingActivity.this,
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                                Calendar tim = Calendar.getInstance();
+                                tim.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                                tim.set(Calendar.MINUTE, minute);
+                                mEndTimeTextInputEditText.setText(android.text.format.DateFormat.getTimeFormat(getApplicationContext()).format(tim.getTime()));
+                            }
+                        },
+                        time.get(Calendar.HOUR_OF_DAY),
+                        time.get(Calendar.MINUTE),
+                        DateFormat.is24HourFormat(AddMeetingActivity.this));
+                mTimePickerDialog.show();
+            }
+        });
+        // Meeting time <--
     }
 
     @Override
@@ -182,6 +254,8 @@ public class AddMeetingActivity extends AppCompatActivity {
         validateTextInput(mTopicTextInputLayout);
         validateTextInput(mRoomNameTextInputLayout);
         validateDateInput(mDateTextInputLayout);
+        validateTimeInput(mStartTimeTextInputLayout);
+        validateTimeInput(mEndTimeTextInputLayout);
 
         if (mError) {
             Toast.makeText(this.getApplicationContext(), R.string.error_add_new_meeting, Toast.LENGTH_LONG).show();
@@ -212,12 +286,30 @@ public class AddMeetingActivity extends AppCompatActivity {
             inputValue.setError(getText(R.string.error_empty_field));
             mError = true;
         } else {
-            // valid format ?
+            // valid date format ?
             try {
                 android.text.format.DateFormat.getDateFormat(getApplicationContext()).parse(tmpValue);
                 inputValue.setError(null);
             } catch (ParseException e) {
                 inputValue.setError(getText(R.string.error_invalid_date_format));
+                mError = true;
+            }
+        }
+    }
+
+    private void validateTimeInput(TextInputLayout inputValue) {
+        String tmpValue = Objects.requireNonNull(inputValue.getEditText()).getText().toString().trim();
+
+        if (tmpValue.isEmpty()) {
+            inputValue.setError(getText(R.string.error_empty_field));
+            mError = true;
+        } else {
+            // valid time format ?
+            try {
+                android.text.format.DateFormat.getTimeFormat(getApplicationContext()).parse(tmpValue);
+                inputValue.setError(null);
+            } catch (ParseException e) {
+                inputValue.setError(getText(R.string.error_invalid_time_format));
                 mError = true;
             }
         }
