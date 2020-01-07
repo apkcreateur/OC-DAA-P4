@@ -43,17 +43,21 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/date"
+        android:id="@+id/date_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_input_layout_margin"
         app:errorEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/date"
             android:hint="@string/date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text" />
+            android:inputType="date"
+            android:cursorVisible="false"
+            android:clickable="false"
+            android:focusable="false" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

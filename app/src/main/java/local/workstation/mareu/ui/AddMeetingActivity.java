@@ -3,6 +3,7 @@ package local.workstation.mareu.ui;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.DatePicker;
 import android.widget.Toast;
 
 import com.google.android.material.chip.Chip;
@@ -19,6 +21,8 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.text.ParseException;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
@@ -41,6 +45,9 @@ public class AddMeetingActivity extends AppCompatActivity {
 
     private ChipGroup mEmailsChipGroup;
     private TextInputEditText mEmailsTextInputEditText;
+
+    private TextInputLayout mDateTextInputLayout;
+    private TextInputEditText mDateTextInputEditText;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -123,6 +130,34 @@ public class AddMeetingActivity extends AppCompatActivity {
             }
         });
         // Meeting participants <--
+
+        // Meeting date -->
+        mDateTextInputLayout = findViewById(R.id.date_layout);
+        mDateTextInputEditText = findViewById(R.id.date);
+
+        mDateTextInputEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar calendar = Calendar.getInstance();
+                DatePickerDialog mDatePickerDialog;
+
+
+                mDatePickerDialog = new DatePickerDialog(v.getContext(),
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                Calendar cal = Calendar.getInstance();
+                                cal.set(year, month, dayOfMonth);
+                                mDateTextInputEditText.setText(android.text.format.DateFormat.getDateFormat(getApplicationContext()).format(cal.getTime()));
+                            }
+                        },
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH));
+                mDatePickerDialog.show();
+            }
+        });
+        // Meeting date <--
     }
 
     @Override
@@ -146,6 +181,7 @@ public class AddMeetingActivity extends AppCompatActivity {
     private void add_meeting() {
         validateTextInput(mTopicTextInputLayout);
         validateTextInput(mRoomNameTextInputLayout);
+        validateDateInput(mDateTextInputLayout);
 
         if (mError) {
             Toast.makeText(this.getApplicationContext(), R.string.error_add_new_meeting, Toast.LENGTH_LONG).show();
@@ -169,8 +205,27 @@ public class AddMeetingActivity extends AppCompatActivity {
         }
     }
 
+    private void validateDateInput(TextInputLayout inputValue) {
+        String tmpValue = Objects.requireNonNull(inputValue.getEditText()).getText().toString().trim();
+
+        if (tmpValue.isEmpty()) {
+            inputValue.setError(getText(R.string.error_empty_field));
+            mError = true;
+        } else {
+            // valid format ?
+            try {
+                android.text.format.DateFormat.getDateFormat(getApplicationContext()).parse(tmpValue);
+                inputValue.setError(null);
+            } catch (ParseException e) {
+                inputValue.setError(getText(R.string.error_invalid_date_format));
+                mError = true;
+            }
+        }
+    }
+
     private void validateEmailInput(TextInputLayout inputValue) {
         String tmpValue = Objects.requireNonNull(inputValue.getEditText()).getText().toString().trim();
+
         if (tmpValue.isEmpty()) {
             inputValue.setError(getText(R.string.error_empty_field));
             mError = true;

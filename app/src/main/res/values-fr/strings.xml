@@ -19,4 +19,5 @@
     <string name="abort_add_meeting">L\'ajout d\'une réunion a été abandonnée</string>
     <string name="action_add">Ajouter</string>
     <string name="error_invalid_field">Ce champ n\'est pas valide</string>
+    <string name="error_invalid_date_format">Format de la date invalide</string>
 </resources>

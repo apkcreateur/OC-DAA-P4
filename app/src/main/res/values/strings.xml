@@ -19,4 +19,5 @@
     <string name="abort_add_meeting">Adding a meeting has been abort</string>
     <string name="action_add">Add</string>
     <string name="error_invalid_field">Field it is not valid</string>
+    <string name="error_invalid_date_format">Invalid date format</string>
 </resources>
