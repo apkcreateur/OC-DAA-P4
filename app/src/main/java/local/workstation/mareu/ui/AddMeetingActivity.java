@@ -178,8 +178,6 @@ public class AddMeetingActivity extends AppCompatActivity {
                 int unroundedMinutes = time.get(Calendar.MINUTE);
                 int mod = unroundedMinutes % 15;
                 time.add(Calendar.MINUTE, mod > 0 ? (15 - mod) : 0);
-                if (unroundedMinutes > 45)
-                    time.add(Calendar.HOUR_OF_DAY, 1);
 
                 TimePickerDialog mTimePickerDialog;
 
@@ -208,8 +206,6 @@ public class AddMeetingActivity extends AppCompatActivity {
                 int unroundedMinutes = time.get(Calendar.MINUTE);
                 int mod = unroundedMinutes % 15;
                 time.add(Calendar.MINUTE, mod > 0 ? (15 - mod) : 0);
-                if (unroundedMinutes > 45)
-                    time.add(Calendar.HOUR_OF_DAY, 1);
 
                 TimePickerDialog mTimePickerDialog;
 
@@ -261,9 +257,12 @@ public class AddMeetingActivity extends AppCompatActivity {
             Toast.makeText(this.getApplicationContext(), R.string.error_add_new_meeting, Toast.LENGTH_LONG).show();
             mError = false;
         } else {
-            Toast.makeText(this.getApplicationContext(), R.string.add_new_meeting, Toast.LENGTH_LONG).show();
             // TODO
             // Upload with Fake Service API
+            // TODO if error
+            //
+            // TODO else OK
+            Toast.makeText(this.getApplicationContext(), R.string.add_new_meeting, Toast.LENGTH_LONG).show();
             finish();
         }
     }
