@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -46,6 +47,7 @@ public class AddMeetingActivity extends AppCompatActivity {
 
     private TextInputLayout mTopicTextInputLayout;
 
+    private TextInputLayout mEmailsTextInputLayout;
     private ChipGroup mEmailsChipGroup;
     private TextInputEditText mEmailsTextInputEditText;
 
@@ -91,11 +93,11 @@ public class AddMeetingActivity extends AppCompatActivity {
         // Meeting topic <--
 
         // Meeting participants -->
+        mEmailsTextInputLayout = findViewById(R.id.participants);
         mEmailsChipGroup = findViewById(R.id.emails_group);
         mEmailsTextInputEditText = findViewById(R.id.emails);
 
         mEmailsTextInputEditText.addTextChangedListener(new TextWatcher() {
-            private int mPreviousPosition = 0;
             private boolean mNewEmail = false;
 
             @Override
@@ -105,7 +107,7 @@ public class AddMeetingActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(count >=1) {
+                if(count == 1) {
                     if(s.charAt(start) == ' ' || s.charAt(start) == ',' || s.charAt(start) == ';') {
                         mNewEmail = true;
                     }
@@ -115,24 +117,22 @@ public class AddMeetingActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if (mNewEmail) {
-                    Chip email = new Chip(getApplicationContext());
-                    email.setText(s.subSequence(mPreviousPosition, s.length()).toString());
-
-                    mEmailsChipGroup.addView(email);
-                    mPreviousPosition = s.length();
+                    String value = s.toString().substring(0, s.length() - 1);
+                    value = value.trim();
+                    if (!value.isEmpty()) {
+                        final Chip email = new Chip(AddMeetingActivity.this);
+                        email.setText(value);
+                        email.setCloseIconVisible(true);
+                        email.setOnCloseIconClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                mEmailsChipGroup.removeView(email);
+                            }
+                        });
+                        mEmailsChipGroup.addView(email);
+                        mEmailsTextInputEditText.setText("");
+                    }
                 }
-//                // TODO
-//                if (mNewEmail) {
-//                    ChipDrawable email = ChipDrawable.createFromResource(AddMeetingActivity.this, R.xml.chip);
-//
-//                    email.setText(s.subSequence(mPreviousPosition, s.length()).toString());
-//                    email.setBounds(0, 0, email.getIntrinsicWidth(), email.getIntrinsicHeight());
-//
-//                    ImageSpan span = new ImageSpan(email);
-//                    s.setSpan(span, mPreviousPosition, s.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//
-//                    mPreviousPosition = s.length();
-//                }
             }
         });
         // Meeting participants <--
@@ -247,11 +247,12 @@ public class AddMeetingActivity extends AppCompatActivity {
     }
 
     private void add_meeting() {
-        validateTextInput(mTopicTextInputLayout);
         validateTextInput(mRoomNameTextInputLayout);
+        validateTextInput(mTopicTextInputLayout);
         validateDateInput(mDateTextInputLayout);
         validateTimeInput(mStartTimeTextInputLayout);
         validateTimeInput(mEndTimeTextInputLayout);
+        validateEmailInput(mEmailsTextInputLayout, mEmailsChipGroup);
 
         if (mError) {
             Toast.makeText(this.getApplicationContext(), R.string.error_add_new_meeting, Toast.LENGTH_LONG).show();
@@ -314,17 +315,24 @@ public class AddMeetingActivity extends AppCompatActivity {
         }
     }
 
-    private void validateEmailInput(TextInputLayout inputValue) {
-        String tmpValue = Objects.requireNonNull(inputValue.getEditText()).getText().toString().trim();
+    private void validateEmailInput(TextInputLayout inputValue, ChipGroup emails) {
+        inputValue.setError(null);
+        int nb = emails.getChildCount();
 
-        if (tmpValue.isEmpty()) {
+        if (nb == 0) {
             inputValue.setError(getText(R.string.error_empty_field));
             mError = true;
-        } else if (!mRooms.contains(tmpValue)) {
-            inputValue.setError(getText(R.string.error_invalid_field));
-            mError = true;
-        } else {
-            inputValue.setError(null);
+        }
+        else {
+            for (int i = 0; i < nb; i++) {
+                Chip tmpEmail = (Chip) emails.getChildAt(i);
+                String email = tmpEmail.getText().toString();
+                if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    mError = true;
+                    inputValue.setError(getText(R.string.error_invalid_email));
+                    break;
+                }
+            }
         }
     }
 }

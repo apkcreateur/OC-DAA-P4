@@ -13,9 +13,4 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
-
-    <!-- ChipDrawable -->
-    <style name="AppTheme.ChipTextApperance" parent="TextAppearance.MaterialComponents.Chip">
-        <item name="android:textColor">@android:color/white</item>
-    </style>
 </resources>

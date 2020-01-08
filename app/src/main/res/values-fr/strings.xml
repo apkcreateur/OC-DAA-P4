@@ -21,4 +21,5 @@
     <string name="error_invalid_field">Ce champ n\'est pas valide</string>
     <string name="error_invalid_date_format">Format de la date invalide</string>
     <string name="error_invalid_time_format">Format de l\'heure invalide</string>
+    <string name="error_invalid_email">Une ou plusieurs adresse mail sont invalides</string>
 </resources>
