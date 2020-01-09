@@ -1,7 +1,7 @@
 package local.workstation.mareu.model;
 
-import org.junit.Test;
 import org.hamcrest.CoreMatchers;
+import org.junit.jupiter.api.Test;
 
 import static local.workstation.mareu.utils.Util.fromTime;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -10,11 +10,11 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public class MeetingTest {
+class MeetingTest {
     private final String invalid_email = "test";
 
     @Test
-    public void givenValidEmailAddresses_whenInstatiateMeeting_thenGetValidParticipants() {
+    void givenValidEmailAddresses_whenInstatiateMeeting_thenGetValidParticipants() {
         List<String> participants  = Arrays.asList(
                 "p.roger@gmail.com",
                 "s.ramen@gmail.fr");
@@ -29,7 +29,7 @@ public class MeetingTest {
     }
 
     @Test
-    public void givenInvalidEmailAddresses_whenInstatiateMeeting_thenGetValidParticipants() {
+    void givenInvalidEmailAddresses_whenInstatiateMeeting_thenGetValidParticipants() {
         List<String> participants  = new LinkedList<>(Arrays.asList(
                 "p.roger@gmail.com",
                 "s.ramen@gmail.fr",

@@ -21,5 +21,7 @@
     <string name="error_invalid_field">Field it is not valid</string>
     <string name="error_invalid_date_format">Invalid date format</string>
     <string name="error_invalid_time_format">Invalid time format</string>
-    <string name="error_invalid_email">One or more email addresses are invalid</string>
+    <string name="error_invalid_email">An email address is invalid</string>
+    <string name="error_invalid_emails">Multiple email addresses are invalid</string>
+    <string name="error_meeting_room_already_booked">Meeting room already booked</string>
 </resources>

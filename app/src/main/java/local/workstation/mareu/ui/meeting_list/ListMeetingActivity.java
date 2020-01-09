@@ -1,5 +1,6 @@
 package local.workstation.mareu.ui.meeting_list;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,7 +37,7 @@ public class ListMeetingActivity extends AppCompatActivity {
 
         mRecyclerView = findViewById(R.id.list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mItemMeetingRecyclerViewAdapter = new ItemMeetingRecyclerViewAdapter(this, sApiService);
+        mItemMeetingRecyclerViewAdapter = new ItemMeetingRecyclerViewAdapter(this);
         mRecyclerView.setAdapter(mItemMeetingRecyclerViewAdapter);
 
         mFloatingActionButton = findViewById(R.id.add);
@@ -48,4 +49,15 @@ public class ListMeetingActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (ADD_MEETING_ACTIVITY_REQUEST_CODE == requestCode && RESULT_OK == resultCode) {
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+            mItemMeetingRecyclerViewAdapter = new ItemMeetingRecyclerViewAdapter(this);
+            mRecyclerView.setAdapter(mItemMeetingRecyclerViewAdapter);
+        }
+    }
+
 }

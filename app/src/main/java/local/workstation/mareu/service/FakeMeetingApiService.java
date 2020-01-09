@@ -64,11 +64,20 @@ public class FakeMeetingApiService implements MeetingApiService {
      * {@inheritDoc}
      */
     @Override
-    public void addMeeting(Meeting meeting) {
-        // TODO check if the meeting room is free
-        // IF free => add meeting
+    public void addMeeting(Meeting meeting) throws MeetingApiServiceException {
+        // Check if the meeting room is free
+        for (Meeting m: mMeetings) {
+            if (meeting.getRoomName().equals(m.getRoomName())) {
+                if (meeting.getStart().equals(m.getStart()) || meeting.getEnd().equals(m.getEnd()))
+                    throw new MeetingApiServiceException();
+                if (meeting.getStart().after(m.getStart()) && meeting.getStart().before(m.getEnd()))
+                    throw new MeetingApiServiceException();
+                if (meeting.getEnd().after(m.getStart()) && meeting.getEnd().before(m.getEnd()))
+                    throw new MeetingApiServiceException();
+            }
+        }
+        // Add meeting
         mMeetings.add(meeting);
-        // ELSE => error message
     }
 
     /**

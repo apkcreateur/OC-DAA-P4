@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -26,11 +29,15 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 import local.workstation.mareu.R;
+import local.workstation.mareu.model.Meeting;
+import local.workstation.mareu.service.MeetingApiServiceException;
 
 import static local.workstation.mareu.ui.meeting_list.ListMeetingActivity.sApiService;
 
@@ -237,102 +244,150 @@ public class AddMeetingActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.action_add_meeting:
-                add_meeting();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.action_add_meeting) {
+            add_meeting();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     private void add_meeting() {
-        validateTextInput(mRoomNameTextInputLayout);
-        validateTextInput(mTopicTextInputLayout);
-        validateDateInput(mDateTextInputLayout);
-        validateTimeInput(mStartTimeTextInputLayout);
-        validateTimeInput(mEndTimeTextInputLayout);
-        validateEmailInput(mEmailsTextInputLayout, mEmailsChipGroup);
+        String roomName = validateTextInput(mRoomNameTextInputLayout);
+        String topic = validateTextInput(mTopicTextInputLayout);
+        Calendar date = validateDateInput(mDateTextInputLayout);
+        Calendar start = validateTimeInput(mStartTimeTextInputLayout);
+        Calendar end = validateTimeInput(mEndTimeTextInputLayout);
+        List<String> participants = validateEmailInput(mEmailsTextInputLayout, mEmailsChipGroup);
 
         if (mError) {
             Toast.makeText(this.getApplicationContext(), R.string.error_add_new_meeting, Toast.LENGTH_LONG).show();
             mError = false;
         } else {
-            // TODO
-            // Upload with Fake Service API
-            // TODO if error
-            //
-            // TODO else OK
-            Toast.makeText(this.getApplicationContext(), R.string.add_new_meeting, Toast.LENGTH_LONG).show();
-            finish();
+            if (date != null && start != null) {
+                start.set(Calendar.YEAR, date.get(Calendar.YEAR));
+                start.set(Calendar.MONTH, date.get(Calendar.MONTH));
+                start.set(Calendar.DAY_OF_MONTH, date.get(Calendar.DAY_OF_MONTH));
+            }
+            if (date != null && end != null) {
+                end.set(Calendar.YEAR, date.get(Calendar.YEAR));
+                end.set(Calendar.MONTH, date.get(Calendar.MONTH));
+                end.set(Calendar.DAY_OF_MONTH, date.get(Calendar.DAY_OF_MONTH));
+            }
+
+            try {
+                sApiService.addMeeting(new Meeting(
+                        roomName,
+                        start,
+                        end,
+                        topic,
+                        participants));
+
+                Toast.makeText(this.getApplicationContext(), R.string.add_new_meeting, Toast.LENGTH_LONG).show();
+
+                Intent intent = new Intent();
+                setResult(RESULT_OK, intent);
+
+                finish();
+            } catch (MeetingApiServiceException e) {
+                Toast.makeText(this.getApplicationContext(), R.string.error_meeting_room_already_booked, Toast.LENGTH_LONG).show();
+                mError = false;
+            }
         }
     }
 
-    private void validateTextInput(TextInputLayout inputValue) {
+    private String validateTextInput(TextInputLayout inputValue) {
         String tmpValue = Objects.requireNonNull(inputValue.getEditText()).getText().toString().trim();
 
         if (tmpValue.isEmpty()) {
             inputValue.setError(getText(R.string.error_empty_field));
             mError = true;
+            return null;
         } else {
             inputValue.setError(null);
+            return tmpValue;
         }
     }
 
-    private void validateDateInput(TextInputLayout inputValue) {
+    private Calendar validateDateInput(TextInputLayout inputValue) {
         String tmpValue = Objects.requireNonNull(inputValue.getEditText()).getText().toString().trim();
 
         if (tmpValue.isEmpty()) {
             inputValue.setError(getText(R.string.error_empty_field));
             mError = true;
+            return null;
         } else {
             // valid date format ?
             try {
-                android.text.format.DateFormat.getDateFormat(getApplicationContext()).parse(tmpValue);
+                Date dDate = android.text.format.DateFormat.getDateFormat(getApplicationContext()).parse(tmpValue);
+                Calendar date = Calendar.getInstance();
+                date.setTime(Objects.requireNonNull(dDate));
                 inputValue.setError(null);
+                return date;
             } catch (ParseException e) {
                 inputValue.setError(getText(R.string.error_invalid_date_format));
                 mError = true;
+                return null;
             }
         }
     }
 
-    private void validateTimeInput(TextInputLayout inputValue) {
+    private Calendar validateTimeInput(TextInputLayout inputValue) {
         String tmpValue = Objects.requireNonNull(inputValue.getEditText()).getText().toString().trim();
 
         if (tmpValue.isEmpty()) {
             inputValue.setError(getText(R.string.error_empty_field));
             mError = true;
+            return null;
         } else {
             // valid time format ?
             try {
-                android.text.format.DateFormat.getTimeFormat(getApplicationContext()).parse(tmpValue);
+                Date dTime = android.text.format.DateFormat.getTimeFormat(getApplicationContext()).parse(tmpValue);
+                Calendar Time = Calendar.getInstance();
+                Time.setTime(Objects.requireNonNull(dTime));
                 inputValue.setError(null);
+                return Time;
             } catch (ParseException e) {
                 inputValue.setError(getText(R.string.error_invalid_time_format));
                 mError = true;
+                return null;
             }
         }
     }
 
-    private void validateEmailInput(TextInputLayout inputValue, ChipGroup emails) {
+    private List<String> validateEmailInput(TextInputLayout inputValue, ChipGroup emails) {
         inputValue.setError(null);
         int nb = emails.getChildCount();
+        List<String> lEmails = new ArrayList<>();
 
         if (nb == 0) {
             inputValue.setError(getText(R.string.error_empty_field));
             mError = true;
+            return null;
         }
         else {
+            int error_count = 0;
             for (int i = 0; i < nb; i++) {
                 Chip tmpEmail = (Chip) emails.getChildAt(i);
                 String email = tmpEmail.getText().toString();
                 if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                    mError = true;
+                    error_count++;
+                    // TODO doesn't working
+                    tmpEmail.setChipStrokeColor(ColorStateList.valueOf(Color.RED));
+                } else
+                    lEmails.add(email);
+            }
+            if (error_count >= 1) {
+                if (error_count == 1)
                     inputValue.setError(getText(R.string.error_invalid_email));
-                    break;
-                }
+                else
+                    inputValue.setError(getText(R.string.error_invalid_emails));
+                mError = true;
+                return null;
             }
         }
+        if (mError)
+            return null;
+        else
+            return lEmails;
     }
 }

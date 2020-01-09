@@ -18,8 +18,9 @@ import java.util.List;
 
 import local.workstation.mareu.R;
 import local.workstation.mareu.model.Meeting;
-import local.workstation.mareu.service.MeetingApiService;
 import local.workstation.mareu.view.ItemMeeting;
+
+import static local.workstation.mareu.ui.meeting_list.ListMeetingActivity.sApiService;
 
 /**
  * Display list of meetings
@@ -32,13 +33,11 @@ import local.workstation.mareu.view.ItemMeeting;
  */
 public class ItemMeetingRecyclerViewAdapter extends RecyclerView.Adapter<ItemMeeting> {
     private Context mContext;
-    private MeetingApiService mApiService;
     private List<Meeting> mMeetings;
 
-    ItemMeetingRecyclerViewAdapter(Context context , MeetingApiService apiService) {
+    ItemMeetingRecyclerViewAdapter(Context context) {
         mContext = context;
-        mApiService = apiService;
-        mMeetings = mApiService.getMeetings();
+        mMeetings = sApiService.getMeetings();
     }
 
     @NonNull
@@ -69,8 +68,8 @@ public class ItemMeetingRecyclerViewAdapter extends RecyclerView.Adapter<ItemMee
         holder.mDeleteImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mApiService.delMeeting(meeting.getId());
-                mMeetings = mApiService.getMeetings();
+                sApiService.delMeeting(meeting.getId());
+                mMeetings = sApiService.getMeetings();
 
                 Toast.makeText(mContext, R.string.toast_text_delete_meeting, Toast.LENGTH_SHORT).show();
             }

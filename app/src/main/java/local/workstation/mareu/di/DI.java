@@ -5,6 +5,7 @@ import java.util.List;
 import local.workstation.mareu.model.Meeting;
 import local.workstation.mareu.service.FakeMeetingApiService;
 import local.workstation.mareu.service.MeetingApiService;
+import local.workstation.mareu.service.MeetingApiServiceException;
 
 public class DI {
     private static MeetingApiService sService = new FakeMeetingApiService();
@@ -23,7 +24,7 @@ public class DI {
      *
      * @param meetings list of meetings
      */
-    public static void initializeMeetingApiService(List<String> rooms, List<Meeting> meetings) {
+    public static void initializeMeetingApiService(List<String> rooms, List<Meeting> meetings) throws MeetingApiServiceException {
         // Purge
         sService = new FakeMeetingApiService();
         sService.delAllRooms();

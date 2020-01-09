@@ -13,6 +13,7 @@ import androidx.test.rule.ActivityTestRule;
 
 import local.workstation.mareu.R;
 import local.workstation.mareu.di.DI;
+import local.workstation.mareu.service.MeetingApiServiceException;
 import local.workstation.mareu.ui.AddMeetingActivity;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -52,7 +53,11 @@ public class ListMeetingActivityTest {
             new ActivityTestRule<ListMeetingActivity>(ListMeetingActivity.class) {
                 @Override
                 protected void beforeActivityLaunched() {
-                    DI.initializeMeetingApiService(generateRooms(), generateMeetings());
+                    try {
+                        DI.initializeMeetingApiService(generateRooms(), generateMeetings());
+                    } catch (MeetingApiServiceException e) {
+                        e.printStackTrace();
+                    }
                 }
             };
 

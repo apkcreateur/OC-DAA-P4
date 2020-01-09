@@ -43,7 +43,7 @@ public interface MeetingApiService {
      * Add a meeting
      * @param meeting meeting to add
      */
-    void addMeeting(Meeting meeting);
+    void addMeeting(Meeting meeting) throws MeetingApiServiceException;
 
     /**
      * Remove a meeting
