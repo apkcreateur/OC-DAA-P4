@@ -1,5 +1,6 @@
 package local.workstation.mareu.ui.meeting_list;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.text.TextUtils;
@@ -11,7 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 
@@ -51,9 +52,11 @@ public class ItemMeetingRecyclerViewAdapter extends RecyclerView.Adapter<ItemMee
     @Override
     public void onBindViewHolder(@NonNull final ItemMeeting holder, int position) {
         final Meeting meeting = mMeetings.get(position);
+
+        @SuppressLint("SimpleDateFormat")
         String desc = TextUtils.join(" - ", Arrays.asList(
                 meeting.getRoomName(),
-                DateFormat.getTimeInstance(DateFormat.SHORT).format(meeting.getDatetime()),
+                new SimpleDateFormat("HH:ss").format(meeting.getStart().getTime()),
                 meeting.getTopic()));
 
         holder.mDescriptionTextView.setText(desc);

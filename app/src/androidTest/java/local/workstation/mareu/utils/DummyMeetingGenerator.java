@@ -1,11 +1,13 @@
 package local.workstation.mareu.utils;
 
-import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import local.workstation.mareu.model.Meeting;
 
@@ -35,17 +37,19 @@ public abstract class DummyMeetingGenerator {
             "f.tolken@gmail.fr",
             "s.decourt@gmail.fr");
 
-    private static Date fromTime(String time) {
+    private static Calendar fromTime(String time) {
         // convert string to time
-        Time tmp = Time.valueOf(time + ":00");
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         // get now
-        Date date = new Date();
+        Calendar datetime = Calendar.getInstance();
         // set time
-        date.setHours(tmp.getHours());
-        date.setMinutes(tmp.getMinutes());
-        date.setSeconds(0);
+        try {
+            datetime.setTime(Objects.requireNonNull(sdf.parse(time)));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-        return date;
+        return datetime;
     }
 
     private static List<String> DUMMY_MEETING_ROOMS = Arrays.asList(
@@ -55,50 +59,62 @@ public abstract class DummyMeetingGenerator {
     private static List<Meeting> DUMMY_MEETINGS = Arrays.asList(
             new Meeting("Room 1",
                     fromTime("14:00"),
+                    fromTime("15:00"),
                     "Java vs Kotlin",
                     participants4),
             new Meeting("Room 2",
                     fromTime("14:15"),
+                    fromTime("15:15"),
                     "I like Java",
                     participants1),
             new Meeting("Room 3",
                     fromTime("14:00"),
+                    fromTime("15:00"),
                     "Project a world!",
                     participants2),
             new Meeting("Room 1",
                     fromTime("15:00"),
+                    fromTime("16:00"),
                     "Java part 1",
                     participants4),
             new Meeting("Room 4",
                     fromTime("09:00"),
+                    fromTime("11:00"),
                     "Project Foo!",
                     participants4),
             new Meeting("Room 3",
                     fromTime("15:00"),
+                    fromTime("16:00"),
                     "Kotlin part 1",
                     participants1),
             new Meeting("Room 9",
                     fromTime("16:45"),
+                    fromTime("17:45"),
                     "Job interview",
                     participants2),
             new Meeting("Room 2",
                     fromTime("16:00"),
+                    fromTime("17:00"),
                     "Java part 2",
                     participants4),
             new Meeting("Room 5",
                     fromTime("13:30"),
+                    fromTime("14:30"),
                     "job interview",
                     participants2),
             new Meeting("Room 5",
                     fromTime("11:45"),
+                    fromTime("12:45"),
                     "Little big project",
                     participants3),
             new Meeting("Room 7",
                     fromTime("13:45"),
+                    fromTime("14:45"),
                     "What else?",
                     participants3),
             new Meeting("Room 10",
                     fromTime("11:00"),
+                    fromTime("12:00"),
                     "Once upon a time",
                     participants4)
     );

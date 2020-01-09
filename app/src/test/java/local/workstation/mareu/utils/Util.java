@@ -1,19 +1,23 @@
 package local.workstation.mareu.utils;
 
-import java.sql.Time;
-import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Objects;
 
 public class Util {
-    public static Date fromTime(String time) {
+    public static Calendar fromTime(String time) {
         // convert string to time
-        Time tmp = Time.valueOf(time + ":00");
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         // get now
-        Date date = new Date();
+        Calendar datetime = Calendar.getInstance();
         // set time
-        date.setHours(tmp.getHours());
-        date.setMinutes(tmp.getMinutes());
-        date.setSeconds(0);
+        try {
+            datetime.setTime(Objects.requireNonNull(sdf.parse(time)));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-        return date;
+        return datetime;
     }
 }

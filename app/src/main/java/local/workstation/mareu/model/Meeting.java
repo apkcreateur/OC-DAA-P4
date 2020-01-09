@@ -3,7 +3,7 @@ package local.workstation.mareu.model;
 import android.graphics.Color;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 import java.util.regex.Pattern;
@@ -14,7 +14,8 @@ public class Meeting {
 
     private Integer mId;
     private String mRoomName;
-    private Date mDatetime;
+    private Calendar mStart;
+    private Calendar mEnd;
     private String mTopic;
     private List<String> mParticipants;
     private Integer mColor;
@@ -23,13 +24,15 @@ public class Meeting {
      * Constructor
      * @param topic topic of the meeting
      * @param roomName name of the meeting room
-     * @param datetime meeting time
+     * @param start meeting start date and time
+     * @param end meeting end date and time
      * @param participants list of email addresses of meeting participants
      */
-    public Meeting(String roomName, Date datetime, String topic, List<String> participants) {
+    public Meeting(String roomName, Calendar start, Calendar end, String topic, List<String> participants) {
         mId = ++sLastId;
         mRoomName = roomName;
-        mDatetime = datetime;
+        mStart = start;
+        mEnd = end;
         mTopic = topic;
         mParticipants = new ArrayList<>();
         this.setParticipants(participants);
@@ -49,8 +52,12 @@ public class Meeting {
         return mRoomName;
     }
 
-    public Date getDatetime() {
-        return mDatetime;
+    public Calendar getStart() {
+        return mStart;
+    }
+
+    public Calendar getEnd() {
+        return mEnd;
     }
 
     public String getTopic() {

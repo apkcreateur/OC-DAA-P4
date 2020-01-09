@@ -65,7 +65,10 @@ public class FakeMeetingApiService implements MeetingApiService {
      */
     @Override
     public void addMeeting(Meeting meeting) {
+        // TODO check if the meeting room is free
+        // IF free => add meeting
         mMeetings.add(meeting);
+        // ELSE => error message
     }
 
     /**

@@ -21,6 +21,7 @@ public class MeetingTest {
 
         Meeting meeting = new Meeting("Salle 1",
                 fromTime("11:00"),
+                fromTime("11:30"),
                 "Just a meeting",
                 participants);
 
@@ -36,6 +37,7 @@ public class MeetingTest {
 
         Meeting meeting = new Meeting("Salle 1",
                 fromTime("11:00"),
+                fromTime("12:00"),
                 "Just a meeting",
                 participants);
 

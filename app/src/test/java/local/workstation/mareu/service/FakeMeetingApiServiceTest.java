@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 import local.workstation.mareu.model.Meeting;
@@ -24,7 +24,7 @@ public class FakeMeetingApiServiceTest {
         List<String> participants = Arrays.asList(
                 "p.roger@gmail.com",
                 "s.ramen@gmail.fr");
-        mMeeting = new Meeting("Salle 1", new Date(), "sujet", participants);
+        mMeeting = new Meeting("Salle 1", Calendar.getInstance(), Calendar.getInstance(), "sujet", participants);
 
         // Initialize API with 1 Meeting
         mApi.addMeeting(mMeeting);
@@ -36,7 +36,7 @@ public class FakeMeetingApiServiceTest {
         List<String> participants = Arrays.asList(
                 "p.roger@gmail.com",
                 "s.ramen@gmail.fr");
-        Meeting meeting = new Meeting("Salle 2", new Date(), "sujet", participants);
+        Meeting meeting = new Meeting("Salle 2", Calendar.getInstance(), Calendar.getInstance(), "sujet", participants);
 
         mApi.addMeeting(meeting);
 
