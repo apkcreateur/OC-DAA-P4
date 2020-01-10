@@ -44,7 +44,7 @@ import static local.workstation.mareu.ui.meeting_list.ListMeetingActivity.sApiSe
 /**
  * Add new meeting
  */
-public class AddMeetingActivity extends AppCompatActivity {
+public class AddMeetingActivity extends AppCompatActivity implements View.OnClickListener {
 
     private boolean mError;
 
@@ -147,92 +147,35 @@ public class AddMeetingActivity extends AppCompatActivity {
         // Meeting date -->
         mDateTextInputLayout = findViewById(R.id.date_layout);
         mDateTextInputEditText = findViewById(R.id.date);
-
-        mDateTextInputEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar calendar = Calendar.getInstance();
-                DatePickerDialog mDatePickerDialog;
-
-                mDatePickerDialog = new DatePickerDialog(v.getContext(),
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                                Calendar cal = Calendar.getInstance();
-                                cal.set(year, month, dayOfMonth);
-                                mDateTextInputEditText.setText(android.text.format.DateFormat.getDateFormat(getApplicationContext()).format(cal.getTime()));
-                            }
-                        },
-                        calendar.get(Calendar.YEAR),
-                        calendar.get(Calendar.MONTH),
-                        calendar.get(Calendar.DAY_OF_MONTH));
-                mDatePickerDialog.show();
-            }
-        });
+        mDateTextInputEditText.setOnClickListener(this);
         // Meeting date <--
 
         // Meeting time -->
         mStartTimeTextInputLayout = findViewById(R.id.from_layout);
         mStartTimeTextInputEditText = findViewById(R.id.from);
+        mStartTimeTextInputEditText.setOnClickListener(this);
+
         mEndTimeTextInputLayout = findViewById(R.id.to_layout);
         mEndTimeTextInputEditText = findViewById(R.id.to);
-
-        mStartTimeTextInputEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar time = Calendar.getInstance();
-
-                int unroundedMinutes = time.get(Calendar.MINUTE);
-                int mod = unroundedMinutes % 15;
-                time.add(Calendar.MINUTE, mod > 0 ? (15 - mod) : 0);
-
-                TimePickerDialog mTimePickerDialog;
-
-                mTimePickerDialog = new TimePickerDialog(AddMeetingActivity.this,
-                        new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                Calendar tim = Calendar.getInstance();
-                                tim.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                                tim.set(Calendar.MINUTE, minute);
-                                mStartTimeTextInputEditText.setText(android.text.format.DateFormat.getTimeFormat(getApplicationContext()).format(tim.getTime()));
-                            }
-                        },
-                        time.get(Calendar.HOUR_OF_DAY),
-                        time.get(Calendar.MINUTE),
-                        DateFormat.is24HourFormat(AddMeetingActivity.this));
-                mTimePickerDialog.show();
-            }
-        });
-
-        mEndTimeTextInputEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar time = Calendar.getInstance();
-
-                int unroundedMinutes = time.get(Calendar.MINUTE);
-                int mod = unroundedMinutes % 15;
-                time.add(Calendar.MINUTE, mod > 0 ? (15 - mod) : 0);
-
-                TimePickerDialog mTimePickerDialog;
-
-                mTimePickerDialog = new TimePickerDialog(AddMeetingActivity.this,
-                        new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                Calendar tim = Calendar.getInstance();
-                                tim.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                                tim.set(Calendar.MINUTE, minute);
-                                mEndTimeTextInputEditText.setText(android.text.format.DateFormat.getTimeFormat(getApplicationContext()).format(tim.getTime()));
-                            }
-                        },
-                        time.get(Calendar.HOUR_OF_DAY),
-                        time.get(Calendar.MINUTE),
-                        DateFormat.is24HourFormat(AddMeetingActivity.this));
-                mTimePickerDialog.show();
-            }
-        });
+        mEndTimeTextInputEditText.setOnClickListener(this);
         // Meeting time <--
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+
+        switch (id){
+            case R.id.date:
+                displayDatePicker();
+                break;
+            case R.id.from:
+            case R.id.to:
+                displayTimePicker(id);
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -245,13 +188,60 @@ public class AddMeetingActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_add_meeting) {
-            add_meeting();
+            addMeeting();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void add_meeting() {
+    private void displayDatePicker() {
+        Calendar calendar = Calendar.getInstance();
+        DatePickerDialog mDatePickerDialog;
+
+        mDatePickerDialog = new DatePickerDialog(AddMeetingActivity.this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        Calendar cal = Calendar.getInstance();
+                        cal.set(year, month, dayOfMonth);
+                        mDateTextInputEditText.setText(android.text.format.DateFormat.getDateFormat(getApplicationContext()).format(cal.getTime()));
+                    }
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH));
+
+        mDatePickerDialog.show();
+    }
+
+    private void displayTimePicker(final int id) {
+        Calendar time = Calendar.getInstance();
+        TimePickerDialog mTimePickerDialog;
+
+        int roundedMinutes = time.get(Calendar.MINUTE) % 15;
+        time.add(Calendar.MINUTE, roundedMinutes > 0 ? (15 - roundedMinutes) : 0);
+
+        mTimePickerDialog = new TimePickerDialog(AddMeetingActivity.this,
+                new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        Calendar tim = Calendar.getInstance();
+                        tim.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        tim.set(Calendar.MINUTE, minute);
+                        if (id == R.id.from)
+                            mStartTimeTextInputEditText.setText(android.text.format.DateFormat.getTimeFormat(getApplicationContext()).format(tim.getTime()));
+                        else if (id == R.id.to)
+                            mEndTimeTextInputEditText.setText(android.text.format.DateFormat.getTimeFormat(getApplicationContext()).format(tim.getTime()));
+                    }
+                },
+                time.get(Calendar.HOUR_OF_DAY),
+                time.get(Calendar.MINUTE),
+                DateFormat.is24HourFormat(AddMeetingActivity.this));
+
+        mTimePickerDialog.show();
+    }
+
+    private void addMeeting() {
         String roomName = validateTextInput(mRoomNameTextInputLayout);
         String topic = validateTextInput(mTopicTextInputLayout);
         Calendar date = validateDateInput(mDateTextInputLayout);
@@ -371,7 +361,8 @@ public class AddMeetingActivity extends AppCompatActivity {
                 String email = tmpEmail.getText().toString();
                 if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                     error_count++;
-                    // TODO doesn't working
+                    // TODO OK, but to delete later
+                    tmpEmail.setChipStrokeWidth(1);
                     tmpEmail.setChipStrokeColor(ColorStateList.valueOf(Color.RED));
                 } else
                     lEmails.add(email);
