@@ -7,7 +7,6 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -16,8 +15,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.DatePicker;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.material.chip.Chip;
@@ -35,6 +32,8 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
+import butterknife.OnTouch;
 import local.workstation.mareu.R;
 import local.workstation.mareu.model.Meeting;
 import local.workstation.mareu.service.MeetingApiServiceException;
@@ -84,57 +83,9 @@ public class AddMeetingActivity extends AppCompatActivity {
                 this,
                 R.layout.room_item,
                 mRooms));
-
-        mRoomNameAutoCompleteTextView.setOnTouchListener((v, event) -> {
-            if(event.getAction() == MotionEvent.ACTION_DOWN) {
-                mRoomNameAutoCompleteTextView.showDropDown();
-                return true;
-            }
-            return (event.getAction() == MotionEvent.ACTION_UP);
-        });
         // Meeting room <--
 
         // Meeting participants -->
-        mEmailsTextInputEditText.addTextChangedListener(new TextWatcher() {
-            private boolean mNewEmail = false;
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                mNewEmail = false;
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(count == 1) {
-                    if(s.charAt(start) == ' ' || s.charAt(start) == ',' || s.charAt(start) == ';') {
-                        mNewEmail = true;
-                    }
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (mNewEmail) {
-                    String value = s.toString().substring(0, s.length() - 1);
-                    value = value.trim();
-                    if (!value.isEmpty()) {
-                        if (!validEmail(value)) {
-                            mEmailsTextInputLayout.setError(getText(R.string.error_invalid_email));
-                        } else {
-                            final Chip email = new Chip(AddMeetingActivity.this);
-                            email.setText(value);
-                            email.setCloseIconVisible(true);
-                            email.setOnCloseIconClickListener(v -> mEmailsChipGroup.removeView(email));
-
-                            mEmailsChipGroup.addView(email);
-                            mEmailsTextInputEditText.setText("");
-                            mEmailsTextInputLayout.setError(null);
-                        }
-                    }
-                }
-            }
-        });
-
         mEmailsTextInputEditText.setOnKeyListener((v, keyCode, event) -> {
             if (event.getAction() == KeyEvent.ACTION_DOWN) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER) {
@@ -181,6 +132,15 @@ public class AddMeetingActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @OnTouch(R.id.room_name)
+    boolean onTouch(View v, MotionEvent event) {
+        if(event.getAction() == MotionEvent.ACTION_DOWN) {
+            mRoomNameAutoCompleteTextView.showDropDown();
+            return true;
+        }
+        return (event.getAction() == MotionEvent.ACTION_UP);
+    }
+
     @OnClick(R.id.date)
     void displayDatePicker() {
         Calendar calendar = Calendar.getInstance();
@@ -224,6 +184,33 @@ public class AddMeetingActivity extends AppCompatActivity {
                 DateFormat.is24HourFormat(AddMeetingActivity.this));
 
         mTimePickerDialog.show();
+    }
+
+    @OnTextChanged(R.id.emails)
+    void afterTextChanged(Editable s) {
+        String value = s.toString();
+
+        if (value.length() > 0) {
+            char lastChar = value.charAt(value.length() - 1);
+
+            if (lastChar == ' ' || lastChar == ',') {
+                value = value.trim();
+                if (!value.isEmpty()) {
+                    if (!validEmail(value)) {
+                        mEmailsTextInputLayout.setError(getText(R.string.error_invalid_email));
+                    } else {
+                        final Chip email = new Chip(AddMeetingActivity.this);
+                        email.setText(value);
+                        email.setCloseIconVisible(true);
+                        email.setOnCloseIconClickListener(v -> mEmailsChipGroup.removeView(email));
+
+                        mEmailsChipGroup.addView(email);
+                        mEmailsTextInputEditText.setText("");
+                        mEmailsTextInputLayout.setError(null);
+                    }
+                }
+            }
+        }
     }
 
     private void addMeeting() {
