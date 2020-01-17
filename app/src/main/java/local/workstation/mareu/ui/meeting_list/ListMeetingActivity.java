@@ -9,14 +9,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.Serializable;
 import java.util.Objects;
 
 import local.workstation.mareu.R;
 import local.workstation.mareu.di.DI;
+import local.workstation.mareu.events.DeleteMeetingEvent;
 import local.workstation.mareu.service.MeetingApiService;
 import local.workstation.mareu.ui.AddMeetingActivity;
 
@@ -42,9 +47,8 @@ public class ListMeetingActivity extends AppCompatActivity {
         mApiService = DI.getApiService();
 
         mRecyclerView = findViewById(R.id.list);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mItemMeetingRecyclerViewAdapter = new ItemMeetingRecyclerViewAdapter(this, mApiService);
-        mRecyclerView.setAdapter(mItemMeetingRecyclerViewAdapter);
+
+        init();
 
         mFloatingActionButton = findViewById(R.id.add);
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -69,10 +73,35 @@ public class ListMeetingActivity extends AppCompatActivity {
             Log.d("DEBUG", "on activity result");
             mApiService = (MeetingApiService) Objects.requireNonNull(data).getSerializableExtra(BUNDLE_API_SERVICE);
 
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-            mItemMeetingRecyclerViewAdapter = new ItemMeetingRecyclerViewAdapter(this, mApiService);
-            mRecyclerView.setAdapter(mItemMeetingRecyclerViewAdapter);
+            init();
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+    @Subscribe
+    public void onDeleteMeeting(DeleteMeetingEvent event) {
+        mApiService.delMeeting(event.getMeetingId());
+
+        Toast.makeText(getApplicationContext(), R.string.toast_text_delete_meeting, Toast.LENGTH_SHORT).show();
+
+        init();
+    }
+
+    private void init() {
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mItemMeetingRecyclerViewAdapter = new ItemMeetingRecyclerViewAdapter(this, mApiService);
+        mRecyclerView.setAdapter(mItemMeetingRecyclerViewAdapter);
     }
 
 }

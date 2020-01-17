@@ -12,11 +12,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 
 import local.workstation.mareu.R;
+import local.workstation.mareu.events.DeleteMeetingEvent;
 import local.workstation.mareu.model.Meeting;
 import local.workstation.mareu.service.MeetingApiService;
 import local.workstation.mareu.view.ItemMeeting;
@@ -66,15 +69,10 @@ public class ItemMeetingRecyclerViewAdapter extends RecyclerView.Adapter<ItemMee
         ((GradientDrawable)holder.mImageView.getBackground()).setColor(meeting.getColor());
 
         // Delete meeting
-        // TODO Utiliser EventBus
-        // notify datastatechange
         holder.mDeleteImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mApiService.delMeeting(meeting.getId());
-                mMeetings = mApiService.getMeetings();
-
-                Toast.makeText(mContext, R.string.toast_text_delete_meeting, Toast.LENGTH_SHORT).show();
+                EventBus.getDefault().post(new DeleteMeetingEvent(meeting.getId()));
             }
         });
     }
