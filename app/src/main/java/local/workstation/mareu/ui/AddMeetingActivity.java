@@ -6,13 +6,11 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
-import android.util.Patterns;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -28,6 +26,7 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,22 +36,26 @@ import java.util.Objects;
 
 import local.workstation.mareu.R;
 import local.workstation.mareu.model.Meeting;
+import local.workstation.mareu.service.MeetingApiService;
 import local.workstation.mareu.service.MeetingApiServiceException;
+import local.workstation.mareu.ui.meeting_list.ListMeetingActivity;
 
-import static local.workstation.mareu.ui.meeting_list.ListMeetingActivity.sApiService;
+import static local.workstation.mareu.tool.Validator.validEmail;
+import static local.workstation.mareu.ui.meeting_list.ListMeetingActivity.BUNDLE_API_SERVICE;
 
 /**
  * Add new meeting
  */
 public class AddMeetingActivity extends AppCompatActivity implements View.OnClickListener {
-
     private boolean mError;
 
+    private MeetingApiService mApiService;
     private List<String> mRooms;
     private TextInputLayout mRoomNameTextInputLayout;
     private AutoCompleteTextView mRoomNameAutoCompleteTextView;
 
     private TextInputLayout mTopicTextInputLayout;
+    private TextInputEditText mTopicTextInputEditText;
 
     private TextInputLayout mEmailsTextInputLayout;
     private ChipGroup mEmailsChipGroup;
@@ -68,13 +71,18 @@ public class AddMeetingActivity extends AppCompatActivity implements View.OnClic
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         // Global -->
+        // Get ApiService
+        Intent intent = getIntent();
+        mApiService = (MeetingApiService) intent.getSerializableExtra(BUNDLE_API_SERVICE);
+
         setContentView(R.layout.activity_add_meeting);
         mError = false;
         // Global <--
 
         // Meeting room -->
-        mRooms = sApiService.getRooms();
+        mRooms = mApiService.getRooms();
         mRoomNameTextInputLayout = findViewById(R.id.room_name_layout);
         mRoomNameAutoCompleteTextView = findViewById(R.id.room_name);
 
@@ -96,7 +104,8 @@ public class AddMeetingActivity extends AppCompatActivity implements View.OnClic
         // Meeting room <--
 
         // Meeting topic -->
-        mTopicTextInputLayout = findViewById(R.id.topic);
+        mTopicTextInputLayout = findViewById(R.id.topic_layout);
+        mTopicTextInputEditText = findViewById(R.id.topic);
         // Meeting topic <--
 
         // Meeting participants -->
@@ -127,19 +136,61 @@ public class AddMeetingActivity extends AppCompatActivity implements View.OnClic
                     String value = s.toString().substring(0, s.length() - 1);
                     value = value.trim();
                     if (!value.isEmpty()) {
-                        final Chip email = new Chip(AddMeetingActivity.this);
-                        email.setText(value);
-                        email.setCloseIconVisible(true);
-                        email.setOnCloseIconClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                mEmailsChipGroup.removeView(email);
-                            }
-                        });
-                        mEmailsChipGroup.addView(email);
-                        mEmailsTextInputEditText.setText("");
+                        if (!validEmail(value)) {
+                            mEmailsTextInputLayout.setError(getText(R.string.error_invalid_email));
+                        } else {
+                            final Chip email = new Chip(AddMeetingActivity.this);
+                            email.setText(value);
+                            email.setCloseIconVisible(true);
+                            email.setOnCloseIconClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    mEmailsChipGroup.removeView(email);
+                                }
+                            });
+
+                            mEmailsChipGroup.addView(email);
+                            mEmailsTextInputEditText.setText("");
+                            mEmailsTextInputLayout.setError(null);
+                        }
                     }
                 }
+            }
+        });
+
+        mEmailsTextInputEditText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                        String value = Objects.requireNonNull(mEmailsTextInputEditText.getText()).toString().trim();
+
+                        if (!value.isEmpty()) {
+                            if (!validEmail(value)) {
+                                mEmailsTextInputLayout.setError(getText(R.string.error_invalid_email));
+
+                                return false;
+                            } else {
+                                final Chip email = new Chip(AddMeetingActivity.this);
+                                email.setText(value);
+                                email.setCloseIconVisible(true);
+                                email.setOnCloseIconClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        mEmailsChipGroup.removeView(email);
+                                    }
+                                });
+
+                                mEmailsChipGroup.addView(email);
+                                mEmailsTextInputEditText.setText("");
+                                mEmailsTextInputLayout.setError(null);
+
+                                return true;
+                            }
+                        }
+                    }
+                }
+                return false;
             }
         });
         // Meeting participants <--
@@ -249,23 +300,29 @@ public class AddMeetingActivity extends AppCompatActivity implements View.OnClic
         Calendar end = validateTimeInput(mEndTimeTextInputLayout);
         List<String> participants = validateEmailInput(mEmailsTextInputLayout, mEmailsChipGroup);
 
+
+        if (date != null && start != null && end != null) {
+            start.set(Calendar.YEAR, date.get(Calendar.YEAR));
+            start.set(Calendar.MONTH, date.get(Calendar.MONTH));
+            start.set(Calendar.DAY_OF_MONTH, date.get(Calendar.DAY_OF_MONTH));
+
+            end.set(Calendar.YEAR, date.get(Calendar.YEAR));
+            end.set(Calendar.MONTH, date.get(Calendar.MONTH));
+            end.set(Calendar.DAY_OF_MONTH, date.get(Calendar.DAY_OF_MONTH));
+
+            if (start.compareTo(end) >= 0) {
+                mEndTimeTextInputLayout.setError(getText(R.string.error_time_comparison));
+                mError = true;
+            }
+        }
+
         if (mError) {
             Toast.makeText(this.getApplicationContext(), R.string.error_add_new_meeting, Toast.LENGTH_LONG).show();
             mError = false;
         } else {
-            if (date != null && start != null) {
-                start.set(Calendar.YEAR, date.get(Calendar.YEAR));
-                start.set(Calendar.MONTH, date.get(Calendar.MONTH));
-                start.set(Calendar.DAY_OF_MONTH, date.get(Calendar.DAY_OF_MONTH));
-            }
-            if (date != null && end != null) {
-                end.set(Calendar.YEAR, date.get(Calendar.YEAR));
-                end.set(Calendar.MONTH, date.get(Calendar.MONTH));
-                end.set(Calendar.DAY_OF_MONTH, date.get(Calendar.DAY_OF_MONTH));
-            }
 
             try {
-                sApiService.addMeeting(new Meeting(
+                mApiService.addMeeting(new Meeting(
                         roomName,
                         start,
                         end,
@@ -274,11 +331,13 @@ public class AddMeetingActivity extends AppCompatActivity implements View.OnClic
 
                 Toast.makeText(this.getApplicationContext(), R.string.add_new_meeting, Toast.LENGTH_LONG).show();
 
-                Intent intent = new Intent();
-                setResult(RESULT_OK, intent);
+                Intent intentApiService = new Intent(AddMeetingActivity.this, ListMeetingActivity.class);
+                intentApiService.putExtra(BUNDLE_API_SERVICE, (Serializable) mApiService);
+                setResult(RESULT_OK, intentApiService);
 
                 finish();
             } catch (MeetingApiServiceException e) {
+                mRoomNameTextInputLayout.setError(getText(R.string.error_meeting_room_already_booked));
                 Toast.makeText(this.getApplicationContext(), R.string.error_meeting_room_already_booked, Toast.LENGTH_LONG).show();
                 mError = false;
             }
@@ -353,32 +412,14 @@ public class AddMeetingActivity extends AppCompatActivity implements View.OnClic
             inputValue.setError(getText(R.string.error_empty_field));
             mError = true;
             return null;
-        }
-        else {
-            int error_count = 0;
+        } else {
             for (int i = 0; i < nb; i++) {
                 Chip tmpEmail = (Chip) emails.getChildAt(i);
                 String email = tmpEmail.getText().toString();
-                if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                    error_count++;
-                    // TODO OK, but to delete later
-                    tmpEmail.setChipStrokeWidth(1);
-                    tmpEmail.setChipStrokeColor(ColorStateList.valueOf(Color.RED));
-                } else
+
                     lEmails.add(email);
             }
-            if (error_count >= 1) {
-                if (error_count == 1)
-                    inputValue.setError(getText(R.string.error_invalid_email));
-                else
-                    inputValue.setError(getText(R.string.error_invalid_emails));
-                mError = true;
-                return null;
-            }
-        }
-        if (mError)
-            return null;
-        else
             return lEmails;
+        }
     }
 }

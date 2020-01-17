@@ -21,7 +21,8 @@
     <string name="error_invalid_field">Ce champ n\'est pas valide</string>
     <string name="error_invalid_date_format">Format de la date invalide</string>
     <string name="error_invalid_time_format">Format de l\'heure invalide</string>
-    <string name="error_invalid_email">Une adresse mail est invalide</string>
-    <string name="error_invalid_emails">Plusieurs adresses mail sont invalides</string>
-    <string name="error_meeting_room_already_booked">salle de réunion déjà réservé</string>
+    <string name="error_invalid_email">L\'adresse mail est invalide</string>
+    <string name="error_time_comparison">L\'heure de fin ne peut pas être antérieure à l\'heure de
+        début</string>
+    <string name="error_meeting_room_already_booked">La salle de réunion est déjà réservée</string>
 </resources>

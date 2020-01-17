@@ -1,5 +1,6 @@
 package local.workstation.mareu.service;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -9,7 +10,7 @@ import local.workstation.mareu.model.Meeting;
 /**
  * Dummy mock for the Meeting Api Service
  */
-public class FakeMeetingApiService implements MeetingApiService {
+public class FakeMeetingApiService implements MeetingApiService, Serializable {
     private List<Meeting> mMeetings;
     private final List<String> mRooms;
 

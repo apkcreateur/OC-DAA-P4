@@ -2,13 +2,14 @@ package local.workstation.mareu.model;
 
 import android.graphics.Color;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 import java.util.regex.Pattern;
 
-public class Meeting {
+public class Meeting implements Serializable {
     private static Integer sLastId = 0;
     private static Random sRandom = new Random();
 

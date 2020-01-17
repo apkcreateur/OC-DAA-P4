@@ -32,13 +32,14 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/topic"
+        android:id="@+id/topic_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_input_layout_margin"
         app:errorEnabled="true">
 
     <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/topic"
         android:hint="@string/meeting_topic"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
