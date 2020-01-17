@@ -26,7 +26,6 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.io.Serializable;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -36,12 +35,10 @@ import java.util.Objects;
 
 import local.workstation.mareu.R;
 import local.workstation.mareu.model.Meeting;
-import local.workstation.mareu.service.MeetingApiService;
 import local.workstation.mareu.service.MeetingApiServiceException;
-import local.workstation.mareu.ui.meeting_list.ListMeetingActivity;
 
 import static local.workstation.mareu.tool.Validator.validEmail;
-import static local.workstation.mareu.ui.meeting_list.ListMeetingActivity.BUNDLE_API_SERVICE;
+import static local.workstation.mareu.ui.meeting_list.ListMeetingActivity.sApiService;
 
 /**
  * Add new meeting
@@ -49,7 +46,6 @@ import static local.workstation.mareu.ui.meeting_list.ListMeetingActivity.BUNDLE
 public class AddMeetingActivity extends AppCompatActivity implements View.OnClickListener {
     private boolean mError;
 
-    private MeetingApiService mApiService;
     private List<String> mRooms;
     private TextInputLayout mRoomNameTextInputLayout;
     private AutoCompleteTextView mRoomNameAutoCompleteTextView;
@@ -73,16 +69,12 @@ public class AddMeetingActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
 
         // Global -->
-        // Get ApiService
-        Intent intent = getIntent();
-        mApiService = (MeetingApiService) intent.getSerializableExtra(BUNDLE_API_SERVICE);
-
         setContentView(R.layout.activity_add_meeting);
         mError = false;
         // Global <--
 
         // Meeting room -->
-        mRooms = mApiService.getRooms();
+        mRooms = sApiService.getRooms();
         mRoomNameTextInputLayout = findViewById(R.id.room_name_layout);
         mRoomNameAutoCompleteTextView = findViewById(R.id.room_name);
 
@@ -322,7 +314,7 @@ public class AddMeetingActivity extends AppCompatActivity implements View.OnClic
         } else {
 
             try {
-                mApiService.addMeeting(new Meeting(
+                sApiService.addMeeting(new Meeting(
                         roomName,
                         start,
                         end,
@@ -330,10 +322,6 @@ public class AddMeetingActivity extends AppCompatActivity implements View.OnClic
                         participants));
 
                 Toast.makeText(this.getApplicationContext(), R.string.add_new_meeting, Toast.LENGTH_LONG).show();
-
-                Intent intentApiService = new Intent(AddMeetingActivity.this, ListMeetingActivity.class);
-                intentApiService.putExtra(BUNDLE_API_SERVICE, (Serializable) mApiService);
-                setResult(RESULT_OK, intentApiService);
 
                 finish();
             } catch (MeetingApiServiceException e) {

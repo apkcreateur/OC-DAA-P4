@@ -1,6 +1,5 @@
 package local.workstation.mareu.service;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -10,7 +9,7 @@ import local.workstation.mareu.model.Meeting;
 /**
  * Dummy mock for the Meeting Api Service
  */
-public class FakeMeetingApiService implements MeetingApiService, Serializable {
+public class FakeMeetingApiService implements MeetingApiService {
     private List<Meeting> mMeetings;
     private final List<String> mRooms;
 
@@ -56,7 +55,6 @@ public class FakeMeetingApiService implements MeetingApiService, Serializable {
     /**
      * {@inheritDoc}
      */
-    @Override
     public List<Meeting> getMeetings() {
         return mMeetings;
     }

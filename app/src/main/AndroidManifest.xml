@@ -14,7 +14,7 @@
             android:name=".ui.AddMeetingActivity"
             android:parentActivityName=".ui.meeting_list.ListMeetingActivity"
             android:theme="@style/AppTheme.AddMeetingTheme"></activity>
-        <activity android:name=".ui.meeting_list.ListMeetingActivity">
+        <activity android:name=".ui.meeting_list.ListMeetingActivity" android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
