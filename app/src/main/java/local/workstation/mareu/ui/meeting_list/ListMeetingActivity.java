@@ -14,6 +14,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import local.workstation.mareu.R;
 import local.workstation.mareu.di.DI;
 import local.workstation.mareu.events.DeleteMeetingEvent;
@@ -27,28 +29,23 @@ import local.workstation.mareu.ui.AddMeetingActivity;
  */
 public class ListMeetingActivity extends AppCompatActivity {
     public static MeetingApiService sApiService;
-    private RecyclerView mRecyclerView;
+
+    @BindView(R.id.list) RecyclerView mRecyclerView;
+    @BindView(R.id.add) FloatingActionButton mFloatingActionButton;
     private ItemMeetingRecyclerViewAdapter mItemMeetingRecyclerViewAdapter;
-    private FloatingActionButton mFloatingActionButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_meeting);
+        ButterKnife.bind(this);
 
         sApiService = DI.getApiService();
 
-        mRecyclerView = findViewById(R.id.list);
-
         init();
 
-        mFloatingActionButton = findViewById(R.id.add);
-        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ListMeetingActivity.this, AddMeetingActivity.class));
-            }
-        });
+        mFloatingActionButton.setOnClickListener(v -> startActivity(new Intent(ListMeetingActivity.this, AddMeetingActivity.class)));
     }
 
     @Override
