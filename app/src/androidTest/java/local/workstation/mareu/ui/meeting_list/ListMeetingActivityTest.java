@@ -27,7 +27,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static local.workstation.mareu.utils.DummyMeetingGenerator.generateRooms;
-import static local.workstation.mareu.utils.RecyclerViewItemCountAssertion.itemCountAssertion;
+import static local.workstation.mareu.utils.assertions.RecyclerViewItemCountAssertion.itemCountAssertion;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -38,9 +38,9 @@ import static local.workstation.mareu.utils.DummyMeetingGenerator.EXPECTED_DESCR
 import static local.workstation.mareu.utils.DummyMeetingGenerator.EXPECTED_ITEM_POSITION;
 import static local.workstation.mareu.utils.DummyMeetingGenerator.EXPECTED_PARTICIPANTS;
 import static local.workstation.mareu.utils.DummyMeetingGenerator.ITEMS_COUNT;
-import static local.workstation.mareu.utils.TextViewValueAssertion.matchesDescriptionAtItemPosition;
-import static local.workstation.mareu.utils.TextViewValueAssertion.matchesParticipantsAtItemPosition;
-import static local.workstation.mareu.utils.ClickButtonAction.clickToDeleteButton;
+import static local.workstation.mareu.utils.assertions.TextViewValueAssertion.matchesDescriptionAtItemPosition;
+import static local.workstation.mareu.utils.assertions.TextViewValueAssertion.matchesParticipantsAtItemPosition;
+import static local.workstation.mareu.utils.actions.ClickButtonAction.clickToDeleteButton;
 
 @RunWith(AndroidJUnit4.class)
 public class ListMeetingActivityTest {

@@ -1,4 +1,4 @@
-package local.workstation.mareu.utils;
+package local.workstation.mareu.utils.actions;
 
 import android.view.View;
 

@@ -1,4 +1,4 @@
-package local.workstation.mareu.utils;
+package local.workstation.mareu.utils.assertions;
 
 import android.view.View;
 import android.widget.TextView;
