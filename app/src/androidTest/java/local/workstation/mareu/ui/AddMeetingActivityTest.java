@@ -45,6 +45,7 @@ public class AddMeetingActivityTest {
         private static final String sTopic = "New Meeting!";
         private static final String sEmail1 = "mickael@gmail.com";
         private static final String sEmail2 = "john@outlook.com";
+        private static final String sEmailInvalid = "test";
 
         /**
          * Define rules to initialize AddMeetingActivity
@@ -94,20 +95,56 @@ public class AddMeetingActivityTest {
             onView(withId(R.id.topic_layout)).check(matchesNoErrorText());
         }
 
+        /**
+         * Check the correct entry of the Email field (press Enter key)
+         */
         @Test
-        public void givenValidEmail_whenClickToAddMeeting_thenGetEmailWithoutError() {
+        public void givenValidEmail_whenPressEnterKey_thenGetEmailWithoutError() {
             onView(withId(R.id.emails)).perform(typeText(sEmail1));
             onView(withId(R.id.emails)).perform(pressKey(KeyEvent.KEYCODE_ENTER));
-            onView(withId(R.id.action_add_meeting)).perform(click());
 
             onView(withId(R.id.emails_group)).check(matchesChipTextAtPosition(1, sEmail1));
             onView(withId(R.id.emails)).check(matches(withHint(R.string.list_of_participants)));
             onView(withId(R.id.participants)).check(matchesNoErrorText());
         }
+
+        /**
+         * Check invalid entry of the Email field (press Enter key)
+         */
+        @Test
+        public void givenInvalidEmail_whenPressEnterKey_thenGetErrorMessage() {
+            AddMeetingActivity activity = mActivityRule.getActivity();
+
+            onView(withId(R.id.emails)).perform(typeText(sEmailInvalid));
+            onView(withId(R.id.emails)).perform(pressKey(KeyEvent.KEYCODE_ENTER));
+
+            onView(withId(R.id.participants))
+                    .check(matchesErrorText(activity.getString(R.string.error_invalid_email)));
+            onView(withId(R.id.emails)).check(matches(withHint(R.string.list_of_participants)));
+        }
     }
 
     @RunWith(Parameterized.class)
-    public static class ComponentParamTests {
+    public static class ComponentParamTestsCheckEmptyFields {
+
+        /**
+         * Test data
+         * @return list of field identifiers to check
+         */
+        @Parameters
+        public static Collection<Object> data() {
+            return Arrays.asList(new Object[] {
+                    R.id.room_name_layout,
+                    R.id.topic_layout,
+                    R.id.date_layout,
+                    R.id.to_layout,
+                    R.id.from_layout,
+                    R.id.participants
+            });
+        }
+
+        @Parameterized.Parameter
+        public int viewId;
 
         /**
          * Define rules to initialize AddMeetingActivity
@@ -130,25 +167,6 @@ public class AddMeetingActivityTest {
         }
 
         /**
-         * Test data
-         * @return list of field identifiers to check
-         */
-        @Parameters
-        public static Collection<Object> data() {
-            return Arrays.asList(new Object[] {
-                    R.id.room_name_layout,
-                    R.id.topic_layout,
-                    R.id.date_layout,
-                    R.id.to_layout,
-                    R.id.from_layout,
-                    R.id.participants
-            });
-        }
-
-        @Parameterized.Parameter
-        public int viewId;
-
-        /**
          * Check that the unfilled fields display a valid error message
          */
         @Test
@@ -157,11 +175,77 @@ public class AddMeetingActivityTest {
 
             onView(withId(R.id.action_add_meeting)).perform(click());
             onView(withId(viewId))
-                    .check(matchesErrorText(mActivityRule.getActivity().getString(R.string.error_empty_field)));
+                    .check(matchesErrorText(activity.getString(R.string.error_empty_field)));
 
             onView(withText(R.string.error_add_new_meeting))
                     .inRoot(withDecorView(not(is(activity.getWindow().getDecorView()))))
                     .check(matches(isDisplayed()));
+        }
+    }
+
+    @RunWith(Parameterized.class)
+    public static class ComponentParamTestsCheckEmailsField {
+        private static final String sEmail1 = "mickael@gmail.com";
+        private static final String sEmail2 = "john@outlook.com";
+        private static final String sEmailInvalid = "test";
+
+        /**
+         * Test data
+         *
+         * @return list of internal field delimiter to check
+         */
+        @Parameters
+        public static Collection<Object> data() {
+            return Arrays.asList(new Object[]{" ", ","});
+        }
+
+        @Parameterized.Parameter
+        public String internalFieldDelimiter;
+
+        /**
+         * Define rules to initialize AddMeetingActivity
+         */
+        @Rule
+        public ActivityTestRule<ListMeetingActivity> mActivityRuleInit =
+                new ActivityTestRule<>(ListMeetingActivity.class);
+
+        @Rule
+        public ActivityTestRule<AddMeetingActivity> mActivityRule =
+                new ActivityTestRule<>(AddMeetingActivity.class);
+
+        /**
+         * Initialize AddMeetingActivity and check that it is not empty
+         */
+        @Before
+        public void setUp() {
+            AddMeetingActivity activity = mActivityRule.getActivity();
+            assertThat(activity, notNullValue());
+        }
+
+        /**
+         * Check the correct entry of the Email field (press Enter key)
+         */
+        @Test
+        public void givenValidEmail_whenTypeTextWithDelimiter_thenGetEmailWithoutError() {
+            onView(withId(R.id.emails)).perform(typeText(sEmail1 + internalFieldDelimiter));
+
+            onView(withId(R.id.emails_group)).check(matchesChipTextAtPosition(1, sEmail1));
+            onView(withId(R.id.emails)).check(matches(withHint(R.string.list_of_participants)));
+            onView(withId(R.id.participants)).check(matchesNoErrorText());
+        }
+
+        /**
+         * Check invalid entry of the Email field (press Enter key)
+         */
+        @Test
+        public void givenInvalidEmail_whenTypeTextWithDelimiter_thenGetErrorMessage() {
+            AddMeetingActivity activity = mActivityRule.getActivity();
+
+            onView(withId(R.id.emails)).perform(typeText(sEmailInvalid + internalFieldDelimiter));
+
+            onView(withId(R.id.participants))
+                    .check(matchesErrorText(activity.getString(R.string.error_invalid_email)));
+            onView(withId(R.id.emails)).check(matches(withHint(R.string.list_of_participants)));
         }
     }
 
