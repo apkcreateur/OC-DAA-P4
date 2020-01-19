@@ -24,7 +24,12 @@ public class TextInputLayoutErrorValueAssertion implements ViewAssertion {
             throw noViewFoundException;
         }
 
-        String text = Objects.requireNonNull(((TextInputLayout) view).getError()).toString();
+        String text;
+        try {
+            text = Objects.requireNonNull(((TextInputLayout) view).getError()).toString();
+        } catch (Exception e) {
+            text = "";
+        }
 
         assertEquals(mExpectedText, text);
     }

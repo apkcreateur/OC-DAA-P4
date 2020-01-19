@@ -33,7 +33,7 @@ public class TextViewValueAssertion implements ViewAssertion {
         assert viewHolder != null;
         TextView textView = viewHolder.itemView.findViewById(mExpectedId);
 
-        assertEquals(textView.getText().toString(), mExpectedText);
+        assertEquals(mExpectedText, textView.getText().toString());
     }
 
     public static TextViewValueAssertion matchesDescriptionAtItemPosition(int itemPosition, String expectedText) {

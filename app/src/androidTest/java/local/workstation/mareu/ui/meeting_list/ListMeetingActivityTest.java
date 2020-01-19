@@ -1,5 +1,7 @@
 package local.workstation.mareu.ui.meeting_list;
 
+import android.text.format.DateFormat;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -26,18 +28,19 @@ import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static local.workstation.mareu.utils.DummyMeetingGenerator.generateRooms;
+import static local.workstation.mareu.utils.dummydata.DummyMeetingGenerator.DELETE_ITEM_POSITION;
+import static local.workstation.mareu.utils.dummydata.DummyMeetingGenerator.EXPECTED_DESCRIPTION_24H;
+import static local.workstation.mareu.utils.dummydata.DummyMeetingGenerator.EXPECTED_DESCRIPTION_12H;
+import static local.workstation.mareu.utils.dummydata.DummyMeetingGenerator.EXPECTED_ITEM_POSITION;
+import static local.workstation.mareu.utils.dummydata.DummyMeetingGenerator.EXPECTED_PARTICIPANTS;
+import static local.workstation.mareu.utils.dummydata.DummyMeetingGenerator.ITEMS_COUNT;
+import static local.workstation.mareu.utils.dummydata.DummyMeetingGenerator.generateRooms;
 import static local.workstation.mareu.utils.assertions.RecyclerViewItemCountAssertion.itemCountAssertion;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 
-import static local.workstation.mareu.utils.DummyMeetingGenerator.generateMeetings;
-import static local.workstation.mareu.utils.DummyMeetingGenerator.DELETE_ITEM_POSITION;
-import static local.workstation.mareu.utils.DummyMeetingGenerator.EXPECTED_DESCRIPTION;
-import static local.workstation.mareu.utils.DummyMeetingGenerator.EXPECTED_ITEM_POSITION;
-import static local.workstation.mareu.utils.DummyMeetingGenerator.EXPECTED_PARTICIPANTS;
-import static local.workstation.mareu.utils.DummyMeetingGenerator.ITEMS_COUNT;
+import static local.workstation.mareu.utils.dummydata.DummyMeetingGenerator.generateMeetings;
 import static local.workstation.mareu.utils.assertions.TextViewValueAssertion.matchesDescriptionAtItemPosition;
 import static local.workstation.mareu.utils.assertions.TextViewValueAssertion.matchesParticipantsAtItemPosition;
 import static local.workstation.mareu.utils.actions.ClickButtonAction.clickToDeleteButton;
@@ -84,8 +87,16 @@ public class ListMeetingActivityTest {
      */
     @Test
     public void givenMeetingsList_whenStartMainActivity_thenDisplayValidMeetingDescriptionAtFirstPosition() {
+        ListMeetingActivity activity = mActivityRule.getActivity();
+        String expected_description;
+
+        if (DateFormat.is24HourFormat(activity.getApplicationContext()))
+            expected_description = EXPECTED_DESCRIPTION_24H;
+        else
+            expected_description = EXPECTED_DESCRIPTION_12H;
+
         onView(withId(R.id.list))
-                .check(matchesDescriptionAtItemPosition(EXPECTED_ITEM_POSITION, EXPECTED_DESCRIPTION));
+                .check(matchesDescriptionAtItemPosition(EXPECTED_ITEM_POSITION, expected_description));
     }
 
     /**
@@ -109,6 +120,7 @@ public class ListMeetingActivityTest {
         onView(ViewMatchers.withId(R.id.list))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(DELETE_ITEM_POSITION, clickToDeleteButton()));
 
+        // TODO sometimes the check doesn't work
         onView(withText(R.string.toast_text_delete_meeting))
                 .inRoot(withDecorView(not(is(activity.getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));

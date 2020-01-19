@@ -37,21 +37,19 @@ import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static local.workstation.mareu.utils.DummyMeetingGenerator.tomorrow;
-import static local.workstation.mareu.utils.DummyMeetingGenerator.tomorrowDay;
-import static local.workstation.mareu.utils.DummyMeetingGenerator.tomorrowEnd;
-import static local.workstation.mareu.utils.DummyMeetingGenerator.tomorrowEndAt;
-import static local.workstation.mareu.utils.DummyMeetingGenerator.tomorrowMonth;
-import static local.workstation.mareu.utils.DummyMeetingGenerator.tomorrowStartAt;
-import static local.workstation.mareu.utils.DummyMeetingGenerator.tomorrowYear;
-import static local.workstation.mareu.utils.DummyMeetingGenerator.yesterdayDay;
-import static local.workstation.mareu.utils.DummyMeetingGenerator.yesterdayMonth;
-import static local.workstation.mareu.utils.DummyMeetingGenerator.yesterdayYear;
 import static local.workstation.mareu.utils.assertions.ChipGroupNoValueAssertion.matchesChipGroupHasNoChip;
 import static local.workstation.mareu.utils.assertions.ChipValueAssertion.matchesChipTextAtPosition;
 import static local.workstation.mareu.utils.actions.ClickCloseIconChipAction.clickOnCloseIconChip;
 import static local.workstation.mareu.utils.assertions.TextInputLayoutErrorValueAssertion.matchesErrorText;
 import static local.workstation.mareu.utils.assertions.TextInputLayoutNoErrorValueAssertion.matchesNoErrorText;
+import static local.workstation.mareu.utils.dummydata.DummyCalendarGenerator.TOMORROW_VALID_END_TIME;
+import static local.workstation.mareu.utils.dummydata.DummyCalendarGenerator.TOMORROW_VALID_START_TIME;
+import static local.workstation.mareu.utils.dummydata.DummyCalendarGenerator.YESTERDAY;
+import static local.workstation.mareu.utils.dummydata.DummyEmailGenerator.INVALID_EMAIL;
+import static local.workstation.mareu.utils.dummydata.DummyEmailGenerator.VALID_EMAIL_1;
+import static local.workstation.mareu.utils.dummydata.DummyEmailGenerator.VALID_EMAIL_2;
+import static local.workstation.mareu.utils.dummydata.DummyMeetingGenerator.ROOM_NAME;
+import static local.workstation.mareu.utils.dummydata.DummyMeetingGenerator.TOPIC;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
@@ -60,11 +58,6 @@ import static org.hamcrest.core.Is.is;
 public class AddMeetingActivityTest {
 
     public static class ComponentSingleTests {
-        private static final String sRoomName = "Room 3";
-        private static final String sTopic = "New Meeting!";
-        private static final String sEmail1 = "mickael@gmail.com";
-        private static final String sEmail2 = "john@outlook.com";
-        private static final String sEmailInvalid = "test";
 
         /**
          * Define rules to initialize AddMeetingActivity
@@ -92,12 +85,12 @@ public class AddMeetingActivityTest {
         @Test
         public void givenRoom_whenClickToAddMeeting_thenGetRoomWithoutError() {
             onView(withId(R.id.room_name)).perform(click());
-            onView(withText(sRoomName))
+            onView(withText(ROOM_NAME))
                     .inRoot(RootMatchers.isPlatformPopup())
                     .perform(click());
 
             onView(withId(R.id.action_add_meeting)).perform(click());
-            onView(withId(R.id.room_name)).check(matches(withText(sRoomName)));
+            onView(withId(R.id.room_name)).check(matches(withText(ROOM_NAME)));
             onView(withId(R.id.room_name_layout)).check(matchesNoErrorText());
         }
 
@@ -106,10 +99,10 @@ public class AddMeetingActivityTest {
          */
         @Test
         public void givenTopic_whenClickToAddMeeting_thenGetTopicWithoutError() {
-            onView(withId(R.id.topic)).perform(typeText(sTopic));
+            onView(withId(R.id.topic)).perform(typeText(TOPIC));
             onView(withId(R.id.action_add_meeting)).perform(click());
 
-            onView(withId(R.id.topic)).check(matches(withText(sTopic)));
+            onView(withId(R.id.topic)).check(matches(withText(TOPIC)));
             onView(withId(R.id.topic)).check(matches(withHint(R.string.meeting_topic)));
             onView(withId(R.id.topic_layout)).check(matchesNoErrorText());
         }
@@ -119,10 +112,10 @@ public class AddMeetingActivityTest {
          */
         @Test
         public void givenValidEmail_whenPressEnterKey_thenGetEmailWithoutError() {
-            onView(withId(R.id.emails)).perform(typeText(sEmail1));
+            onView(withId(R.id.emails)).perform(typeText(VALID_EMAIL_1));
             onView(withId(R.id.emails)).perform(pressKey(KeyEvent.KEYCODE_ENTER));
 
-            onView(withId(R.id.emails_group)).check(matchesChipTextAtPosition(1, sEmail1));
+            onView(withId(R.id.emails_group)).check(matchesChipTextAtPosition(1, VALID_EMAIL_1));
             onView(withId(R.id.emails)).check(matches(withHint(R.string.list_of_participants)));
             onView(withId(R.id.participants)).check(matchesNoErrorText());
         }
@@ -134,17 +127,17 @@ public class AddMeetingActivityTest {
         public void givenTwoValidEmail_whenPressEnterKey_thenGetEmailsWithoutError() {
             // Initialize test -->
             // add chip
-            onView(withId(R.id.emails)).perform(typeText(sEmail1));
+            onView(withId(R.id.emails)).perform(typeText(VALID_EMAIL_1));
             onView(withId(R.id.emails)).perform(pressKey(KeyEvent.KEYCODE_ENTER));
             // confirm that the first chip is present
-            onView(withId(R.id.emails_group)).check(matchesChipTextAtPosition(1, sEmail1));
+            onView(withId(R.id.emails_group)).check(matchesChipTextAtPosition(1, VALID_EMAIL_1));
             // Initialize test <--
 
             // Test -->
-            onView(withId(R.id.emails)).perform(typeText(sEmail2));
+            onView(withId(R.id.emails)).perform(typeText(VALID_EMAIL_2));
             onView(withId(R.id.emails)).perform(pressKey(KeyEvent.KEYCODE_ENTER));
 
-            onView(withId(R.id.emails_group)).check(matchesChipTextAtPosition(2, sEmail2));
+            onView(withId(R.id.emails_group)).check(matchesChipTextAtPosition(2, VALID_EMAIL_2));
             onView(withId(R.id.emails)).check(matches(withHint(R.string.list_of_participants)));
             onView(withId(R.id.participants)).check(matchesNoErrorText());
             // Test <--
@@ -157,7 +150,7 @@ public class AddMeetingActivityTest {
         public void givenInvalidEmail_whenPressEnterKey_thenGetErrorMessage() {
             AddMeetingActivity activity = mActivityRule.getActivity();
 
-            onView(withId(R.id.emails)).perform(typeText(sEmailInvalid));
+            onView(withId(R.id.emails)).perform(typeText(INVALID_EMAIL));
             onView(withId(R.id.emails)).perform(pressKey(KeyEvent.KEYCODE_ENTER));
 
             onView(withId(R.id.participants))
@@ -173,14 +166,14 @@ public class AddMeetingActivityTest {
             // Initialize test -->
             AddMeetingActivity activity = mActivityRule.getActivity();
             // add chip
-            onView(withId(R.id.emails)).perform(typeText(sEmail1));
+            onView(withId(R.id.emails)).perform(typeText(VALID_EMAIL_1));
             onView(withId(R.id.emails)).perform(pressKey(KeyEvent.KEYCODE_ENTER));
             // confirm that the first chip is present
-            onView(withId(R.id.emails_group)).check(matchesChipTextAtPosition(1, sEmail1));
+            onView(withId(R.id.emails_group)).check(matchesChipTextAtPosition(1, VALID_EMAIL_1));
             // Initialize test <--
 
             // Test -->
-            onView(withId(R.id.emails)).perform(typeText(sEmailInvalid));
+            onView(withId(R.id.emails)).perform(typeText(INVALID_EMAIL));
             onView(withId(R.id.emails)).perform(pressKey(KeyEvent.KEYCODE_ENTER));
 
             onView(withId(R.id.participants))
@@ -196,10 +189,10 @@ public class AddMeetingActivityTest {
         public void givenEmailCHip_whenClickToCloseIconChip_thenDeleteChip() {
             // Initialize test -->
             // add chip
-            onView(withId(R.id.emails)).perform(typeText(sEmail1));
+            onView(withId(R.id.emails)).perform(typeText(VALID_EMAIL_1));
             onView(withId(R.id.emails)).perform(pressKey(KeyEvent.KEYCODE_ENTER));
             // confirm that the chip is present
-            onView(withId(R.id.emails_group)).check(matchesChipTextAtPosition(1, sEmail1));
+            onView(withId(R.id.emails_group)).check(matchesChipTextAtPosition(1, VALID_EMAIL_1));
             onView(withId(R.id.emails)).check(matches(withHint(R.string.list_of_participants)));
             onView(withId(R.id.participants)).check(matchesNoErrorText());
             // Initialize test <--
@@ -219,11 +212,17 @@ public class AddMeetingActivityTest {
             AddMeetingActivity activity = mActivityRule.getActivity();
 
             onView(withId(R.id.date)).perform(click());
-            onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(tomorrowYear, tomorrowMonth, tomorrowDay));
+            onView(withClassName(Matchers.equalTo(DatePicker.class.getName())))
+                    .perform(PickerActions.setDate(
+                            TOMORROW_VALID_START_TIME.get(Calendar.YEAR),
+                            TOMORROW_VALID_START_TIME.get(Calendar.MONTH) + 1,
+                            TOMORROW_VALID_START_TIME.get(Calendar.DAY_OF_MONTH)));
             onView(withText(android.R.string.ok)).perform(click());
 
             onView(withId(R.id.action_add_meeting)).perform(click());
-            onView(withId(R.id.date)).check(matches(withText(DateFormat.getDateFormat(activity.getApplicationContext()).format(tomorrow.getTime()))));
+            onView(withId(R.id.date))
+                    .check(matches(withText(DateFormat.getDateFormat(activity.getApplicationContext())
+                            .format(TOMORROW_VALID_START_TIME.getTime()))));
             onView(withId(R.id.date_layout)).check(matchesNoErrorText());
         }
 
@@ -235,7 +234,12 @@ public class AddMeetingActivityTest {
             AddMeetingActivity activity = mActivityRule.getActivity();
 
             onView(withId(R.id.date)).perform(click());
-            onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(yesterdayYear, yesterdayMonth, yesterdayDay));
+            onView(withClassName(Matchers.equalTo(DatePicker.class.getName())))
+                    .perform(PickerActions.setDate(
+                            YESTERDAY.get(Calendar.YEAR),
+                            YESTERDAY.get(Calendar.MONTH) + 1,
+                            YESTERDAY.get(Calendar.DAY_OF_MONTH)));
+
             onView(withText(android.R.string.ok)).perform(click());
 
             onView(withId(R.id.action_add_meeting)).perform(click());
@@ -251,22 +255,33 @@ public class AddMeetingActivityTest {
         @Test
         public void givenValidTime_whenClickToTimePicker_ThenGetValidTimeStringFormat() {
             AddMeetingActivity activity = mActivityRule.getActivity();
-            tomorrowEnd.add(Calendar.HOUR_OF_DAY, 1);
 
             onView(withId(R.id.from)).perform(click());
-            onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(tomorrowStartAt, 0));
+            onView(withClassName(Matchers.equalTo(TimePicker.class.getName())))
+                    .perform(PickerActions.setTime(
+                            TOMORROW_VALID_START_TIME.get(Calendar.HOUR_OF_DAY),
+                            TOMORROW_VALID_START_TIME.get(Calendar.MINUTE)));
             onView(withText(android.R.string.ok)).perform(click());
 
             onView(withId(R.id.to)).perform(click());
-            onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(tomorrowEndAt, 0));
+            onView(withClassName(Matchers.equalTo(TimePicker.class.getName())))
+                    .perform(PickerActions.setTime(
+                            TOMORROW_VALID_END_TIME.get(Calendar.HOUR_OF_DAY),
+                            TOMORROW_VALID_END_TIME.get(Calendar.MINUTE)));
             onView(withText(android.R.string.ok)).perform(click());
 
             onView(withId(R.id.action_add_meeting)).perform(click());
 
-            onView(withId(R.id.from)).check(matches(withText(DateFormat.getTimeFormat(activity.getApplicationContext()).format(tomorrow.getTime()))));
+            onView(withId(R.id.from))
+                    .check(matches(withText(DateFormat
+                            .getTimeFormat(activity.getApplicationContext())
+                            .format(TOMORROW_VALID_START_TIME.getTime()))));
             onView(withId(R.id.from_layout)).check(matchesNoErrorText());
 
-            onView(withId(R.id.to)).check(matches(withText(DateFormat.getTimeFormat(activity.getApplicationContext()).format(tomorrowEnd.getTime()))));
+            onView(withId(R.id.to))
+                    .check(matches(withText(DateFormat
+                            .getTimeFormat(activity.getApplicationContext())
+                            .format(TOMORROW_VALID_END_TIME.getTime()))));
             onView(withId(R.id.to_layout)).check(matchesNoErrorText());
         }
     }
@@ -332,9 +347,6 @@ public class AddMeetingActivityTest {
 
     @RunWith(Parameterized.class)
     public static class ComponentParamTestsCheckEmailsField {
-        private static final String sEmail1 = "mickael@gmail.com";
-        private static final String sEmail2 = "john@outlook.com";
-        private static final String sEmailInvalid = "test";
 
         /**
          * Test data
@@ -374,9 +386,9 @@ public class AddMeetingActivityTest {
          */
         @Test
         public void givenValidEmail_whenTypeTextWithDelimiter_thenGetEmailWithoutError() {
-            onView(withId(R.id.emails)).perform(typeText(sEmail1 + internalFieldDelimiter));
+            onView(withId(R.id.emails)).perform(typeText(VALID_EMAIL_1 + internalFieldDelimiter));
 
-            onView(withId(R.id.emails_group)).check(matchesChipTextAtPosition(1, sEmail1));
+            onView(withId(R.id.emails_group)).check(matchesChipTextAtPosition(1, VALID_EMAIL_1));
             onView(withId(R.id.emails)).check(matches(withHint(R.string.list_of_participants)));
             onView(withId(R.id.participants)).check(matchesNoErrorText());
         }
@@ -388,15 +400,15 @@ public class AddMeetingActivityTest {
         public void givenTwoValidEmail_whenTypeTextWithDelimiter_thenGetEmailsWithoutError() {
             // Initialize test -->
             // add chip
-            onView(withId(R.id.emails)).perform(typeText(sEmail1 + internalFieldDelimiter));
+            onView(withId(R.id.emails)).perform(typeText(VALID_EMAIL_1 + internalFieldDelimiter));
             // confirm that first chip is present
-            onView(withId(R.id.emails_group)).check(matchesChipTextAtPosition(1, sEmail1));
+            onView(withId(R.id.emails_group)).check(matchesChipTextAtPosition(1, VALID_EMAIL_1));
             // Initialize test <--
 
             // Test -->
-            onView(withId(R.id.emails)).perform(typeText(sEmail2 + internalFieldDelimiter));
+            onView(withId(R.id.emails)).perform(typeText(VALID_EMAIL_2 + internalFieldDelimiter));
 
-            onView(withId(R.id.emails_group)).check(matchesChipTextAtPosition(2, sEmail2));
+            onView(withId(R.id.emails_group)).check(matchesChipTextAtPosition(2, VALID_EMAIL_2));
             onView(withId(R.id.emails)).check(matches(withHint(R.string.list_of_participants)));
             onView(withId(R.id.participants)).check(matchesNoErrorText());
             // Test <--
@@ -409,7 +421,7 @@ public class AddMeetingActivityTest {
         public void givenInvalidEmail_whenTypeTextWithDelimiter_thenGetErrorMessage() {
             AddMeetingActivity activity = mActivityRule.getActivity();
 
-            onView(withId(R.id.emails)).perform(typeText(sEmailInvalid + internalFieldDelimiter));
+            onView(withId(R.id.emails)).perform(typeText(INVALID_EMAIL + internalFieldDelimiter));
 
             onView(withId(R.id.participants))
                     .check(matchesErrorText(activity.getString(R.string.error_invalid_email)));
@@ -424,13 +436,13 @@ public class AddMeetingActivityTest {
             // Initialize test -->
             AddMeetingActivity activity = mActivityRule.getActivity();
             // add chip
-            onView(withId(R.id.emails)).perform(typeText(sEmail1 + internalFieldDelimiter));
+            onView(withId(R.id.emails)).perform(typeText(VALID_EMAIL_1 + internalFieldDelimiter));
             // confirm that first chip is present
-            onView(withId(R.id.emails_group)).check(matchesChipTextAtPosition(1, sEmail1));
+            onView(withId(R.id.emails_group)).check(matchesChipTextAtPosition(1, VALID_EMAIL_1));
             // Initialize test <--
 
             // test -->
-            onView(withId(R.id.emails)).perform(typeText(sEmailInvalid + internalFieldDelimiter));
+            onView(withId(R.id.emails)).perform(typeText(INVALID_EMAIL + internalFieldDelimiter));
 
             onView(withId(R.id.participants))
                     .check(matchesErrorText(activity.getString(R.string.error_invalid_email)));
