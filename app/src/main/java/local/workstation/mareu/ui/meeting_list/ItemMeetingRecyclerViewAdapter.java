@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 
@@ -58,7 +58,7 @@ public class ItemMeetingRecyclerViewAdapter extends RecyclerView.Adapter<ItemMee
         @SuppressLint("SimpleDateFormat")
         String desc = TextUtils.join(" - ", Arrays.asList(
                 meeting.getRoomName(),
-                new SimpleDateFormat("HH:ss").format(meeting.getStart().getTime()),
+                DateFormat.getTimeFormat(mContext).format(meeting.getStart().getTime()),
                 meeting.getTopic()));
 
         holder.mDescriptionTextView.setText(desc);
@@ -68,12 +68,8 @@ public class ItemMeetingRecyclerViewAdapter extends RecyclerView.Adapter<ItemMee
         ((GradientDrawable)holder.mImageView.getBackground()).setColor(meeting.getColor());
 
         // Delete meeting
-        holder.mDeleteImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EventBus.getDefault().post(new DeleteMeetingEvent(meeting.getId()));
-            }
-        });
+        holder.mDeleteImageButton.setOnClickListener(
+                v -> EventBus.getDefault().post(new DeleteMeetingEvent(meeting.getId())));
     }
 
     @Override
