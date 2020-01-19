@@ -15,6 +15,7 @@ import local.workstation.mareu.R;
 import local.workstation.mareu.di.DI;
 import local.workstation.mareu.service.MeetingApiServiceException;
 import local.workstation.mareu.ui.AddMeetingActivity;
+import local.workstation.mareu.utils.ToastMatcher;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -102,13 +103,20 @@ public class ListMeetingActivityTest {
      */
     @Test
     public void givenMeetingList_whenPerformAClickOnItemDeleteImageButton_thenRemoveOneMeeting() {
+        ListMeetingActivity activity = mActivityRule.getActivity();
+
         onView(ViewMatchers.withId(R.id.list))
                 .check(itemCountAssertion(ITEMS_COUNT));
         onView(ViewMatchers.withId(R.id.list))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(DELETE_ITEM_POSITION, clickToDeleteButton()));
+
+//        onView(withText(R.string.toast_text_delete_meeting)).inRoot(new ToastMatcher())
+//                .check(matches(withText(R.string.toast_text_delete_meeting)));
+
         onView(withText(R.string.toast_text_delete_meeting))
-                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .inRoot(withDecorView(not(is(activity.getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
+
         onView(ViewMatchers.withId(R.id.list))
                 .check(itemCountAssertion(ITEMS_COUNT - 1));
     }
