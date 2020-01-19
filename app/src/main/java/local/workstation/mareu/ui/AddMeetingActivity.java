@@ -194,6 +194,7 @@ public class AddMeetingActivity extends AppCompatActivity {
             char lastChar = value.charAt(value.length() - 1);
 
             if (lastChar == ' ' || lastChar == ',') {
+                value = value.substring(0, value.length() - 1);
                 value = value.trim();
                 if (!value.isEmpty()) {
                     if (!validEmail(value)) {
