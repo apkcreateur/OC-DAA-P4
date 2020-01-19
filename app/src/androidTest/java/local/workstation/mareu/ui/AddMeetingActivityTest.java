@@ -3,6 +3,7 @@ package local.workstation.mareu.ui;
 import android.text.format.DateFormat;
 import android.view.KeyEvent;
 import android.widget.DatePicker;
+import android.widget.TimePicker;
 
 import androidx.test.espresso.contrib.PickerActions;
 import androidx.test.espresso.matcher.RootMatchers;
@@ -18,6 +19,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 
 import local.workstation.mareu.R;
@@ -37,7 +39,10 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static local.workstation.mareu.utils.DummyMeetingGenerator.tomorrow;
 import static local.workstation.mareu.utils.DummyMeetingGenerator.tomorrowDay;
+import static local.workstation.mareu.utils.DummyMeetingGenerator.tomorrowEnd;
+import static local.workstation.mareu.utils.DummyMeetingGenerator.tomorrowEndAt;
 import static local.workstation.mareu.utils.DummyMeetingGenerator.tomorrowMonth;
+import static local.workstation.mareu.utils.DummyMeetingGenerator.tomorrowStartAt;
 import static local.workstation.mareu.utils.DummyMeetingGenerator.tomorrowYear;
 import static local.workstation.mareu.utils.DummyMeetingGenerator.yesterdayDay;
 import static local.workstation.mareu.utils.DummyMeetingGenerator.yesterdayMonth;
@@ -234,9 +239,35 @@ public class AddMeetingActivityTest {
             onView(withText(android.R.string.ok)).perform(click());
 
             onView(withId(R.id.action_add_meeting)).perform(click());
+
             onView(withId(R.id.date_layout))
                     .check(matchesErrorText(activity.getString(R.string.error_date_passed)));
             onView(withId(R.id.date_layout)).check(matches(withHint(R.string.date)));
+        }
+
+        /**
+         * Check valid time fields ('from' and 'to')
+         */
+        @Test
+        public void givenValidTime_whenClickToTimePicker_ThenGetValidTimeStringFormat() {
+            AddMeetingActivity activity = mActivityRule.getActivity();
+            tomorrowEnd.add(Calendar.HOUR_OF_DAY, 1);
+
+            onView(withId(R.id.from)).perform(click());
+            onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(tomorrowStartAt, 0));
+            onView(withText(android.R.string.ok)).perform(click());
+
+            onView(withId(R.id.to)).perform(click());
+            onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(tomorrowEndAt, 0));
+            onView(withText(android.R.string.ok)).perform(click());
+
+            onView(withId(R.id.action_add_meeting)).perform(click());
+
+            onView(withId(R.id.from)).check(matches(withText(DateFormat.getTimeFormat(activity.getApplicationContext()).format(tomorrow.getTime()))));
+            onView(withId(R.id.from_layout)).check(matchesNoErrorText());
+
+            onView(withId(R.id.to)).check(matches(withText(DateFormat.getTimeFormat(activity.getApplicationContext()).format(tomorrowEnd.getTime()))));
+            onView(withId(R.id.to_layout)).check(matchesNoErrorText());
         }
     }
 

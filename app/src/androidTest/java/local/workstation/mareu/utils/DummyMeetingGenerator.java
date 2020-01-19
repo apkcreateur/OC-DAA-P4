@@ -16,8 +16,12 @@ public abstract class DummyMeetingGenerator {
     public static int tomorrowYear = tomorrow.get(Calendar.YEAR);
     public static int tomorrowMonth = tomorrow.get(Calendar.MONTH) + 1;
     public static int tomorrowDay = tomorrow.get(Calendar.DAY_OF_MONTH);
+    public static int tomorrowStartAt = tomorrow.get(Calendar.HOUR_OF_DAY);
 
-    public static Calendar yesterday = generateYesterday();
+    public static Calendar tomorrowEnd = (Calendar) tomorrow.clone();
+    public static int tomorrowEndAt = tomorrowStartAt + 1;
+
+    private static Calendar yesterday = generateYesterday();
     public static int yesterdayYear = yesterday.get(Calendar.YEAR);
     public static int yesterdayMonth = yesterday.get(Calendar.MONTH) + 1;
     public static int yesterdayDay = yesterday.get(Calendar.DAY_OF_MONTH);
@@ -65,6 +69,8 @@ public abstract class DummyMeetingGenerator {
     private static Calendar generateTomorrow() {
         Calendar tomorrow = Calendar.getInstance();
         tomorrow.add(Calendar.DAY_OF_MONTH, 1);
+        tomorrow.set(Calendar.HOUR_OF_DAY, 9);
+        tomorrow.set(Calendar.MINUTE, 0);
 
         return tomorrow;
     }
