@@ -1,10 +1,14 @@
 package local.workstation.mareu.ui;
 
+import android.text.format.DateFormat;
 import android.view.KeyEvent;
+import android.widget.DatePicker;
 
+import androidx.test.espresso.contrib.PickerActions;
 import androidx.test.espresso.matcher.RootMatchers;
 import androidx.test.rule.ActivityTestRule;
 
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -27,9 +31,17 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static local.workstation.mareu.utils.DummyMeetingGenerator.tomorrow;
+import static local.workstation.mareu.utils.DummyMeetingGenerator.tomorrowDay;
+import static local.workstation.mareu.utils.DummyMeetingGenerator.tomorrowMonth;
+import static local.workstation.mareu.utils.DummyMeetingGenerator.tomorrowYear;
+import static local.workstation.mareu.utils.DummyMeetingGenerator.yesterdayDay;
+import static local.workstation.mareu.utils.DummyMeetingGenerator.yesterdayMonth;
+import static local.workstation.mareu.utils.DummyMeetingGenerator.yesterdayYear;
 import static local.workstation.mareu.utils.assertions.ChipGroupNoValueAssertion.matchesChipGroupHasNoChip;
 import static local.workstation.mareu.utils.assertions.ChipValueAssertion.matchesChipTextAtPosition;
 import static local.workstation.mareu.utils.actions.ClickCloseIconChipAction.clickOnCloseIconChip;
@@ -116,7 +128,6 @@ public class AddMeetingActivityTest {
         @Test
         public void givenTwoValidEmail_whenPressEnterKey_thenGetEmailsWithoutError() {
             // Initialize test -->
-            AddMeetingActivity activity = mActivityRule.getActivity();
             // add chip
             onView(withId(R.id.emails)).perform(typeText(sEmail1));
             onView(withId(R.id.emails)).perform(pressKey(KeyEvent.KEYCODE_ENTER));
@@ -193,6 +204,39 @@ public class AddMeetingActivityTest {
 
             onView(withId(R.id.emails_group)).check(matchesChipGroupHasNoChip());
             // Test <--
+        }
+
+        /**
+         * Check valid date
+         */
+        @Test
+        public void givenValidDate_whenClickToDatePicker_ThenGetValidDateStringFormat() {
+            AddMeetingActivity activity = mActivityRule.getActivity();
+
+            onView(withId(R.id.date)).perform(click());
+            onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(tomorrowYear, tomorrowMonth, tomorrowDay));
+            onView(withText(android.R.string.ok)).perform(click());
+
+            onView(withId(R.id.action_add_meeting)).perform(click());
+            onView(withId(R.id.date)).check(matches(withText(DateFormat.getDateFormat(activity.getApplicationContext()).format(tomorrow.getTime()))));
+            onView(withId(R.id.date_layout)).check(matchesNoErrorText());
+        }
+
+        /**
+         * Check invalid date (passed)
+         */
+        @Test
+        public void givenInvalidDate_whenClickToDatePicker_ThenGetErrorMessage() {
+            AddMeetingActivity activity = mActivityRule.getActivity();
+
+            onView(withId(R.id.date)).perform(click());
+            onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(yesterdayYear, yesterdayMonth, yesterdayDay));
+            onView(withText(android.R.string.ok)).perform(click());
+
+            onView(withId(R.id.action_add_meeting)).perform(click());
+            onView(withId(R.id.date_layout))
+                    .check(matchesErrorText(activity.getString(R.string.error_date_passed)));
+            onView(withId(R.id.date_layout)).check(matches(withHint(R.string.date)));
         }
     }
 
@@ -312,7 +356,6 @@ public class AddMeetingActivityTest {
         @Test
         public void givenTwoValidEmail_whenTypeTextWithDelimiter_thenGetEmailsWithoutError() {
             // Initialize test -->
-            AddMeetingActivity activity = mActivityRule.getActivity();
             // add chip
             onView(withId(R.id.emails)).perform(typeText(sEmail1 + internalFieldDelimiter));
             // confirm that first chip is present

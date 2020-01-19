@@ -20,6 +20,7 @@
     <string name="action_add">Add</string>
     <string name="error_invalid_field">Field it is not valid</string>
     <string name="error_invalid_date_format">Invalid date format</string>
+    <string name="error_date_passed">The date cannot be passed</string>
     <string name="error_invalid_time_format">Invalid time format</string>
     <string name="error_invalid_email">Invalid email address</string>
     <string name="error_time_comparison">End time cannot be earlier than start time</string>

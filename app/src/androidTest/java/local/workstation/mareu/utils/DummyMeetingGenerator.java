@@ -12,6 +12,16 @@ import java.util.Objects;
 import local.workstation.mareu.model.Meeting;
 
 public abstract class DummyMeetingGenerator {
+    public static Calendar tomorrow = generateTomorrow();
+    public static int tomorrowYear = tomorrow.get(Calendar.YEAR);
+    public static int tomorrowMonth = tomorrow.get(Calendar.MONTH) + 1;
+    public static int tomorrowDay = tomorrow.get(Calendar.DAY_OF_MONTH);
+
+    public static Calendar yesterday = generateYesterday();
+    public static int yesterdayYear = yesterday.get(Calendar.YEAR);
+    public static int yesterdayMonth = yesterday.get(Calendar.MONTH) + 1;
+    public static int yesterdayDay = yesterday.get(Calendar.DAY_OF_MONTH);
+
     public static int ITEMS_COUNT = 12;
     public static final int EXPECTED_ITEM_POSITION = 0;
     public static final int DELETE_ITEM_POSITION = 3;
@@ -50,6 +60,20 @@ public abstract class DummyMeetingGenerator {
         }
 
         return datetime;
+    }
+
+    private static Calendar generateTomorrow() {
+        Calendar tomorrow = Calendar.getInstance();
+        tomorrow.add(Calendar.DAY_OF_MONTH, 1);
+
+        return tomorrow;
+    }
+
+    private static Calendar generateYesterday() {
+        Calendar yesterday = Calendar.getInstance();
+        yesterday.add(Calendar.DAY_OF_MONTH, -1);
+
+        return yesterday;
     }
 
     private static List<String> DUMMY_MEETING_ROOMS = Arrays.asList(
