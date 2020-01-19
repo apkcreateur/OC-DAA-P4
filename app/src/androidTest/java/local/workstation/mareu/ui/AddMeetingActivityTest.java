@@ -1,5 +1,8 @@
 package local.workstation.mareu.ui;
 
+import android.view.KeyEvent;
+
+import androidx.test.espresso.matcher.RootMatchers;
 import androidx.test.rule.ActivityTestRule;
 
 import org.junit.Before;
@@ -18,21 +21,30 @@ import local.workstation.mareu.ui.meeting_list.ListMeetingActivity;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.pressKey;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static local.workstation.mareu.utils.ChipValueAssertion.matchesChipTextAtPosition;
 import static local.workstation.mareu.utils.TextInputLayoutErrorValueAssertion.matchesErrorText;
 import static local.workstation.mareu.utils.TextInputLayoutNoErrorValueAssertion.matchesNoErrorText;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.core.Is.is;
 
 @RunWith(Enclosed.class)
 public class AddMeetingActivityTest {
 
     public static class ComponentSingleTests {
+        private static final String sRoomName = "Room 3";
         private static final String sTopic = "New Meeting!";
+        private static final String sEmail1 = "mickael@gmail.com";
+        private static final String sEmail2 = "john@outlook.com";
 
         /**
          * Define rules to initialize AddMeetingActivity
@@ -55,6 +67,21 @@ public class AddMeetingActivityTest {
         }
 
         /**
+         * Check selected entry of the Room name field
+         */
+        @Test
+        public void givenRoom_whenClickToAddMeeting_thenGetRoomWithoutError() {
+            onView(withId(R.id.room_name)).perform(click());
+            onView(withText(sRoomName))
+                    .inRoot(RootMatchers.isPlatformPopup())
+                    .perform(click());
+
+            onView(withId(R.id.action_add_meeting)).perform(click());
+            onView(withId(R.id.room_name)).check(matches(withText(sRoomName)));
+            onView(withId(R.id.room_name_layout)).check(matchesNoErrorText());
+        }
+
+        /**
          * Check the correct entry of the Topic field
          */
         @Test
@@ -65,6 +92,17 @@ public class AddMeetingActivityTest {
             onView(withId(R.id.topic)).check(matches(withText(sTopic)));
             onView(withId(R.id.topic)).check(matches(withHint(R.string.meeting_topic)));
             onView(withId(R.id.topic_layout)).check(matchesNoErrorText());
+        }
+
+        @Test
+        public void givenValidEmail_whenClickToAddMeeting_thenGetEmailWithoutError() {
+            onView(withId(R.id.emails)).perform(typeText(sEmail1));
+            onView(withId(R.id.emails)).perform(pressKey(KeyEvent.KEYCODE_ENTER));
+            onView(withId(R.id.action_add_meeting)).perform(click());
+
+            onView(withId(R.id.emails_group)).check(matchesChipTextAtPosition(1, sEmail1));
+            onView(withId(R.id.emails)).check(matches(withHint(R.string.list_of_participants)));
+            onView(withId(R.id.participants)).check(matchesNoErrorText());
         }
     }
 
@@ -115,9 +153,15 @@ public class AddMeetingActivityTest {
          */
         @Test
         public void givenNoValue_whenClickToAddMeeting_thenGetErrorMessage() {
+            AddMeetingActivity activity = mActivityRule.getActivity();
+
             onView(withId(R.id.action_add_meeting)).perform(click());
             onView(withId(viewId))
                     .check(matchesErrorText(mActivityRule.getActivity().getString(R.string.error_empty_field)));
+
+            onView(withText(R.string.error_add_new_meeting))
+                    .inRoot(withDecorView(not(is(activity.getWindow().getDecorView()))))
+                    .check(matches(isDisplayed()));
         }
     }
 
