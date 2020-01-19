@@ -96,7 +96,7 @@ public class AddMeetingActivityTest {
         }
 
         /**
-         * Check the correct entry of the Email field (press Enter key)
+         * Check the correct entry of the Emails field (press Enter key)
          */
         @Test
         public void givenValidEmail_whenPressEnterKey_thenGetEmailWithoutError() {
@@ -109,7 +109,23 @@ public class AddMeetingActivityTest {
         }
 
         /**
-         * Check invalid entry of the Email field (press Enter key)
+         * Check the correct entries of the Emails field (press Enter key)
+         */
+        @Test
+        public void givenTwoValidEmail_whenPressEnterKey_thenGetEmailsWithoutError() {
+            onView(withId(R.id.emails)).perform(typeText(sEmail1));
+            onView(withId(R.id.emails)).perform(pressKey(KeyEvent.KEYCODE_ENTER));
+            onView(withId(R.id.emails)).perform(typeText(sEmail2));
+            onView(withId(R.id.emails)).perform(pressKey(KeyEvent.KEYCODE_ENTER));
+
+            onView(withId(R.id.emails_group)).check(matchesChipTextAtPosition(1, sEmail1));
+            onView(withId(R.id.emails_group)).check(matchesChipTextAtPosition(2, sEmail2));
+            onView(withId(R.id.emails)).check(matches(withHint(R.string.list_of_participants)));
+            onView(withId(R.id.participants)).check(matchesNoErrorText());
+        }
+
+        /**
+         * Check invalid entry of the Emails field (press Enter key)
          */
         @Test
         public void givenInvalidEmail_whenPressEnterKey_thenGetErrorMessage() {
@@ -118,6 +134,24 @@ public class AddMeetingActivityTest {
             onView(withId(R.id.emails)).perform(typeText(sEmailInvalid));
             onView(withId(R.id.emails)).perform(pressKey(KeyEvent.KEYCODE_ENTER));
 
+            onView(withId(R.id.participants))
+                    .check(matchesErrorText(activity.getString(R.string.error_invalid_email)));
+            onView(withId(R.id.emails)).check(matches(withHint(R.string.list_of_participants)));
+        }
+
+        /**
+         * Check invalid second entry of the Emails field (press Enter key)
+         */
+        @Test
+        public void givenOneValidEmailAndOneInvalidEmail_whenPressEnterKey_thenGetMessageError() {
+            AddMeetingActivity activity = mActivityRule.getActivity();
+
+            onView(withId(R.id.emails)).perform(typeText(sEmail1));
+            onView(withId(R.id.emails)).perform(pressKey(KeyEvent.KEYCODE_ENTER));
+            onView(withId(R.id.emails)).perform(typeText(sEmailInvalid));
+            onView(withId(R.id.emails)).perform(pressKey(KeyEvent.KEYCODE_ENTER));
+
+            onView(withId(R.id.emails_group)).check(matchesChipTextAtPosition(1, sEmail1));
             onView(withId(R.id.participants))
                     .check(matchesErrorText(activity.getString(R.string.error_invalid_email)));
             onView(withId(R.id.emails)).check(matches(withHint(R.string.list_of_participants)));
@@ -223,7 +257,7 @@ public class AddMeetingActivityTest {
         }
 
         /**
-         * Check the correct entry of the Email field (press Enter key)
+         * Check the correct entry of the Emails field (press Enter key)
          */
         @Test
         public void givenValidEmail_whenTypeTextWithDelimiter_thenGetEmailWithoutError() {
@@ -235,7 +269,21 @@ public class AddMeetingActivityTest {
         }
 
         /**
-         * Check invalid entry of the Email field (press Enter key)
+         * Check the correct entries of the Emails field (press Enter key)
+         */
+        @Test
+        public void givenTwoValidEmail_whenTypeTextWithDelimiter_thenGetEmailsWithoutError() {
+            onView(withId(R.id.emails)).perform(typeText(sEmail1 + internalFieldDelimiter));
+            onView(withId(R.id.emails)).perform(typeText(sEmail2 + internalFieldDelimiter));
+
+            onView(withId(R.id.emails_group)).check(matchesChipTextAtPosition(1, sEmail1));
+            onView(withId(R.id.emails_group)).check(matchesChipTextAtPosition(2, sEmail2));
+            onView(withId(R.id.emails)).check(matches(withHint(R.string.list_of_participants)));
+            onView(withId(R.id.participants)).check(matchesNoErrorText());
+        }
+
+        /**
+         * Check invalid entry of the Emails field (press Enter key)
          */
         @Test
         public void givenInvalidEmail_whenTypeTextWithDelimiter_thenGetErrorMessage() {
@@ -243,6 +291,22 @@ public class AddMeetingActivityTest {
 
             onView(withId(R.id.emails)).perform(typeText(sEmailInvalid + internalFieldDelimiter));
 
+            onView(withId(R.id.participants))
+                    .check(matchesErrorText(activity.getString(R.string.error_invalid_email)));
+            onView(withId(R.id.emails)).check(matches(withHint(R.string.list_of_participants)));
+        }
+
+        /**
+         * Check invalid entry of the Emails field (press Enter key)
+         */
+        @Test
+        public void givenOneValidEmailAndOneInvalidEmail_whenTypeTextWithDelimiter_thenGetErrorMessage() {
+            AddMeetingActivity activity = mActivityRule.getActivity();
+
+            onView(withId(R.id.emails)).perform(typeText(sEmail1 + internalFieldDelimiter));
+            onView(withId(R.id.emails)).perform(typeText(sEmailInvalid + internalFieldDelimiter));
+
+            onView(withId(R.id.emails_group)).check(matchesChipTextAtPosition(1, sEmail1));
             onView(withId(R.id.participants))
                     .check(matchesErrorText(activity.getString(R.string.error_invalid_email)));
             onView(withId(R.id.emails)).check(matches(withHint(R.string.list_of_participants)));
