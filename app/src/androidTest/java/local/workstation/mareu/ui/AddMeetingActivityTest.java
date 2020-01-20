@@ -42,6 +42,7 @@ import static local.workstation.mareu.utils.assertions.ChipValueAssertion.matche
 import static local.workstation.mareu.utils.actions.ClickCloseIconChipAction.clickOnCloseIconChip;
 import static local.workstation.mareu.utils.assertions.TextInputLayoutErrorValueAssertion.matchesErrorText;
 import static local.workstation.mareu.utils.assertions.TextInputLayoutNoErrorValueAssertion.matchesNoErrorText;
+import static local.workstation.mareu.utils.dummydata.DummyCalendarGenerator.TODAY_INVALID_START_TIME;
 import static local.workstation.mareu.utils.dummydata.DummyCalendarGenerator.TOMORROW_VALID_END_TIME;
 import static local.workstation.mareu.utils.dummydata.DummyCalendarGenerator.TOMORROW_VALID_START_TIME;
 import static local.workstation.mareu.utils.dummydata.DummyCalendarGenerator.YESTERDAY;
@@ -283,6 +284,27 @@ public class AddMeetingActivityTest {
                             .getTimeFormat(activity.getApplicationContext())
                             .format(TOMORROW_VALID_END_TIME.getTime()))));
             onView(withId(R.id.to_layout)).check(matchesNoErrorText());
+        }
+
+        /**
+         * Check invalid start time (passed)
+         */
+        @Test
+        public void givenInvalidStartTime_whenClickToTimePicker_ThenGetErrorMessage() {
+            AddMeetingActivity activity = mActivityRule.getActivity();
+
+            onView(withId(R.id.from)).perform(click());
+            onView(withClassName(Matchers.equalTo(TimePicker.class.getName())))
+                    .perform(PickerActions.setTime(
+                            TODAY_INVALID_START_TIME.get(Calendar.HOUR_OF_DAY),
+                            TODAY_INVALID_START_TIME.get(Calendar.MINUTE)));
+            onView(withText(android.R.string.ok)).perform(click());
+
+            onView(withId(R.id.action_add_meeting)).perform(click());
+
+            onView(withId(R.id.from_layout))
+                    .check(matchesErrorText(activity.getString(R.string.error_time_passed)));
+            onView(withId(R.id.from)).check(matches(withHint(R.string.from)));
         }
     }
 

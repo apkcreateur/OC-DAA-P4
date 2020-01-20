@@ -25,4 +25,5 @@
     <string name="error_invalid_email">Invalid email address</string>
     <string name="error_time_comparison">End time cannot be earlier than start time</string>
     <string name="error_meeting_room_already_booked">The meeting room is already booked</string>
+    <string name="error_time_passed">The time cannot be passed</string>
 </resources>
