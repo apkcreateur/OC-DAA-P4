@@ -318,10 +318,17 @@ public class AddMeetingActivity extends AppCompatActivity {
             // valid time format ?
             try {
                 Date dTime = android.text.format.DateFormat.getTimeFormat(getApplicationContext()).parse(tmpValue);
-                Calendar Time = Calendar.getInstance();
-                Time.setTime(Objects.requireNonNull(dTime));
+                Calendar time = Calendar.getInstance();
+                time.setTime(Objects.requireNonNull(dTime));
+
+                if ((Calendar.getInstance()).compareTo(time) > 0) {
+                    inputValue.setError(getText(R.string.error_time_passed));
+                    mError = true;
+                    return null;
+                }
+
                 inputValue.setError(null);
-                return Time;
+                return time;
             } catch (ParseException e) {
                 inputValue.setError(getText(R.string.error_invalid_time_format));
                 mError = true;
