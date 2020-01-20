@@ -246,7 +246,7 @@ public class AddMeetingActivityTest {
 
             onView(withId(R.id.date_layout))
                     .check(matchesErrorText(activity.getString(R.string.error_date_passed)));
-            onView(withId(R.id.date_layout)).check(matches(withHint(R.string.date)));
+            onView(withId(R.id.date)).check(matches(withHint(R.string.date)));
         }
 
         /**

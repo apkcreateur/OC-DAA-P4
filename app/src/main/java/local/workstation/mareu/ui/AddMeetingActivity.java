@@ -151,6 +151,8 @@ public class AddMeetingActivity extends AppCompatActivity {
                     Calendar cal = Calendar.getInstance();
                     cal.set(year, month, dayOfMonth);
                     mDateTextInputEditText.setText(DateFormat.getDateFormat(getApplicationContext()).format(cal.getTime()));
+                    if (calendar.compareTo(cal) > 0)
+                        mDateTextInputLayout.setError(getText(R.string.error_date_passed));
                 },
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
@@ -283,10 +285,19 @@ public class AddMeetingActivity extends AppCompatActivity {
         } else {
             // valid date format ?
             try {
-                Date dDate = android.text.format.DateFormat.getDateFormat(getApplicationContext()).parse(tmpValue);
+                Date dDate = DateFormat.getDateFormat(getApplicationContext()).parse(tmpValue);
+
                 Calendar date = Calendar.getInstance();
                 date.setTime(Objects.requireNonNull(dDate));
+
+                if ((Calendar.getInstance()).compareTo(date) > 0) {
+                    inputValue.setError(getText(R.string.error_date_passed));
+                    mError = true;
+                    return null;
+                }
+
                 inputValue.setError(null);
+
                 return date;
             } catch (ParseException e) {
                 inputValue.setError(getText(R.string.error_invalid_date_format));
