@@ -46,6 +46,7 @@ import static local.workstation.mareu.ui.meeting_list.ListMeetingActivity.sApiSe
  */
 public class AddMeetingActivity extends AppCompatActivity {
     private boolean mError;
+    private Calendar mNow;
 
     private List<String> mRooms;
     @BindView(R.id.room_name_layout) TextInputLayout mRoomNameTextInputLayout;
@@ -74,6 +75,7 @@ public class AddMeetingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_meeting);
         ButterKnife.bind(this);
         mError = false;
+        mNow = Calendar.getInstance();
         // Global <--
 
         // Meeting room -->
@@ -151,7 +153,7 @@ public class AddMeetingActivity extends AppCompatActivity {
                     Calendar cal = Calendar.getInstance();
                     cal.set(year, month, dayOfMonth);
                     mDateTextInputEditText.setText(DateFormat.getDateFormat(getApplicationContext()).format(cal.getTime()));
-                    if (calendar.compareTo(cal) > 0)
+                    if (cal.before(calendar))
                         mDateTextInputLayout.setError(getText(R.string.error_date_passed));
                 },
                 calendar.get(Calendar.YEAR),
@@ -224,19 +226,28 @@ public class AddMeetingActivity extends AppCompatActivity {
         Calendar end = validateTimeInput(mEndTimeTextInputLayout);
         List<String> participants = validateEmailInput(mEmailsTextInputLayout, mEmailsChipGroup);
 
-        if (date != null && start != null && end != null) {
+        if (start != null && end != null) {
+            if (end.before(start)) {
+                mEndTimeTextInputLayout.setError(getText(R.string.error_time_comparaison));
+                mError = true;
+            }
+        }
+
+        if (date != null && start != null) {
             start.set(Calendar.YEAR, date.get(Calendar.YEAR));
             start.set(Calendar.MONTH, date.get(Calendar.MONTH));
             start.set(Calendar.DAY_OF_MONTH, date.get(Calendar.DAY_OF_MONTH));
 
+            if (start.before(mNow)) {
+                mStartTimeTextInputLayout.setError(getText(R.string.error_time_passed));
+                mError = true;
+            }
+        }
+
+        if (date != null && end != null) {
             end.set(Calendar.YEAR, date.get(Calendar.YEAR));
             end.set(Calendar.MONTH, date.get(Calendar.MONTH));
             end.set(Calendar.DAY_OF_MONTH, date.get(Calendar.DAY_OF_MONTH));
-
-            if (start.compareTo(end) >= 0) {
-                mEndTimeTextInputLayout.setError(getText(R.string.error_time_comparison));
-                mError = true;
-            }
         }
 
         if (mError) {
@@ -287,10 +298,16 @@ public class AddMeetingActivity extends AppCompatActivity {
             try {
                 Date dDate = DateFormat.getDateFormat(getApplicationContext()).parse(tmpValue);
 
-                Calendar date = Calendar.getInstance();
+                Calendar now = Calendar.getInstance();
+                now.set(Calendar.HOUR_OF_DAY, 0);
+                now.set(Calendar.MINUTE, 0);
+                now.set(Calendar.SECOND, 0);
+                now.set(Calendar.MILLISECOND, 0);
+
+                Calendar date = (Calendar) now.clone();
                 date.setTime(Objects.requireNonNull(dDate));
 
-                if ((Calendar.getInstance()).compareTo(date) > 0) {
+                if (date.before(now)) {
                     inputValue.setError(getText(R.string.error_date_passed));
                     mError = true;
                     return null;
@@ -321,13 +338,12 @@ public class AddMeetingActivity extends AppCompatActivity {
                 Calendar time = Calendar.getInstance();
                 time.setTime(Objects.requireNonNull(dTime));
 
-                if ((Calendar.getInstance()).compareTo(time) > 0) {
-                    inputValue.setError(getText(R.string.error_time_passed));
-                    mError = true;
-                    return null;
-                }
+                time.set(Calendar.YEAR, mNow.get(Calendar.YEAR));
+                time.set(Calendar.MONTH, mNow.get(Calendar.MONTH));
+                time.set(Calendar.DAY_OF_MONTH, mNow.get(Calendar.DAY_OF_MONTH));
 
                 inputValue.setError(null);
+
                 return time;
             } catch (ParseException e) {
                 inputValue.setError(getText(R.string.error_invalid_time_format));

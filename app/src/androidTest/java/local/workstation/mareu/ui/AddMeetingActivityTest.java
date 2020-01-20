@@ -43,6 +43,7 @@ import static local.workstation.mareu.utils.actions.ClickCloseIconChipAction.cli
 import static local.workstation.mareu.utils.assertions.TextInputLayoutErrorValueAssertion.matchesErrorText;
 import static local.workstation.mareu.utils.assertions.TextInputLayoutNoErrorValueAssertion.matchesNoErrorText;
 import static local.workstation.mareu.utils.dummydata.DummyCalendarGenerator.TODAY_INVALID_START_TIME;
+import static local.workstation.mareu.utils.dummydata.DummyCalendarGenerator.TOMORROW_INVALID_END_TIME;
 import static local.workstation.mareu.utils.dummydata.DummyCalendarGenerator.TOMORROW_VALID_END_TIME;
 import static local.workstation.mareu.utils.dummydata.DummyCalendarGenerator.TOMORROW_VALID_START_TIME;
 import static local.workstation.mareu.utils.dummydata.DummyCalendarGenerator.YESTERDAY;
@@ -293,6 +294,14 @@ public class AddMeetingActivityTest {
         public void givenInvalidStartTime_whenClickToTimePicker_ThenGetErrorMessage() {
             AddMeetingActivity activity = mActivityRule.getActivity();
 
+            onView(withId(R.id.date)).perform(click());
+            onView(withClassName(Matchers.equalTo(DatePicker.class.getName())))
+                    .perform(PickerActions.setDate(
+                            TODAY_INVALID_START_TIME.get(Calendar.YEAR),
+                            TODAY_INVALID_START_TIME.get(Calendar.MONTH) + 1,
+                            TODAY_INVALID_START_TIME.get(Calendar.DAY_OF_MONTH)));
+            onView(withText(android.R.string.ok)).perform(click());
+
             onView(withId(R.id.from)).perform(click());
             onView(withClassName(Matchers.equalTo(TimePicker.class.getName())))
                     .perform(PickerActions.setTime(
@@ -305,6 +314,34 @@ public class AddMeetingActivityTest {
             onView(withId(R.id.from_layout))
                     .check(matchesErrorText(activity.getString(R.string.error_time_passed)));
             onView(withId(R.id.from)).check(matches(withHint(R.string.from)));
+        }
+
+        /**
+         * Check invalid end time (earlier than start time)
+         */
+        @Test
+        public void givenInvalidEndTime_whenClickToTimePicker_ThenGetErrorMessage() {
+            AddMeetingActivity activity = mActivityRule.getActivity();
+
+            onView(withId(R.id.from)).perform(click());
+            onView(withClassName(Matchers.equalTo(TimePicker.class.getName())))
+                    .perform(PickerActions.setTime(
+                            TOMORROW_VALID_START_TIME.get(Calendar.HOUR_OF_DAY),
+                            TOMORROW_VALID_START_TIME.get(Calendar.MINUTE)));
+            onView(withText(android.R.string.ok)).perform(click());
+
+            onView(withId(R.id.to)).perform(click());
+            onView(withClassName(Matchers.equalTo(TimePicker.class.getName())))
+                    .perform(PickerActions.setTime(
+                            TOMORROW_INVALID_END_TIME.get(Calendar.HOUR_OF_DAY),
+                            TOMORROW_INVALID_END_TIME.get(Calendar.MINUTE)));
+            onView(withText(android.R.string.ok)).perform(click());
+
+            onView(withId(R.id.action_add_meeting)).perform(click());
+
+            onView(withId(R.id.to_layout))
+                    .check(matchesErrorText(activity.getString(R.string.error_time_comparaison)));
+            onView(withId(R.id.to)).check(matches(withHint(R.string.to)));
         }
     }
 
