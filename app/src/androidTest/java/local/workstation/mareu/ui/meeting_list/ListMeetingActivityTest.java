@@ -23,7 +23,6 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -36,8 +35,7 @@ import static local.workstation.mareu.utils.dummydata.DummyMeetingGenerator.EXPE
 import static local.workstation.mareu.utils.dummydata.DummyMeetingGenerator.ITEMS_COUNT;
 import static local.workstation.mareu.utils.dummydata.DummyMeetingGenerator.generateRooms;
 import static local.workstation.mareu.utils.assertions.RecyclerViewItemCountAssertion.itemCountAssertion;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.core.Is.is;
+import static local.workstation.mareu.utils.matchers.ToastMatcher.isToast;
 import static org.hamcrest.core.IsNull.notNullValue;
 
 import static local.workstation.mareu.utils.dummydata.DummyMeetingGenerator.generateMeetings;
@@ -113,8 +111,6 @@ public class ListMeetingActivityTest {
      */
     @Test
     public void givenMeetingList_whenPerformAClickOnItemDeleteImageButton_thenRemoveOneMeeting() {
-        ListMeetingActivity activity = mActivityRule.getActivity();
-
         onView(ViewMatchers.withId(R.id.list))
                 .check(itemCountAssertion(ITEMS_COUNT));
         onView(ViewMatchers.withId(R.id.list))
@@ -122,7 +118,7 @@ public class ListMeetingActivityTest {
 
         // TODO sometimes the check doesn't work
         onView(withText(R.string.toast_text_delete_meeting))
-                .inRoot(withDecorView(not(is(activity.getWindow().getDecorView()))))
+                .inRoot(isToast())
                 .check(matches(isDisplayed()));
 
         onView(ViewMatchers.withId(R.id.list))

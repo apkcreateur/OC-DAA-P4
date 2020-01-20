@@ -30,7 +30,6 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.pressKey;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
@@ -52,9 +51,8 @@ import static local.workstation.mareu.utils.dummydata.DummyEmailGenerator.VALID_
 import static local.workstation.mareu.utils.dummydata.DummyEmailGenerator.VALID_EMAIL_2;
 import static local.workstation.mareu.utils.dummydata.DummyMeetingGenerator.ROOM_NAME;
 import static local.workstation.mareu.utils.dummydata.DummyMeetingGenerator.TOPIC;
-import static org.hamcrest.Matchers.not;
+import static local.workstation.mareu.utils.matchers.ToastMatcher.isToast;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.core.Is.is;
 
 @RunWith(Enclosed.class)
 public class AddMeetingActivityTest {
@@ -399,7 +397,7 @@ public class AddMeetingActivityTest {
                     .check(matchesErrorText(activity.getString(R.string.error_empty_field)));
 
             onView(withText(R.string.error_add_new_meeting))
-                    .inRoot(withDecorView(not(is(activity.getWindow().getDecorView()))))
+                    .inRoot(isToast())
                     .check(matches(isDisplayed()));
         }
     }

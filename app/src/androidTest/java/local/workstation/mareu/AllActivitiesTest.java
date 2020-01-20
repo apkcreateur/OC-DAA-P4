@@ -25,7 +25,6 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
@@ -41,8 +40,7 @@ import static local.workstation.mareu.utils.dummydata.DummyMeetingGenerator.ROOM
 import static local.workstation.mareu.utils.dummydata.DummyMeetingGenerator.TOPIC;
 import static local.workstation.mareu.utils.dummydata.DummyMeetingGenerator.generateMeetings;
 import static local.workstation.mareu.utils.dummydata.DummyMeetingGenerator.generateRooms;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.core.Is.is;
+import static local.workstation.mareu.utils.matchers.ToastMatcher.isToast;
 import static org.hamcrest.core.IsNull.notNullValue;
 
 @RunWith(AndroidJUnit4.class)
@@ -79,7 +77,6 @@ public class AllActivitiesTest {
     @Test
     public void whenWeReserveAnAvailableRoom_thenItIsValidated() {
         // Init
-        ListMeetingActivity activity = mActivityRule.getActivity();
         Calendar from = generateDateTimeFromTomorrow(3,9,0);
         Calendar to = generateDateTimeFromTomorrow(3,10,0);
 
@@ -124,7 +121,7 @@ public class AllActivitiesTest {
 
         // Check that the meeting has been added
         onView(withText(R.string.add_new_meeting))
-                .inRoot(withDecorView(not(is(activity.getWindow().getDecorView()))))
+                .inRoot(isToast())
                 .check(matches(isDisplayed()));
         onView(ViewMatchers.withId(R.id.list))
                 .check(itemCountAssertion(ITEMS_COUNT + 1));
@@ -181,7 +178,7 @@ public class AllActivitiesTest {
 
         // Check that the addition is refused
         onView(withText(R.string.error_meeting_room_already_booked))
-                .inRoot(withDecorView(not(is(activity.getWindow().getDecorView()))))
+                .inRoot(isToast())
                 .check(matches(isDisplayed()));
         onView(withId(R.id.room_name_layout))
                 .check(matchesErrorText(activity.getString(R.string.error_meeting_room_already_booked)));
@@ -205,7 +202,7 @@ public class AllActivitiesTest {
 //
 //        // Check that the addition is aborted
 //        onView(withText(R.string.abort_add_meeting))
-//                .inRoot(withDecorView(not(is(activity.getWindow().getDecorView()))))
-//                .check(matches(isDisplayed()));
+//                    .inRoot(isToast())
+//                    .check(matches(isDisplayed()));
 //    }
 }
