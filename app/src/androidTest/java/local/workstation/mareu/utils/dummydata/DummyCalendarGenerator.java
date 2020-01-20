@@ -67,7 +67,7 @@ public abstract class DummyCalendarGenerator {
         return tmp;
     }
 
-    static Calendar generateDateTimeFromTomorrow(int diffDays, int hours, int minutes) {
+    public static Calendar generateDateTimeFromTomorrow(int diffDays, int hours, int minutes) {
         Calendar tmp = (Calendar) TOMORROW.clone();
 
         if (diffDays > 1) {
@@ -80,7 +80,7 @@ public abstract class DummyCalendarGenerator {
         return tmp;
     }
 
-    static Calendar generateTomorrowDateTime(int hours, int minutes) {
+    public static Calendar generateTomorrowDateTime(int hours, int minutes) {
         return generateDateTimeFromTomorrow(0, hours, minutes);
     }
 }
