@@ -127,10 +127,14 @@ public class AddMeetingActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_add_meeting) {
-            addMeeting();
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_add_meeting:
+                addMeeting();
+                return true;
+            case android.R.id.home:
+                Toast.makeText(this.getApplicationContext(), R.string.abort_add_meeting, Toast.LENGTH_LONG).show();
         }
+
         return super.onOptionsItemSelected(item);
     }
 
