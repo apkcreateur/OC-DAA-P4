@@ -1,7 +1,6 @@
 package local.workstation.mareu.utils.matchers;
 
 import android.os.IBinder;
-import android.util.Log;
 import android.view.WindowManager;
 
 import androidx.test.espresso.Root;

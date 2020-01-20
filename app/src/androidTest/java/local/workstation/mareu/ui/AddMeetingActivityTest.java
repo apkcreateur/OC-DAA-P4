@@ -33,6 +33,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
+import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -53,6 +54,7 @@ import static local.workstation.mareu.utils.dummydata.DummyMeetingGenerator.ROOM
 import static local.workstation.mareu.utils.dummydata.DummyMeetingGenerator.TOPIC;
 import static local.workstation.mareu.utils.matchers.ToastMatcher.isToast;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(Enclosed.class)
 public class AddMeetingActivityTest {
@@ -340,6 +342,18 @@ public class AddMeetingActivityTest {
             onView(withId(R.id.to_layout))
                     .check(matchesErrorText(activity.getString(R.string.error_time_comparaison)));
             onView(withId(R.id.to)).check(matches(withHint(R.string.to)));
+        }
+
+        @Test
+        public void whenPerformClickToReturnActionBar_thenAbortAddMeetingActivity() {
+            onView(withContentDescription(R.string.abc_action_bar_up_description))
+                    .perform(click());
+
+            assertTrue(mActivityRule.getActivity().isFinishing());
+            // TODO sometimes the check doesn't work
+            onView(withText(R.string.abort_add_meeting))
+                    .inRoot(isToast())
+                    .check(matches(isDisplayed()));
         }
     }
 

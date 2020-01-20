@@ -1,5 +1,6 @@
 package local.workstation.mareu;
 
+import android.app.Activity;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
@@ -8,6 +9,7 @@ import androidx.test.espresso.matcher.RootMatchers;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
+import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -16,6 +18,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.Calendar;
+import java.util.Collection;
 
 import local.workstation.mareu.di.DI;
 import local.workstation.mareu.service.MeetingApiServiceException;
@@ -31,6 +34,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static androidx.test.runner.lifecycle.Stage.RESUMED;
 import static local.workstation.mareu.utils.assertions.RecyclerViewItemCountAssertion.itemCountAssertion;
 import static local.workstation.mareu.utils.assertions.TextInputLayoutErrorValueAssertion.matchesErrorText;
 import static local.workstation.mareu.utils.dummydata.DummyCalendarGenerator.generateDateTimeFromTomorrow;
@@ -43,6 +48,7 @@ import static local.workstation.mareu.utils.dummydata.DummyMeetingGenerator.gene
 import static local.workstation.mareu.utils.dummydata.DummyMeetingGenerator.generateRooms;
 import static local.workstation.mareu.utils.matchers.ToastMatcher.isToast;
 import static org.hamcrest.core.IsNull.notNullValue;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class AllActivitiesTest {
@@ -194,14 +200,32 @@ public class AllActivitiesTest {
         onView(ViewMatchers.withId(R.id.add))
                 .perform(click());
 
+        Activity currentAddMeetingActivity = getActivityInstance();
+
         // Abort
         onView(withContentDescription(R.string.abc_action_bar_up_description))
                 .perform(click());
 
         // Check abort
+        assertTrue(currentAddMeetingActivity.isFinishing());
         // TODO sometimes the check doesn't work
         onView(withText(R.string.abort_add_meeting))
                     .inRoot(isToast())
                     .check(matches(isDisplayed()));
+    }
+
+    private Activity currentActivity = null;
+
+    private Activity getActivityInstance(){
+        getInstrumentation().runOnMainSync(() -> {
+            Collection<Activity> resumedActivities =
+                    ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(RESUMED);
+            for (Activity activity: resumedActivities){
+                currentActivity = activity;
+                break;
+            }
+        });
+
+        return currentActivity;
     }
 }
