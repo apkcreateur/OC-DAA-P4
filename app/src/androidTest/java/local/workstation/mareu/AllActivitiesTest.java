@@ -28,6 +28,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
+import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static local.workstation.mareu.utils.assertions.RecyclerViewItemCountAssertion.itemCountAssertion;
@@ -184,25 +185,23 @@ public class AllActivitiesTest {
                 .check(matchesErrorText(activity.getString(R.string.error_meeting_room_already_booked)));
     }
 
-//    TODO
-//    /**
-//     * Scenario: abort an booked in progress
-//     */
-//    @Test
-//    public void whenMakingReservationAndWhenWeClickToCancel_thenItIsAborted() {
-//        // Init
-//        ListMeetingActivity activity = mActivityRule.getActivity();
-//
-//        // Click to add meeting
-//        onView(ViewMatchers.withId(R.id.add)).perform(click());
-//
-//        // Abort
-//        // TODO How to perform click on return imageButton? Which ID to use?
-//        // onView(ViewMatchers.withId(android.R.id.ID)).perform(click());
-//
-//        // Check that the addition is aborted
-//        onView(withText(R.string.abort_add_meeting))
-//                    .inRoot(isToast())
-//                    .check(matches(isDisplayed()));
-//    }
+    /**
+     * Scenario: abort an booked in progress
+     */
+    @Test
+    public void whenMakingReservationAndWhenWeClickToCancel_thenItIsAborted() {
+        // Click to add meeting
+        onView(ViewMatchers.withId(R.id.add))
+                .perform(click());
+
+        // Abort
+        onView(withContentDescription(R.string.abc_action_bar_up_description))
+                .perform(click());
+
+        // Check abort
+        // TODO sometimes the check doesn't work
+        onView(withText(R.string.abort_add_meeting))
+                    .inRoot(isToast())
+                    .check(matches(isDisplayed()));
+    }
 }

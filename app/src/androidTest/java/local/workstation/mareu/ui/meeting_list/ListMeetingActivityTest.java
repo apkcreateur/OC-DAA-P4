@@ -134,5 +134,6 @@ public class ListMeetingActivityTest {
         onView(ViewMatchers.withId(R.id.add))
                 .perform(click());
         intended(hasComponent(AddMeetingActivity.class.getName()));
+        Intents.release();
     }
 }
