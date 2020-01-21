@@ -1,4 +1,4 @@
-package local.workstation.mareu.utils.dummydata;
+package local.workstation.mareu.utils.dummies;
 
 import java.util.Arrays;
 import java.util.List;

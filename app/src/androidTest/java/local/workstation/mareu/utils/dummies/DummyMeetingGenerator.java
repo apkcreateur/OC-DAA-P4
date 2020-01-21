@@ -1,4 +1,4 @@
-package local.workstation.mareu.utils.dummydata;
+package local.workstation.mareu.utils.dummies;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,9 +6,9 @@ import java.util.List;
 
 import local.workstation.mareu.model.Meeting;
 
-import static local.workstation.mareu.utils.dummydata.DummyCalendarGenerator.generateDateTimeFromTomorrow;
-import static local.workstation.mareu.utils.dummydata.DummyCalendarGenerator.generateTomorrowDateTime;
-import static local.workstation.mareu.utils.dummydata.DummyEmailGenerator.generateEmails;
+import static local.workstation.mareu.utils.dummies.DummyCalendarGenerator.generateDateTimeFromTomorrow;
+import static local.workstation.mareu.utils.dummies.DummyCalendarGenerator.generateTomorrowDateTime;
+import static local.workstation.mareu.utils.dummies.DummyEmailGenerator.generateEmails;
 
 public abstract class DummyMeetingGenerator {
 
