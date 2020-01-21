@@ -22,6 +22,7 @@ import local.workstation.mareu.R;
 import local.workstation.mareu.events.DeleteMeetingEvent;
 import local.workstation.mareu.model.Meeting;
 import local.workstation.mareu.service.MeetingApiService;
+import static local.workstation.mareu.service.MeetingApiService.DateFilter;
 import local.workstation.mareu.view.ItemMeeting;
 
 /**
@@ -44,7 +45,7 @@ public class ItemMeetingRecyclerViewAdapter extends RecyclerView.Adapter<ItemMee
         mMeetings = mApiService.getMeetings();
     }
 
-    ItemMeetingRecyclerViewAdapter(Context context, MeetingApiService apiService, Calendar date, int filterType) {
+    ItemMeetingRecyclerViewAdapter(Context context, MeetingApiService apiService, Calendar date, DateFilter filterType) {
         mContext = context;
         mApiService = apiService;
         mMeetings = mApiService.getMeetingsFilteredByDate(date, filterType);

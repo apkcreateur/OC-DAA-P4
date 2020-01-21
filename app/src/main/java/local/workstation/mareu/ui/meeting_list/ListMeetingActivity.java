@@ -27,9 +27,10 @@ import local.workstation.mareu.events.DeleteMeetingEvent;
 import local.workstation.mareu.service.MeetingApiService;
 import local.workstation.mareu.ui.AddMeetingActivity;
 
-import static local.workstation.mareu.service.MeetingApiService.AFTER;
-import static local.workstation.mareu.service.MeetingApiService.BEFORE;
-import static local.workstation.mareu.service.MeetingApiService.MATCH;
+import static local.workstation.mareu.service.MeetingApiService.DateFilter;
+import static local.workstation.mareu.service.MeetingApiService.DateFilter.AFTER;
+import static local.workstation.mareu.service.MeetingApiService.DateFilter.BEFORE;
+import static local.workstation.mareu.service.MeetingApiService.DateFilter.MATCH;
 
 /**
  * Display list of meetings (main activity)
@@ -105,7 +106,7 @@ public class ListMeetingActivity extends AppCompatActivity {
         }
     }
 
-    private void performDateFilter(int filterType) {
+    private void performDateFilter(DateFilter filterType) {
         Calendar calendar = Calendar.getInstance();
         DatePickerDialog mDatePickerDialog;
 
@@ -139,7 +140,7 @@ public class ListMeetingActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mItemMeetingRecyclerViewAdapter);
     }
 
-    private void init(Calendar date, int filterType) {
+    private void init(Calendar date, DateFilter filterType) {
         Log.d("TAG", "init with date");
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mItemMeetingRecyclerViewAdapter = new ItemMeetingRecyclerViewAdapter(this, sApiService, date, filterType);

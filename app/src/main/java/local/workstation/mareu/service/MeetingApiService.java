@@ -10,10 +10,12 @@ import local.workstation.mareu.model.Meeting;
  */
 public interface MeetingApiService {
 
-    int FULL = 0;
-    int BEFORE = 1;
-    int MATCH = 2;
-    int AFTER = 3;
+    enum DateFilter {
+        NONE,
+        BEFORE,
+        MATCH,
+        AFTER
+    }
 
     /**
      * Get all meeting rooms
@@ -50,7 +52,7 @@ public interface MeetingApiService {
      * Get meetings filtered by date
      * @return list of meetings
      */
-    List<Meeting> getMeetingsFilteredByDate(Calendar date, int filterType);
+    List<Meeting> getMeetingsFilteredByDate(Calendar date, DateFilter filterType);
 
     /**
      * Add a meeting

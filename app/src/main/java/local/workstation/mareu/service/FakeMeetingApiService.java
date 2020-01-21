@@ -71,7 +71,7 @@ public class FakeMeetingApiService implements MeetingApiService {
      * {@inheritDoc}
      */
     @Override
-    public List<Meeting> getMeetingsFilteredByDate(Calendar date, int filterType) {
+    public List<Meeting> getMeetingsFilteredByDate(Calendar date, DateFilter filterType) {
         Log.d("TAG", "get meetings filtered by date");
         switch (filterType) {
             case BEFORE:
