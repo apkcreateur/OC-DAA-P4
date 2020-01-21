@@ -5,14 +5,13 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
 
 import local.workstation.mareu.model.Meeting;
 
-import static local.workstation.mareu.utils.CalendarUtil.afterOrSameDate;
-import static local.workstation.mareu.utils.CalendarUtil.beforeOrSameDate;
-import static local.workstation.mareu.utils.CalendarUtil.sameDate;
+import static local.workstation.mareu.utils.MeetingUtil.getMeetingsAfterOrSameDate;
+import static local.workstation.mareu.utils.MeetingUtil.getMeetingsBeforeOrSameDate;
+import static local.workstation.mareu.utils.MeetingUtil.getMeetingsMatchDate;
 
 /**
  * Dummy mock for the Meeting Api Service
@@ -76,13 +75,13 @@ public class FakeMeetingApiService implements MeetingApiService {
         switch (filterType) {
             case BEFORE:
                 Log.d("TAG", "getMeetingsBeforeDate");
-                return getMeetingsBeforeOrSameDate(date);
+                return getMeetingsBeforeOrSameDate(date, mMeetings);
             case MATCH:
                 Log.d("TAG", "getMeetingsMatchDate");
-                return getMeetingsMatchDate(date);
+                return getMeetingsMatchDate(date, mMeetings);
             case AFTER:
                 Log.d("TAG", "getMeetingsAfterDate");
-                return getMeetingsAfterOrSameDate(date);
+                return getMeetingsAfterOrSameDate(date, mMeetings);
             default:
                 Log.d("TAG", "getMeetings");
                 return getMeetings();
@@ -120,41 +119,5 @@ public class FakeMeetingApiService implements MeetingApiService {
                 break;
             }
         }
-    }
-
-    private List<Meeting> getMeetingsBeforeOrSameDate(Calendar date) {
-        List<Meeting> tmp = new ArrayList<>();
-
-        for (Meeting m: mMeetings)
-            if (beforeOrSameDate(m.getStart(), date))
-                tmp.add(m);
-
-        Collections.sort(tmp);
-
-        return tmp;
-    }
-
-    private List<Meeting> getMeetingsMatchDate(Calendar date) {
-        List<Meeting> tmp = new ArrayList<>();
-
-        for (Meeting m: mMeetings)
-            if (sameDate(m.getStart(), date))
-                tmp.add(m);
-
-        Collections.sort(tmp);
-
-        return tmp;
-    }
-
-    private List<Meeting> getMeetingsAfterOrSameDate(Calendar date) {
-        List<Meeting> tmp = new ArrayList<>();
-
-        for (Meeting m: mMeetings)
-            if (afterOrSameDate(m.getStart(), date))
-                tmp.add(m);
-
-        Collections.sort(tmp);
-
-        return tmp;
     }
 }
