@@ -26,4 +26,10 @@
     <string name="error_time_comparaison">End time cannot be earlier than start time</string>
     <string name="error_meeting_room_already_booked">The meeting room is already booked</string>
     <string name="error_time_passed">The time cannot be passed</string>
+    <string name="menu_filter">Filtering</string>
+    <string name="item_filter_by_date">Filter by date</string>
+    <string name="item_filter_before_date">Before the selected date</string>
+    <string name="item_filter_match_date">Matches the selected date</string>
+    <string name="item_filter_after_date">After the selected date</string>
+    <string name="item_raz">Remove the filter</string>
 </resources>

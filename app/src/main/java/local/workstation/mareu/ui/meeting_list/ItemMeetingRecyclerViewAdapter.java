@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 import local.workstation.mareu.R;
@@ -41,6 +42,12 @@ public class ItemMeetingRecyclerViewAdapter extends RecyclerView.Adapter<ItemMee
         mContext = context;
         mApiService = apiService;
         mMeetings = mApiService.getMeetings();
+    }
+
+    ItemMeetingRecyclerViewAdapter(Context context, MeetingApiService apiService, Calendar date, int filterType) {
+        mContext = context;
+        mApiService = apiService;
+        mMeetings = mApiService.getMeetingsFilteredByDate(date, filterType);
     }
 
     @NonNull

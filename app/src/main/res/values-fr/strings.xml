@@ -27,4 +27,10 @@
         début</string>
     <string name="error_meeting_room_already_booked">La salle de réunion est déjà réservée</string>
     <string name="error_time_passed">L\'heure ne peut pas être passée</string>
+    <string name="menu_filter">Filtrage</string>
+    <string name="item_filter_by_date">Filtre par date</string>
+    <string name="item_filter_before_date">Avant la date sélectionnée</string>
+    <string name="item_filter_match_date">Correspond à la date sélectionnée</string>
+    <string name="item_filter_after_date">Après la date sélectionnée</string>
+    <string name="item_raz">Enlever le filtre</string>
 </resources>

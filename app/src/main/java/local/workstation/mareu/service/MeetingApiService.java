@@ -1,5 +1,6 @@
 package local.workstation.mareu.service;
 
+import java.util.Calendar;
 import java.util.List;
 
 import local.workstation.mareu.model.Meeting;
@@ -8,6 +9,12 @@ import local.workstation.mareu.model.Meeting;
  * Meeting API client
  */
 public interface MeetingApiService {
+
+    int FULL = 0;
+    int BEFORE = 1;
+    int MATCH = 2;
+    int AFTER = 3;
+
     /**
      * Get all meeting rooms
      * @return list of meeting rooms
@@ -38,6 +45,12 @@ public interface MeetingApiService {
      * @return list of meetings
      */
     List<Meeting> getMeetings();
+
+    /**
+     * Get meetings filtered by date
+     * @return list of meetings
+     */
+    List<Meeting> getMeetingsFilteredByDate(Calendar date, int filterType);
 
     /**
      * Add a meeting

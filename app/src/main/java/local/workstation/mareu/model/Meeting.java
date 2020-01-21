@@ -2,14 +2,13 @@ package local.workstation.mareu.model;
 
 import android.graphics.Color;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 import java.util.regex.Pattern;
 
-public class Meeting implements Serializable {
+public class Meeting implements Comparable<Meeting> {
     private static Integer sLastId = 0;
     private static Random sRandom = new Random();
 
@@ -82,5 +81,14 @@ public class Meeting implements Serializable {
                 mParticipants.add(participant);
             }
         }
+    }
+
+    @Override
+    public int compareTo(Meeting o) {
+        if (getStart() == null || o.getStart() == null) {
+            return 0;
+        }
+
+        return getStart().compareTo(o.getStart());
     }
 }

@@ -38,7 +38,7 @@ import local.workstation.mareu.R;
 import local.workstation.mareu.model.Meeting;
 import local.workstation.mareu.service.MeetingApiServiceException;
 
-import static local.workstation.mareu.tool.Validator.validEmail;
+import static local.workstation.mareu.utils.Validator.validEmail;
 import static local.workstation.mareu.ui.meeting_list.ListMeetingActivity.sApiService;
 
 /**

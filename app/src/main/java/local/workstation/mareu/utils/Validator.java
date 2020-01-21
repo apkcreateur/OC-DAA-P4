@@ -1,4 +1,4 @@
-package local.workstation.mareu.tool;
+package local.workstation.mareu.utils;
 
 import android.content.Context;
 import android.util.Patterns;
