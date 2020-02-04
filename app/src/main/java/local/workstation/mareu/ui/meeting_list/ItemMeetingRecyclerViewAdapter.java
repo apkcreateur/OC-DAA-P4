@@ -21,9 +21,9 @@ import java.util.List;
 import local.workstation.mareu.R;
 import local.workstation.mareu.events.DeleteMeetingEvent;
 import local.workstation.mareu.model.Meeting;
-import local.workstation.mareu.service.MeetingApiService;
-import static local.workstation.mareu.service.MeetingApiService.DateFilter;
 import local.workstation.mareu.view.ItemMeeting;
+
+import static local.workstation.mareu.ui.meeting_list.ListMeetingActivity.sApiService;
 
 /**
  * Display list of meetings
@@ -36,37 +36,11 @@ import local.workstation.mareu.view.ItemMeeting;
  */
 public class ItemMeetingRecyclerViewAdapter extends RecyclerView.Adapter<ItemMeeting> {
     private Context mContext;
-    private MeetingApiService mApiService;
     private List<Meeting> mMeetings;
 
-    ItemMeetingRecyclerViewAdapter(Context context, MeetingApiService apiService) {
+    ItemMeetingRecyclerViewAdapter(Context context, Calendar date, String room) {
         mContext = context;
-        mApiService = apiService;
-        mMeetings = mApiService.getMeetings();
-    }
-
-    ItemMeetingRecyclerViewAdapter(Context context, MeetingApiService apiService, Calendar date, DateFilter filterType) {
-        mContext = context;
-        mApiService = apiService;
-        mMeetings = mApiService.getMeetingsFilteredByDate(date, filterType);
-    }
-
-    ItemMeetingRecyclerViewAdapter(Context context, MeetingApiService apiService, Calendar date) {
-        mContext = context;
-        mApiService = apiService;
-        mMeetings = mApiService.getMeetingsFilteredByDate(date);
-    }
-
-    ItemMeetingRecyclerViewAdapter(Context context, MeetingApiService apiService, String room) {
-        mContext = context;
-        mApiService = apiService;
-        mMeetings = mApiService.getMeetingsFilteredByRoom(room);
-    }
-
-    ItemMeetingRecyclerViewAdapter(Context context, MeetingApiService apiService, Calendar date, String room) {
-        mContext = context;
-        mApiService = apiService;
-        mMeetings = mApiService.getMeetingsFilteredByDateAndRoom(date, room);
+        mMeetings = sApiService.getMeetings(date, room);
     }
 
     @NonNull

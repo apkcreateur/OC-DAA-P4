@@ -26,8 +26,6 @@ import local.workstation.mareu.service.MeetingApiService;
 import local.workstation.mareu.ui.AddMeetingActivity;
 import local.workstation.mareu.ui.fragments.FilterDialogFragment;
 
-import static local.workstation.mareu.service.MeetingApiService.DateFilter;
-
 /**
  * Display list of meetings (main activity)
  *
@@ -56,7 +54,7 @@ public class ListMeetingActivity extends AppCompatActivity implements FilterDial
     protected void onResume() {
         super.onResume();
 
-        init();
+        init(null, "");
     }
 
     @Override
@@ -98,48 +96,18 @@ public class ListMeetingActivity extends AppCompatActivity implements FilterDial
 
         Toast.makeText(getApplicationContext(), R.string.toast_text_delete_meeting, Toast.LENGTH_SHORT).show();
 
-        init();
-    }
-
-    private void init() {
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mItemMeetingRecyclerViewAdapter = new ItemMeetingRecyclerViewAdapter(this, sApiService);
-        mRecyclerView.setAdapter(mItemMeetingRecyclerViewAdapter);
-    }
-
-    private void init(Calendar date, DateFilter filterType) {
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mItemMeetingRecyclerViewAdapter = new ItemMeetingRecyclerViewAdapter(this, sApiService, date, filterType);
-        mRecyclerView.setAdapter(mItemMeetingRecyclerViewAdapter);
-    }
-
-    private void init(Calendar date) {
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mItemMeetingRecyclerViewAdapter = new ItemMeetingRecyclerViewAdapter(this, sApiService, date);
-        mRecyclerView.setAdapter(mItemMeetingRecyclerViewAdapter);
-    }
-
-    private void init(String room) {
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mItemMeetingRecyclerViewAdapter = new ItemMeetingRecyclerViewAdapter(this, sApiService, room);
-        mRecyclerView.setAdapter(mItemMeetingRecyclerViewAdapter);
+        init(null, "");
     }
 
     private void init(Calendar date, String room) {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mItemMeetingRecyclerViewAdapter = new ItemMeetingRecyclerViewAdapter(this, sApiService, date, room);
+        mItemMeetingRecyclerViewAdapter = new ItemMeetingRecyclerViewAdapter(this, date, room);
         mRecyclerView.setAdapter(mItemMeetingRecyclerViewAdapter);
     }
 
     @Override
     public void onButtonClicked(Calendar date, String room, boolean reset) {
-        if (reset)
-            init();
-        else if (date != null && room.isEmpty())
-            init(date);
-        else if (date == null && ! room.isEmpty())
-            init(room);
-        else if (date != null && ! room.isEmpty())
+        if (reset || date != null || ! room.isEmpty())
             init(date, room);
     }
 }

@@ -10,13 +10,6 @@ import local.workstation.mareu.model.Meeting;
  */
 public interface MeetingApiService {
 
-    enum DateFilter {
-        NONE,
-        BEFORE,
-        MATCH,
-        AFTER
-    }
-
     /**
      * Get all meeting rooms
      * @return list of meeting rooms
@@ -43,34 +36,12 @@ public interface MeetingApiService {
     void delAllRooms();
 
     /**
-     * Get all meetings
+     * Get meetings
+     *
+     * Unfiltered, filtered by date, filtered by room name or filtered by date and room name
      * @return list of meetings
      */
-    List<Meeting> getMeetings();
-
-    /**
-     * Get meetings filtered by date
-     * @return list of meetings
-     */
-    List<Meeting> getMeetingsFilteredByDate(Calendar date, DateFilter filterType);
-
-    /**
-     * Get meetings filtered by date
-     * @return list of meetings
-     */
-    List<Meeting> getMeetingsFilteredByDate(Calendar date);
-
-    /**
-     * Get meetings filtered by room name
-     * @return list of meetings
-     */
-    List<Meeting> getMeetingsFilteredByRoom(String roomName);
-
-    /**
-     * Get meetings filtered by date and room name
-     * @return list of meetings
-     */
-    List<Meeting> getMeetingsFilteredByDateAndRoom(Calendar date, String roomName);
+    List<Meeting> getMeetings(Calendar date, String roomName);
 
     /**
      * Add a meeting

@@ -88,33 +88,7 @@ public class AddMeetingActivity extends AppCompatActivity {
         // Meeting room <--
 
         // Meeting participants -->
-        mEmailsTextInputEditText.setOnKeyListener((v, keyCode, event) -> {
-            if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                if (keyCode == KeyEvent.KEYCODE_ENTER) {
-                    String value = Objects.requireNonNull(mEmailsTextInputEditText.getText()).toString().trim();
-
-                    if (!value.isEmpty()) {
-                        if (!validEmail(value)) {
-                            mEmailsTextInputLayout.setError(getText(R.string.error_invalid_email));
-
-                            return false;
-                        } else {
-                            final Chip email = new Chip(AddMeetingActivity.this);
-                            email.setText(value);
-                            email.setCloseIconVisible(true);
-                            email.setOnCloseIconClickListener(v1 -> mEmailsChipGroup.removeView(email));
-
-                            mEmailsChipGroup.addView(email);
-                            mEmailsTextInputEditText.setText("");
-                            mEmailsTextInputLayout.setError(null);
-
-                            return true;
-                        }
-                    }
-                }
-            }
-            return false;
-        });
+        initEmailsOnKeyListener();
         // Meeting participants <--
     }
 
@@ -220,6 +194,36 @@ public class AddMeetingActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    private void initEmailsOnKeyListener() {
+        mEmailsTextInputEditText.setOnKeyListener((v, keyCode, event) -> {
+            if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                    String value = Objects.requireNonNull(mEmailsTextInputEditText.getText()).toString().trim();
+
+                    if (!value.isEmpty()) {
+                        if (!validEmail(value)) {
+                            mEmailsTextInputLayout.setError(getText(R.string.error_invalid_email));
+
+                            return false;
+                        } else {
+                            final Chip email = new Chip(AddMeetingActivity.this);
+                            email.setText(value);
+                            email.setCloseIconVisible(true);
+                            email.setOnCloseIconClickListener(v1 -> mEmailsChipGroup.removeView(email));
+
+                            mEmailsChipGroup.addView(email);
+                            mEmailsTextInputEditText.setText("");
+                            mEmailsTextInputLayout.setError(null);
+
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        });
     }
 
     private void addMeeting() {

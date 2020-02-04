@@ -3,13 +3,11 @@ package local.workstation.mareu.service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 import local.workstation.mareu.model.Meeting;
 
-import static local.workstation.mareu.service.MeetingApiService.DateFilter.MATCH;
-import static local.workstation.mareu.utils.MeetingUtil.getMeetingsAfterOrSameDate;
-import static local.workstation.mareu.utils.MeetingUtil.getMeetingsBeforeOrSameDate;
 import static local.workstation.mareu.utils.MeetingUtil.getMeetingsMatchRoomName;
 import static local.workstation.mareu.utils.MeetingUtil.getMeetingsMatchDate;
 
@@ -62,51 +60,17 @@ public class FakeMeetingApiService implements MeetingApiService {
     /**
      * {@inheritDoc}
      */
-    public List<Meeting> getMeetings() {
+    @Override
+    public List<Meeting> getMeetings(Calendar date, String roomName) {
+        if (date != null && roomName != null && ! roomName.isEmpty())
+            return getMeetingsMatchDate(date, getMeetingsMatchRoomName(roomName, mMeetings));
+        else if (date != null)
+            return getMeetingsMatchDate(date, mMeetings);
+        else if (roomName != null && ! roomName.isEmpty())
+            return getMeetingsMatchRoomName(roomName, mMeetings);
+
+        Collections.sort(mMeetings);
         return mMeetings;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<Meeting> getMeetingsFilteredByDate(Calendar date) {
-        return getMeetingsFilteredByDate(date, MATCH);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<Meeting> getMeetingsFilteredByDate(Calendar date, DateFilter filterType) {
-        switch (filterType) {
-            case BEFORE:
-                return getMeetingsBeforeOrSameDate(date, mMeetings);
-            case MATCH:
-                return getMeetingsMatchDate(date, mMeetings);
-            case AFTER:
-                return getMeetingsAfterOrSameDate(date, mMeetings);
-            default:
-                return getMeetings();
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<Meeting> getMeetingsFilteredByRoom(String roomName) {
-        return getMeetingsMatchRoomName(roomName, mMeetings);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<Meeting> getMeetingsFilteredByDateAndRoom(Calendar date, String roomName) {
-        List<Meeting> meetings = getMeetingsFilteredByDate(date);
-
-        return getMeetingsMatchRoomName(roomName, meetings);
     }
 
     /**

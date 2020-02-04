@@ -63,7 +63,6 @@ public class FilterDialogFragment extends DialogFragment {
         builder.setTitle(R.string.select_filter);
 
         builder.setPositiveButton(android.R.string.ok, (dialog, which) -> {
-        // TODO
             mCallback.onButtonClicked(mDate, mRoomFilter.getEditableText().toString(), false);
         });
 
