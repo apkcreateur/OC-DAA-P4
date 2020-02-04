@@ -5,7 +5,7 @@ import java.util.Calendar;
 public abstract class DummyCalendarGenerator {
 
     private static final Calendar NOW = initRoundedNow();
-    private static final Calendar TOMORROW = generateDateFromNow(1);
+    public static final Calendar TOMORROW = generateDateFromNow(1);
 
     public static final Calendar YESTERDAY = generateDateFromNow(-1);
 

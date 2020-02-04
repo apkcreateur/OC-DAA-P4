@@ -15,6 +15,10 @@ public abstract class DummyMeetingGenerator {
     public static final String ROOM_NAME = "Room 3";
     public static final String TOPIC = "Sprint review";
     public static int ITEMS_COUNT = 12;
+    public static final String ROOM_NAME_1 = "Room 1";
+    public static int TOMORROW_MEETINGS_COUNT = 8;
+    public static int MEETINGS_WITH_ROOM_NAME_1_COUNT = 3;
+    public static int TOMORROW_MEETING_WITH_ROOM_NAME_1 = 2;
     public static final int EXPECTED_ITEM_POSITION = 0;
     public static final int DELETE_ITEM_POSITION = 3;
     public static final String EXPECTED_DESCRIPTION_24H = "Room 1 - 09:00 - Mêlée";
