@@ -33,4 +33,9 @@
     <string name="item_filter_match_date">Correspond à la date sélectionnée</string>
     <string name="item_filter_after_date">Après la date sélectionnée</string>
     <string name="item_raz">Enlever le filtre</string>
+    <string name="item_filter_match_room_name">Correspond au nom de la salle de réunion</string>
+    <string name="date_filter">Filtre par date</string>
+    <string name="room_filter">Filtre par salle</string>
+    <string name="select_filter">Choix des filtres</string>
+    <string name="reset">Remise à zéro</string>
 </resources>

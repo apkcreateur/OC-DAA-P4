@@ -1,7 +1,5 @@
 package local.workstation.mareu.service;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -9,8 +7,10 @@ import java.util.List;
 
 import local.workstation.mareu.model.Meeting;
 
+import static local.workstation.mareu.service.MeetingApiService.DateFilter.MATCH;
 import static local.workstation.mareu.utils.MeetingUtil.getMeetingsAfterOrSameDate;
 import static local.workstation.mareu.utils.MeetingUtil.getMeetingsBeforeOrSameDate;
+import static local.workstation.mareu.utils.MeetingUtil.getMeetingsMatchRoomName;
 import static local.workstation.mareu.utils.MeetingUtil.getMeetingsMatchDate;
 
 /**
@@ -70,22 +70,43 @@ public class FakeMeetingApiService implements MeetingApiService {
      * {@inheritDoc}
      */
     @Override
+    public List<Meeting> getMeetingsFilteredByDate(Calendar date) {
+        return getMeetingsFilteredByDate(date, MATCH);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public List<Meeting> getMeetingsFilteredByDate(Calendar date, DateFilter filterType) {
-        Log.d("TAG", "get meetings filtered by date");
         switch (filterType) {
             case BEFORE:
-                Log.d("TAG", "getMeetingsBeforeDate");
                 return getMeetingsBeforeOrSameDate(date, mMeetings);
             case MATCH:
-                Log.d("TAG", "getMeetingsMatchDate");
                 return getMeetingsMatchDate(date, mMeetings);
             case AFTER:
-                Log.d("TAG", "getMeetingsAfterDate");
                 return getMeetingsAfterOrSameDate(date, mMeetings);
             default:
-                Log.d("TAG", "getMeetings");
                 return getMeetings();
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Meeting> getMeetingsFilteredByRoom(String roomName) {
+        return getMeetingsMatchRoomName(roomName, mMeetings);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Meeting> getMeetingsFilteredByDateAndRoom(Calendar date, String roomName) {
+        List<Meeting> meetings = getMeetingsFilteredByDate(date);
+
+        return getMeetingsMatchRoomName(roomName, meetings);
     }
 
     /**

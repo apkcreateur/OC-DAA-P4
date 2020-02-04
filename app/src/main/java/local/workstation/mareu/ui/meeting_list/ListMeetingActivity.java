@@ -4,10 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -26,18 +24,16 @@ import local.workstation.mareu.di.DI;
 import local.workstation.mareu.events.DeleteMeetingEvent;
 import local.workstation.mareu.service.MeetingApiService;
 import local.workstation.mareu.ui.AddMeetingActivity;
+import local.workstation.mareu.ui.fragments.FilterDialogFragment;
 
 import static local.workstation.mareu.service.MeetingApiService.DateFilter;
-import static local.workstation.mareu.service.MeetingApiService.DateFilter.AFTER;
-import static local.workstation.mareu.service.MeetingApiService.DateFilter.BEFORE;
-import static local.workstation.mareu.service.MeetingApiService.DateFilter.MATCH;
 
 /**
  * Display list of meetings (main activity)
  *
  * Use an fake meeting API Service to manage meetings.
  */
-public class ListMeetingActivity extends AppCompatActivity {
+public class ListMeetingActivity extends AppCompatActivity implements FilterDialogFragment.OnButtonClickedListener {
     public static MeetingApiService sApiService;
 
     @BindView(R.id.list) RecyclerView mRecyclerView;
@@ -53,7 +49,6 @@ public class ListMeetingActivity extends AppCompatActivity {
 
         sApiService = DI.getApiService();
 
-        Log.d("TAG", "onCreate");
         mFloatingActionButton.setOnClickListener(v -> startActivity(new Intent(ListMeetingActivity.this, AddMeetingActivity.class)));
     }
 
@@ -61,7 +56,6 @@ public class ListMeetingActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        Log.d("TAG", "before init onResume");
         init();
     }
 
@@ -86,42 +80,16 @@ public class ListMeetingActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.filter:
-                return true;
-            case R.id.filter_raz:
-                init();
-                return true;
-            case R.id.filter_before_date:
-                performDateFilter(BEFORE);
-                return true;
-            case R.id.filter_match_date:
-                performDateFilter(MATCH);
-                return true;
-            case R.id.filter_after_date:
-                performDateFilter(AFTER);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.filter) {
+            performFilter();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
-    private void performDateFilter(DateFilter filterType) {
-        Calendar calendar = Calendar.getInstance();
-        DatePickerDialog mDatePickerDialog;
-
-        mDatePickerDialog = new DatePickerDialog(ListMeetingActivity.this,
-                (view, year, month, dayOfMonth) -> {
-                    Calendar cal = Calendar.getInstance();
-                    cal.set(year, month, dayOfMonth);
-
-                    init(cal, filterType);
-                },
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH));
-
-        mDatePickerDialog.show();
+    private  void performFilter() {
+        FilterDialogFragment filterDialog = new FilterDialogFragment(sApiService.getRooms());
+        filterDialog.show(getSupportFragmentManager(), "filter");
     }
 
     @Subscribe
@@ -134,17 +102,44 @@ public class ListMeetingActivity extends AppCompatActivity {
     }
 
     private void init() {
-        Log.d("TAG", "init");
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mItemMeetingRecyclerViewAdapter = new ItemMeetingRecyclerViewAdapter(this, sApiService);
         mRecyclerView.setAdapter(mItemMeetingRecyclerViewAdapter);
     }
 
     private void init(Calendar date, DateFilter filterType) {
-        Log.d("TAG", "init with date");
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mItemMeetingRecyclerViewAdapter = new ItemMeetingRecyclerViewAdapter(this, sApiService, date, filterType);
         mRecyclerView.setAdapter(mItemMeetingRecyclerViewAdapter);
     }
 
+    private void init(Calendar date) {
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mItemMeetingRecyclerViewAdapter = new ItemMeetingRecyclerViewAdapter(this, sApiService, date);
+        mRecyclerView.setAdapter(mItemMeetingRecyclerViewAdapter);
+    }
+
+    private void init(String room) {
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mItemMeetingRecyclerViewAdapter = new ItemMeetingRecyclerViewAdapter(this, sApiService, room);
+        mRecyclerView.setAdapter(mItemMeetingRecyclerViewAdapter);
+    }
+
+    private void init(Calendar date, String room) {
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mItemMeetingRecyclerViewAdapter = new ItemMeetingRecyclerViewAdapter(this, sApiService, date, room);
+        mRecyclerView.setAdapter(mItemMeetingRecyclerViewAdapter);
+    }
+
+    @Override
+    public void onButtonClicked(Calendar date, String room, boolean reset) {
+        if (reset)
+            init();
+        else if (date != null && room.isEmpty())
+            init(date);
+        else if (date == null && ! room.isEmpty())
+            init(room);
+        else if (date != null && ! room.isEmpty())
+            init(date, room);
+    }
 }

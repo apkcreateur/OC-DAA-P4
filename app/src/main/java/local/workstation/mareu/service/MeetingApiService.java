@@ -55,6 +55,24 @@ public interface MeetingApiService {
     List<Meeting> getMeetingsFilteredByDate(Calendar date, DateFilter filterType);
 
     /**
+     * Get meetings filtered by date
+     * @return list of meetings
+     */
+    List<Meeting> getMeetingsFilteredByDate(Calendar date);
+
+    /**
+     * Get meetings filtered by room name
+     * @return list of meetings
+     */
+    List<Meeting> getMeetingsFilteredByRoom(String roomName);
+
+    /**
+     * Get meetings filtered by date and room name
+     * @return list of meetings
+     */
+    List<Meeting> getMeetingsFilteredByDateAndRoom(Calendar date, String roomName);
+
+    /**
      * Add a meeting
      * @param meeting meeting to add
      */

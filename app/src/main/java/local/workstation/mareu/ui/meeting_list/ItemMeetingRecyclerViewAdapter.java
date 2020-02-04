@@ -51,6 +51,24 @@ public class ItemMeetingRecyclerViewAdapter extends RecyclerView.Adapter<ItemMee
         mMeetings = mApiService.getMeetingsFilteredByDate(date, filterType);
     }
 
+    ItemMeetingRecyclerViewAdapter(Context context, MeetingApiService apiService, Calendar date) {
+        mContext = context;
+        mApiService = apiService;
+        mMeetings = mApiService.getMeetingsFilteredByDate(date);
+    }
+
+    ItemMeetingRecyclerViewAdapter(Context context, MeetingApiService apiService, String room) {
+        mContext = context;
+        mApiService = apiService;
+        mMeetings = mApiService.getMeetingsFilteredByRoom(room);
+    }
+
+    ItemMeetingRecyclerViewAdapter(Context context, MeetingApiService apiService, Calendar date, String room) {
+        mContext = context;
+        mApiService = apiService;
+        mMeetings = mApiService.getMeetingsFilteredByDateAndRoom(date, room);
+    }
+
     @NonNull
     @Override
     public ItemMeeting onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

@@ -32,4 +32,9 @@
     <string name="item_filter_match_date">Matches the selected date</string>
     <string name="item_filter_after_date">After the selected date</string>
     <string name="item_raz">Remove the filter</string>
+    <string name="item_filter_match_room_name">Matches the selected room name</string>
+    <string name="date_filter">Filter by date</string>
+    <string name="room_filter">Filter by room name</string>
+    <string name="select_filter">Choices filter</string>
+    <string name="reset">Reset</string>
 </resources>
