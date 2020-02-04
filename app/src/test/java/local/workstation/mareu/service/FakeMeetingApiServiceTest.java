@@ -2,7 +2,6 @@ package local.workstation.mareu.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -36,7 +35,7 @@ class FakeMeetingApiServiceTest {
         // Initialize API with 1 Meeting
         mApi.addMeeting(mMeeting);
 
-        mInitialCount = mApi.getMeetings().size();
+        mInitialCount = mApi.getMeetings(null, "").size();
     }
 
     @Test
@@ -65,23 +64,18 @@ class FakeMeetingApiServiceTest {
                 "sujet",
                 Arrays.asList("p.roger@gmail.com", "s.ramen@gmail.fr"));
 
-        assertThrows(MeetingApiServiceException.class, new Executable() {
-            @Override
-            public void execute() throws Throwable {
-                mApi.addMeeting(meeting);
-            }
-        });
+        assertThrows(MeetingApiServiceException.class, () -> mApi.addMeeting(meeting));
     }
 
     @Test
     void getMeetings() {
-        assertEquals((int) mInitialCount, mApi.getMeetings().size());
+        assertEquals((int) mInitialCount, mApi.getMeetings(null, "").size());
     }
 
     @Test
     void delMeeting() {
         mApi.delMeeting(mMeeting.getId());
 
-        assertEquals((int) --mInitialCount, mApi.getMeetings().size());
+        assertEquals((int) --mInitialCount, mApi.getMeetings(null, "").size());
     }
 }
